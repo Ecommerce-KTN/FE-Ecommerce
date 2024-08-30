@@ -8,11 +8,11 @@ function CreateProduct() {
             <div>TopTitle</div>
         </div>
         <div style={{display:"flex",flexDirection:"row"}}>
-            <div style={{width:"50%",height:height*0.85, backgroundColor:"red"}}>
-                <div>text</div>
-            </div>
             <div style={{width:"50%",height:height*0.85, backgroundColor:"blue"}}>
-                <div>AddImage</div>
+                <div>text</div>           // Kiệt
+            </div>
+            <div style={{width:"50%",height:height*0.85, backgroundColor:"red"}}>
+                <div>AddImage</div>  //nguyên
             </div>
         </div>
     </div>
