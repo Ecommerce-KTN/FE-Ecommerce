@@ -1,15 +1,22 @@
+import { Link } from 'react-router-dom';
 import './App.css';
-import Banner from './components/Banner';
-import Category from './components/Category';
-import Product from './components/Product';
-
+import Banner from './components/app/Banner';
+import Category from './components/app/Category';
+import Product from './components/app/Product';
+import { Button } from '@mui/material';
 
 function App() {
   return (
-    <div className="App">
-      <Banner />
-      <Category />
-      <Product />
+    <div>
+        <div>
+          <h1>Manager</h1>
+          <Link to="/Manager">
+            <Button variant="contained">Manager</Button>
+          </Link>
+        </div>
+        <Banner />
+        <Category />
+        <Product />
     </div>
   );
 }

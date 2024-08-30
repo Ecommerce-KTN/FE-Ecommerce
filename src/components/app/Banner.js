@@ -1,9 +1,8 @@
 import React from 'react';
-import '../App.css';
 
-const Banner = () => {
+function Banner(){
   return (
-    <div className="banner">
+    <div style={{  background: "linear-gradient(to right, #ff5e62, #ff9966)", color: "white", padding: "50px 20px", marginBottom: "30px", borderRadius: "10px"}}>
       <h1>New Year Sale Offer 2024</h1>
       <p>20% OFF</p>
       <button>Start Shopping</button>

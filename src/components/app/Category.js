@@ -1,5 +1,4 @@
 import React from 'react';
-import '../App.css';
 
 const categories = [
   { name: 'Electronics', icon: '📱' },
@@ -14,16 +13,16 @@ const categories = [
   { name: 'Furniture', icon: '🛋️' },
 ];
 
-const Category = () => {
+function Category(){
   return (
-    <div className="categories">
-      <div className="categories-header">
+    <div style={{margin: "20px 0" , padding: "0 50px" }}>
+      <div style={{  display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px"}}>
         <h2>Our Top Categories</h2>
-        <button className="see-all">See All</button>
+        <button style={{  textDecoration: "none", color: "#ff6f61", fontSize: "14px"}}>See All</button>
       </div>
-      <div className="categories-list">
+      <div style={{  display: "flex", justifyContent: "space-between", flexWrap: "wrap"}}>
         {categories.map((category, index) => (
-          <div key={index} className="category-item">
+          <div key={index} style={{  textAlign: "center", width: "9%", marginBottom: "20px"}}>
             <div>{category.icon}</div>
             <h3>{category.name}</h3>
           </div>
