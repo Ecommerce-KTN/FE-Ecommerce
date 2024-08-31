@@ -1,25 +1,33 @@
 import React from 'react';
+import '../../App.css';
 
 const products = [
-  { name: 'Smart Watch', price: '$24.56', rating: '4.7', sold: '7,489', image: 'link-to-image-1' },
-  { name: 'Headphones', price: '$24.56', rating: '4.7', sold: '7,489', image: 'link-to-image-2' },
-  { name: 'Smartphone', price: '$24.56', rating: '4.7', sold: '7,489', image: 'link-to-image-3' },
-  { name: 'Laptop', price: '$24.56', rating: '4.7', sold: '7,489', image: 'link-to-image-4' },
+  { name: 'Smart Watch', price: '$24.56', rating: '4.7', sold: '7,489', image: '../image/watch.png' },
+  { name: 'Headphones', price: '$24.56', rating: '4.7', sold: '7,489', image: '../image/Headphones.png' },
+  { name: 'Smartphone', price: '$24.56', rating: '4.7', sold: '7,489', image: '../image/phone.png' },
+  { name: 'Laptop', price: '$24.56', rating: '4.7', sold: '7,489', image: '../image/laptop.png' },
 ];
 
-function Product () {
+const Product = () => {
+  const handleAddToCart = (productName) => {
+    alert(`${productName} added to cart!`);
+  };
+
   return (
-    <div style={{  margin: "40px 0", padding: "0 50px"}}>
-      <h2>Popular Products 2023</h2> {/* Thêm tiêu đề giống mẫu */}
-      <div style={{  display: "flex", justifyContent: "space-between"}}>
+    <div className="products">
+      <h2>Popular Products 2023</h2>
+      <div className="products-list">
         {products.map((product, index) => (
-          <div key={index} style={{  width: "23%", backgroundColor: "white", borderRadius: "10px", boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)", textAlign: "center", padding: "20px", marginBottom: "20px"}}>
-            <img src={product.image} alt={product.name} />
+          <div key={index} className="product-item">
+            <div className="product-image-container">
+              <img src={product.image} alt={product.name} />
+              <div className="add-to-cart" onClick={() => handleAddToCart(product.name)}>+</div>
+            </div>
             <h3>{product.name}</h3>
             <p>Brand Name</p>
             <p>Rating: {product.rating}</p>
             <p>{product.sold} Sold</p>
-            <p>{product.price}</p>
+            <p className="price">{product.price}</p>
           </div>
         ))}
       </div>
