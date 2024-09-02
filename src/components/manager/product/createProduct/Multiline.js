@@ -1,87 +1,105 @@
-import * as React from 'react';
-import { Input as BaseInput, InputProps } from '@mui/base/Input';
-import { styled } from '@mui/system';
+import React, { useState, useRef } from 'react';
+import { IconButton, Typography } from '@mui/material';
+import { FormatBold, FormatItalic, FormatUnderlined, FormatListBulleted, Link as LinkIcon } from '@mui/icons-material';
 
-const Input = React.forwardRef(function CustomInput(
-  props: InputProps,
-  ref: React.ForwardedRef<HTMLDivElement>,
-) {
+function Multiline() {
+  const [anchorPosition, setAnchorPosition] = useState(null);
+  const [charCount, setCharCount] = useState(0);
+  const editorRef = useRef(null);
+  const maxChars = 1000;
+
+  const handleMouseUp = (e) => {
+    const selection = window.getSelection();
+    if (selection && !selection.isCollapsed) {
+      const range = selection.getRangeAt(0);
+      const rect = range.getBoundingClientRect();
+
+      const editorTop = rect.top > 40 ? rect.top - 40 : rect.bottom + 10;
+
+      setAnchorPosition({
+        top: editorTop,
+        left: rect.left + rect.width / 2,
+      });
+    } else {
+      setAnchorPosition(null);
+    }
+  };
+
+  const handleFormatText = (command) => {
+    document.execCommand(command, false, null);
+  };
+
+  const handleCreateLink = () => {
+    const url = prompt('Enter URL:');
+    if (url) {
+      document.execCommand('createLink', false, url);
+    }
+  };
+
+  const handleInput = (e) => {
+    const text = e.currentTarget.textContent || '';
+    if (text.length <= maxChars) {
+      setCharCount(text.length);
+    } else {
+      const truncatedText = text.slice(0, maxChars);
+      e.currentTarget.textContent = truncatedText;
+      setCharCount(maxChars);
+    }
+  };
+
   return (
-    <BaseInput
-      slots={{
-        root: RootDiv,
-        input: 'input',
-        textarea: TextareaElement,
-      }}
-      {...props}
-      ref={ref}
-    />
+    <div>
+      <div
+        ref={editorRef}
+        contentEditable
+        onInput={handleInput}
+        onMouseUp={handleMouseUp}
+        style={{
+          width: '95%',
+          height: '150px',
+          padding: '10px',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          overflowY: 'auto',
+        }}
+      ></div>
+      <Typography variant="caption" color={charCount >= maxChars ? 'red' : 'black'}>
+        {charCount}/{maxChars} characters
+      </Typography>
+      {anchorPosition && (
+        <div
+          style={{
+            position: 'absolute',
+            top: anchorPosition.top,
+            left: anchorPosition.left,
+            backgroundColor: '#f0f0f0',
+            padding: '5px',
+            borderRadius: '4px',
+            display: 'flex',
+            gap: '5px',
+            boxShadow: '0px 0px 10px rgba(0,0,0,0.1)',
+            zIndex: 1000,
+          }}
+        >
+          <IconButton size="small" onClick={() => handleFormatText('bold')}>
+            <FormatBold />
+          </IconButton>
+          <IconButton size="small" onClick={() => handleFormatText('italic')}>
+            <FormatItalic />
+          </IconButton>
+          <IconButton size="small" onClick={() => handleFormatText('underline')}>
+            <FormatUnderlined />
+          </IconButton>
+          <IconButton size="small" onClick={() => handleFormatText('insertUnorderedList')}>
+            <FormatListBulleted />
+          </IconButton>
+          <IconButton size="small" onClick={handleCreateLink}>
+<LinkIcon />
+          </IconButton>
+        </div>
+      )}
+    </div>
   );
-});
-
-export default function InputMultiline() {
-  return <Input aria-label="Demo input" multiline placeholder="Type something…" />;
 }
 
-const blue = {
-  100: '#DAECFF',
-  200: '#80BFFF',
-  400: '#3399FF',
-  500: '#007FFF',
-  600: '#0072E5',
-  700: '#0059B2',
-};
-
-const grey = {
-  50: '#F3F6F9',
-  100: '#E5EAF2',
-  200: '#DAE2ED',
-  300: '#C7D0DD',
-  400: '#B0B8C4',
-  500: '#9DA8B7',
-  600: '#6B7A90',
-  700: '#434D5B',
-  800: '#303740',
-  900: '#1C2025',
-};
-
-const RootDiv = styled('div')`
-  display: flex;
-  max-width: 100%;
-`;
-
-const TextareaElement = styled('textarea', {
-  shouldForwardProp: (prop) =>
-    !['ownerState', 'minRows', 'maxRows'].includes(prop.toString()),
-})(
-  ({ theme }) => `
-  width: 320px;
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 400;
-  line-height: 1.5rem;
-  padding: 8px 12px;
-  border-radius: 8px 8px 0 8px;
-  color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
-  background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
-  border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-  box-shadow: 0px 2px 4px ${
-    theme.palette.mode === 'dark' ? 'rgba(0,0,0, 0.5)' : 'rgba(0,0,0, 0.05)'
-  };
-  resize: none;
-
-  &:hover {
-    border-color: ${blue[400]};
-  }
-
-  &:focus {
-    border-color: ${blue[400]};
-    box-shadow: 0 0 0 3px ${theme.palette.mode === 'dark' ? blue[700] : blue[200]};
-  }
-
-  // firefox
-  &:focus-visible {
-    outline: 0;
-  }
-`,
-);
+export default Multiline;

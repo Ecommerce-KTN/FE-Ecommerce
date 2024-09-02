@@ -1,10 +1,15 @@
-import react from 'react'
+import react, {useState} from 'react'
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
+import restrictAlphabets from './RestrictAlphabets';
 
 function Reuse({props, width}){
+  const [inputValue, setInputValue] = useState("");
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
+  };
   return (
     <>
       <FormControl sx={{ m: 1, width: {width}}} variant="outlined">
@@ -25,6 +30,9 @@ function Reuse({props, width}){
               padding: '8px', 
             },
           }}
+          value={inputValue}
+          onChange={handleChange}
+          onKeyDown={(e) => restrictAlphabets(e, inputValue)}
         />
       </FormControl>
     </>

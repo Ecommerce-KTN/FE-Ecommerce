@@ -1,53 +1,132 @@
-import React from 'react';
+import React from "react";
 
 function Category() {
   return (
-    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '20px', boxSizing: 'border-box' }}>
+    <div
+      style={{
+        width: "28.5rem",
+        height: "100%",
+        boxSizing: "border-box",
+      }}
+    >
       {/* Category Section */}
-      <div style={{ width: '100%', marginBottom: '20px' }}>
-        <label style={{ fontWeight: 'bold' }}>Product Category</label>
-        <select style={{ width: '100%', padding: '10px', marginBottom: '10px', borderRadius: '4px', border: '1px solid #ccc' }}>
+      <h3>Category</h3>
+      <div style={{ width: "95%", marginBottom: "20px", border: "1px solid #d9d9d9", padding: "10px"}}>
+        <label style={{ fontWeight: "500", fontSize: "small" }}>Product Category</label>
+        <select
+          style={{
+            width: "100%",
+            padding: "10px",
+            marginBottom: "10px",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+          }}
+        >
           <option>Health & Medicine</option>
         </select>
-        <select style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}>
+        <label style={{ fontWeight: "500", fontSize: "small" }}>Product Category</label>
+        <select
+          style={{
+            width: "100%",
+            padding: "10px",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+          }}
+        >
           <option>Beauty</option>
         </select>
       </div>
 
       {/* Inventory Section */}
-      <div style={{ width: '100%', marginBottom: '20px' }}>
-        <label style={{ fontWeight: 'bold' }}>Inventory</label>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <input type="number" placeholder="Quantity" style={{ flex: '1', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }} />
-          <input type="text" placeholder="SKU (Optional)" style={{ flex: '1', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }} />
+      <div style={{ width: "100%", marginBottom: "20px" }}>
+        <label style={{ fontWeight: "bold" }}>Inventory</label>
+        <div style={{ display: "flex", gap: "10px", border: "1px solid #d9d9d9", padding: "10px"}}>
+          <from>
+            <label style={{ display: "block", fontSize: "small"}}>Quantity</label>
+            <input
+              type="number"
+              placeholder="Quantity"
+              style={{
+                flex: "1",
+                padding: "10px",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+              }}
+            />
+          </from>
+          <from>
+            <label style={{ display: "block", fontSize: "small"}}>SKU(Optional)</label>
+            <input
+              type="text"
+              placeholder="SKU(Optional)"
+              style={{
+                width: "120%",
+                flex: "1",
+                padding: "10px",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+              }}
+            />
+          </from>
         </div>
       </div>
 
       {/* Selling Type Section */}
-      <div style={{ width: '100%', marginBottom: '20px' }}>
-        <label style={{ fontWeight: 'bold' }}>Selling Type</label>
-        <div style={{ padding: '10px', borderRadius: '4px', backgroundColor: '#fff', border: '1px solid #ccc' }}>
-          <div style={{ marginBottom: '10px' }}>
-            <input type="checkbox" id="inStore" name="sellingType" defaultChecked />
-            <label htmlFor="inStore" style={{ marginLeft: '10px' }}>In-store selling only</label>
+      <div style={{ width: "100%", marginBottom: "20px" }}>
+        <label style={{ fontWeight: "bold" }}>Selling Type</label>
+        <div
+          style={{
+            padding: "10px",
+            borderRadius: "4px",
+            backgroundColor: "#fff",
+            border: "1px solid #ccc",
+          }}
+        >
+          <div style={{ marginBottom: "10px" }}>
+            <input
+              type="radio"
+              id="inStore"
+              name="sellingType"
+              defaultChecked
+            />
+            <label htmlFor="inStore" style={{ marginLeft: "10px" }}>
+              In-store selling only
+            </label>
           </div>
-          <div style={{ marginBottom: '10px' }}>
-            <input type="checkbox" id="online" name="sellingType" />
-            <label htmlFor="online" style={{ marginLeft: '10px' }}>Online selling only</label>
+          <div style={{ marginBottom: "10px" }}>
+            <input type="radio" id="online" name="sellingType" />
+            <label htmlFor="online" style={{ marginLeft: "10px" }}>
+              Online selling only
+            </label>
           </div>
           <div>
-            <input type="checkbox" id="both" name="sellingType" />
-            <label htmlFor="both" style={{ marginLeft: '10px' }}>Available both in-store and online</label>
+            <input type="radio" id="both" name="sellingType" />
+            <label htmlFor="both" style={{ marginLeft: "10px" }}>
+              Available both in-store and online
+            </label>
           </div>
         </div>
       </div>
 
       {/* Variant Section */}
-      <div style={{ width: '100%' }}>
-        <label style={{ fontWeight: 'bold' }}>Variant</label>
-        <button style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', backgroundColor: '#fff' }}>
-          + Add Variant
-        </button>
+      <div style={{ width: "100%"}}>
+        <label style={{ fontWeight: "bold" }}>Variant</label>
+        <form style={{border: "1px solid #d9d9d9", display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+          <p style={{fontSize: "13px"}}>Product Variant</p>
+          <button
+            style={{
+              width: "50%",
+              padding: "10px",
+              borderRadius: "4px",
+              border: "none",
+              backgroundColor: "#fff",
+              color: "blue",
+              
+            }}
+          >
+            + Add Variant
+          </button>
+        </form>
       </div>
     </div>
   );

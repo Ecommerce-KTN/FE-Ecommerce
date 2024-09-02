@@ -7,16 +7,6 @@ import FormControl from '@mui/material/FormControl';
 import NativeSelect from '@mui/material/NativeSelect';
 
 function Dropdown({options}) {
-  /*
-  const [id, setID] = useState(1);
-  const options = [
-    {label: "kg", id: 1},
-    {label: "pound",id: 2}
-  ]
-  function selectID(e){
-    setID(e.target.value)
-  }
-  */
   return(
     <FormControl>
         <NativeSelect

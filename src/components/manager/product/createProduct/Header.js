@@ -3,7 +3,7 @@ import Button from '@atlaskit/button'
 import { IoNotificationsOutline } from "react-icons/io5";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import { FiArrowLeft } from "react-icons/fi";
-function Header() {
+function Header({closeAddingProduct}) {
   return (
     <>
         <div style={{display: "flex", justifyContent: "end"}}>
@@ -13,8 +13,8 @@ function Header() {
         </div>
         <div style={{flexDirection:"row", display: "flex"}}>
             <div>
-                <Button style={{padding: "20px" ,height: "60px", borderRadius: "5px", border: "1px solid #d9d9d9", marginRight: "15px", alignItem: "center"}}>
-                    <FiArrowLeft />
+                <Button style={{padding: "20px" ,height: "60px", borderRadius: "5px", border: "1px solid #d9d9d9", marginRight: "15px", alignItem: "center"}} onClick={closeAddingProduct}>
+                    <FiArrowLeft/>
                 </Button>
             </div>
             <div>
