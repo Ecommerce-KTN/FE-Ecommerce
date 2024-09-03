@@ -13,7 +13,7 @@ function CreateProduct({closeAddingProduct}) {
   const height = useRef(window.innerHeight).current
   return (
     <div style={{flexDirection: "column", height:height, paddingLeft: "4rem", paddingRight: "3rem", backgroundColor: "white"}}>
-        <div style={{ height: "30%", backgroundColor: "", marginTop: "2.8rem"}}>
+        <div style={{ height: "23%", backgroundColor: "", marginTop: "2.8rem"}}>
             <Header closeAddingProduct ={() => closeAddingProduct}/>
         </div>
         <div style={{display:"flex",flexDirection:"row", backgroundColor: "white"}}>
@@ -43,11 +43,11 @@ function CreateProduct({closeAddingProduct}) {
                 </div>
                 <div>
                     <h3>Pricing</h3>
-                    <div style={{border: "1px solid #d9d9d9", height: "7rem", width: "27rem", paddingTop: "30px"}}>
+                    <div style={{border: "1px solid #d9d9d9", height: "8.5em", width: "26.5rem", paddingTop: "30px", paddingLeft: "10px"}}>
                         <Pricing/>
                     </div>
                 </div>
-                <div>
+                <div style={{marginTop: "20px", width: "27rem"}}>
                     <Button/>
                 </div>
             </div>

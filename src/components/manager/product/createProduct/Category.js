@@ -20,6 +20,7 @@ function Category() {
             marginBottom: "10px",
             borderRadius: "4px",
             border: "1px solid #ccc",
+            marginTop: "10px"
           }}
         >
           <option>Health & Medicine</option>
@@ -31,6 +32,7 @@ function Category() {
             padding: "10px",
             borderRadius: "4px",
             border: "1px solid #ccc",
+            marginTop: "10px"
           }}
         >
           <option>Beauty</option>
@@ -40,7 +42,7 @@ function Category() {
       {/* Inventory Section */}
       <div style={{ width: "100%", marginBottom: "20px" }}>
         <label style={{ fontWeight: "bold" }}>Inventory</label>
-        <div style={{ display: "flex", gap: "10px", border: "1px solid #d9d9d9", padding: "10px"}}>
+        <div style={{ display: "flex", gap: "10px", border: "1px solid #d9d9d9", padding: "10px", marginTop: "15px"}}>
           <from>
             <label style={{ display: "block", fontSize: "small"}}>Quantity</label>
             <input
@@ -51,6 +53,8 @@ function Category() {
                 padding: "10px",
                 borderRadius: "4px",
                 border: "1px solid #ccc",
+                marginTop: "10px"
+                
               }}
             />
           </from>
@@ -65,6 +69,8 @@ function Category() {
                 padding: "10px",
                 borderRadius: "4px",
                 border: "1px solid #ccc",
+                marginTop: "10px"
+                
               }}
             />
           </from>
@@ -80,6 +86,7 @@ function Category() {
             borderRadius: "4px",
             backgroundColor: "#fff",
             border: "1px solid #ccc",
+            marginTop: "15px"
           }}
         >
           <div style={{ marginBottom: "10px" }}>
@@ -111,8 +118,8 @@ function Category() {
       {/* Variant Section */}
       <div style={{ width: "100%"}}>
         <label style={{ fontWeight: "bold" }}>Variant</label>
-        <form style={{border: "1px solid #d9d9d9", display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-          <p style={{fontSize: "13px"}}>Product Variant</p>
+        <form style={{border: "1px solid #d9d9d9", display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: "15px"}}>
+          <p style={{fontSize: "13px", marginLeft: "10px"}}>Product Variant</p>
           <button
             style={{
               width: "50%",
@@ -121,7 +128,7 @@ function Category() {
               border: "none",
               backgroundColor: "#fff",
               color: "blue",
-              
+              textAlign: "right"
             }}
           >
             + Add Variant

@@ -1,6 +1,9 @@
 import React, { useRef } from 'react'
 import {Menu,MenuProps} from "antd"
 import InsertChartIcon from '@mui/icons-material/InsertChart';
+import User from './product/createProduct/User';
+
+
 const icons=[InsertChartIcon,InsertChartIcon,InsertChartIcon,InsertChartIcon,InsertChartIcon,InsertChartIcon]
 const labels=[{name:"Page manager", childs:["Child 1", "Child 2"]},
 {name:"My shop", childs:["Products", "Order", "Customer"]},
@@ -30,15 +33,19 @@ const menuSideBar: MenuProps['items'] = icons.map((icon, index) => {
 function SideBar() {
     const height = useRef(window.innerHeight).current
   return (
-    <div style={{display: "flex",backgroundColor: "green", height:height}}>
-        <Menu
-              mode="inline"
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
-              style={{ height: '100%' }}
-              items={menuSideBar}
-            />
-    </div>
+    <>
+      <div style={{display: "flex",backgroundColor: "green", height:height}}>
+          <Menu
+                mode="inline"
+                defaultSelectedKeys={['1']}
+                defaultOpenKeys={['sub1']}
+                style={{ height: '100%' }}
+                items={menuSideBar}
+              />
+      </div>
+      <div><User/></div>
+    </>
+    
   )
 }
 

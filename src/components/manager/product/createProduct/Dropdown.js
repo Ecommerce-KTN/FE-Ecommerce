@@ -15,6 +15,11 @@ function Dropdown({options}) {
             name: '',
             id: 'uncontrolled-native',
           }}
+          sx={{
+            '&::before, &::after': {
+              display: 'none',
+            }, 
+          }}
         >
           {options.map(option => (
             <option value={option.value}>{option.label}</option>

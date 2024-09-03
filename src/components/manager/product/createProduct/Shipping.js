@@ -72,7 +72,6 @@ function Shipping() {
     { label: "m", id: 3 },
   ];
 
-
   function selectIDLength(e) {
     setIDLength(e.target.value);
   }
@@ -80,13 +79,12 @@ function Shipping() {
   return (
     <>
       <div
-        style={{ border: "1px solid #d9d9d9", padding: "10px", width: "25rem" }}
+        style={{ padding: "10px", width: "25rem", paddingTop: "25px" }}
       >
         {/*<input type="text" style={{border: "none", outline: "none"}}></input>*/}
-        <FormControl sx={{ m: 1, width: "40ch" }} variant="outlined">
+        <FormControl sx={{ m: 1, width: "43ch" }} variant="outlined">
           <InputLabel
             shrink
-            htmlFor=""
             sx={{
               top: "-17px",
               left: "-13px",
@@ -120,19 +118,24 @@ function Shipping() {
           />
         </FormControl>
       </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: "20px",
-        }}
-      >
-        <p>Package Size</p>
-        <Dropdown options={optionsLength} />
+
+      <div style={{paddingLeft: "10px"}}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "20px",
+            paddingLeft: "10px",
+            paddingRight: "15px"
+          }}
+        >
+          <p style={{marginTop: "9px"}}>Package Size</p>
+          <Dropdown options={optionsLength} />
+        </div>
+        <PackageSize props={"Length"} />
+        <PackageSize props={"Breadth"} />
+        <PackageSize props={"Width"} />
       </div>
-      <PackageSize props={"Length"} />
-      <PackageSize props={"Breadth"} />
-      <PackageSize props={"Width"} />
     </>
   );
 }
