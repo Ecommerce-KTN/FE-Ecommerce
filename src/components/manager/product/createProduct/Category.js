@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 function Category ( { onCategoryChange, onSubCategoryChange, onQuantityChange, onSKUChange, onSellingTypeChange } )
 {
   const [ categories, setCategories ] = useState( [] );
+
   const [ subCategories, setSubCategories ] = useState( [] );
   const [ selectedCategoryId, setSelectedCategoryId ] = useState( '' );
   const [ quantity, setQuantity ] = useState( "" );

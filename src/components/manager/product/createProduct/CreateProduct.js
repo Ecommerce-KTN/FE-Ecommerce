@@ -7,6 +7,7 @@ import Pricing from './Pricing';
 import Button from '@mui/joy/Button';
 import Description from './Description';
 import Box from '@mui/joy/Box';
+import axios from 'axios';
 
 function CreateProduct ( { closeAddingProduct } )
 {
@@ -14,13 +15,13 @@ function CreateProduct ( { closeAddingProduct } )
   const [ productName, setProductName ] = useState( '' );
   const [ description, setDescription ] = useState( '' );
   const [ isAddingProduct, setIsAddingProduct ] = useState( false );
-  const [ category, setCategory ] = useState( [] );
-  const [ subCategory, setSubCategory ] = useState( [] );
+  const [ category, setCategory ] = useState( {} );
+  const [ subCategory, setSubCategory ] = useState( {} );
   const [ quantity, setQuantity ] = useState( 1 );
   const [ SKU, setSKU ] = useState( '' );
   const [ sellingType, setSellingType ] = useState( 'In-store selling only' );
   const [ images, setImages ] = useState( [] );
-  const [ primaryImage, setPrimaryImage ] = useState( null );
+  const [ primaryImage, setPrimaryImage ] = useState();
   const [ weight, setWeight ] = useState( '' );
   const [ length, setLength ] = useState( '' );
   const [ width, setWidth ] = useState( '' );
@@ -116,17 +117,59 @@ function CreateProduct ( { closeAddingProduct } )
   // Check if form is valid
   useEffect( () =>
   {
-    setIsAddingProduct( isValidProductName && isValidDescription && price && MRRPPrice && discount && quantity && category && subCategory );
+    setIsAddingProduct( isValidProductName && isValidDescription && price && MRRPPrice && discount && quantity && category && subCategory && primaryImage );
   }, [ isValidProductName, isValidDescription ] ); // Added dependencies here
 
   // Submit handler
-  const handleSubmit = () =>
+  const handleSubmit = async () =>
   {
 
-    console.log( 'Product Name:', productName );
-    console.log( 'Description:', description );
+    const formData = new FormData();
+    formData.append( 'name', productName );
+    formData.append( 'description', description );
+    formData.append( 'quantity', quantity );
+    formData.append( 'sellingType', sellingType );
+    formData.append( 'weight', weight );
+    formData.append( 'breadth', breadth );
+    formData.append( 'width', width );
+    formData.append( 'length', length );
+    formData.append( 'unitOfMass', unitOfWeight );
+    formData.append( 'unitOfLength', unitOfLength );
+    formData.append( 'categoryId', category ); // Assuming category is an array of IDs
+    formData.append( 'parentCategoryId', subCategory ); // Assuming subCategory is an array of IDs
+    formData.append( 'costPrice', MRRPPrice );
+    formData.append( 'price', price );
+    formData.append( 'discountPrice', discount );
 
+    if ( primaryImage )
+    {
+      formData.append( 'primaryImage', primaryImage );
+    }
+
+    if ( images.length > 0 )
+    {
+      images.forEach( ( image, index ) =>
+      {
+        formData.append( `images[${ index }]`, image );
+      } );
+    }
+
+    try
+    {
+      const response = await axios.post( 'http://localhost:8080/api/v1/products', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      } );
+
+      console.log( 'Product added successfully!', response.data );
+    } catch ( error )
+    {
+      console.error( 'Error adding product:', error );
+
+    }
   };
+
 
   return (
     <div style={ { display: "flex", flexDirection: "column", width: '100%', paddingLeft: "3rem", paddingRight: "3rem", backgroundColor: "white", height: '100%', overflow: 'auto' } }>
