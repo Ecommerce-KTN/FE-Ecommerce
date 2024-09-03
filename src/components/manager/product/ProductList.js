@@ -36,7 +36,7 @@ function ProductList ()
     };
 
     getAllProducts();
-  }, [] ); // Sử dụng dependency là mảng rỗng để chỉ chạy useEffect một lần khi component được mount
+  }, [ products ] ); // Sử dụng dependency là mảng rỗng để chỉ chạy useEffect một lần khi component được mount
 
   if ( isAddingProduct )
   {
