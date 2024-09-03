@@ -12,7 +12,7 @@ function Reuse({props, width}){
   };
   return (
     <>
-      <FormControl sx={{ m: 1, width: {width}}} variant="outlined">
+      <FormControl sx={{ m: 1, width: {width}, marginBottom: "20px"}} variant="outlined">
       <InputLabel shrink htmlFor="" sx={{
         top: '-14px',
         left: '-13px',
@@ -42,9 +42,9 @@ function Reuse({props, width}){
 function Pricing() {
   return(
     <>
-      <Reuse props={"MRRP Price"} width={"20ch"}/>
-      <Reuse props={"Sale Price"} width={"20ch"}/>
-      <Reuse props={"Sale Price"} width={"42ch"}/>
+      <Reuse props={"MRRP Price"} width={"20.5ch"}/>
+      <Reuse props={"Sale Price"} width={"20.5ch"}/>
+      <Reuse props={"Sale Price"} width={"42.53ch"}/>
     </>
   )
 }
