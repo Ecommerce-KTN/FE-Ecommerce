@@ -1,16 +1,14 @@
 import { useState, useRef } from "react";
-import img1 from "./image/img1.jpg";
-import img2 from "./image/img2.jpg";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from "@mui/material";
 import { Close as CloseIcon, Star as StarIcon, Delete as DeleteIcon, Add as AddIcon } from "@mui/icons-material";
 
-function ProductImage ()
+function ProductImage ( { onImagesChange, onPrimaryImageChange } )
 {
   const inputRef = useRef( null );
   const [ openForm, setOpenForm ] = useState( false );
-  const [ primaryImage, setPrimaryImage ] = useState( img1 );
+  const [ primaryImage, setPrimaryImage ] = useState( null );
   const [ selectedImage, setSelectedImage ] = useState( null );
-  const [ images, setImages ] = useState( [ img1, img2 ] );
+  const [ images, setImages ] = useState( [] );
 
   const clickToUpload = () =>
   {
@@ -19,10 +17,13 @@ function ProductImage ()
 
   const handleRemoveImage = ( image ) =>
   {
-    setImages( images.filter( img => img !== image ) );
+    const updatedImages = images.filter( ( img ) => img !== image );
+    setImages( updatedImages );
+    onImagesChange( updatedImages );
     if ( image === primaryImage )
     {
       setPrimaryImage( null );
+      onPrimaryImageChange( null );
     }
   };
 
@@ -31,8 +32,15 @@ function ProductImage ()
     const file = event.target.files[ 0 ];
     if ( file )
     {
-      // Add file to images list (for demonstration, using URL.createObjectURL)
-      setImages( [ ...images, URL.createObjectURL( file ) ] );
+      const imageUrl = URL.createObjectURL( file );
+      const updatedImages = [ ...images, imageUrl ];
+      setImages( updatedImages );
+      if ( !primaryImage )
+      {
+        setPrimaryImage( imageUrl );
+        onPrimaryImageChange( imageUrl );
+      }
+      onImagesChange( updatedImages );
     }
   };
 
@@ -57,6 +65,7 @@ function ProductImage ()
     if ( selectedImage && selectedImage !== primaryImage )
     {
       setPrimaryImage( selectedImage );
+      onPrimaryImageChange( selectedImage );
       setSelectedImage( null );
     }
   };
@@ -69,115 +78,216 @@ function ProductImage ()
           flexDirection: "row",
           justifyContent: "space-around",
           alignItems: "center",
-          paddingLeft: "15px",
-          paddingRight: "15px",
+          padding: "15px",
           border: "1px solid #d9d9d9",
           borderRadius: "5px",
         } }
       >
+        {/* Upload Section */ }
         <div
           onClick={ clickToUpload }
           style={ {
             backgroundColor: "#efeff5",
-            width: "9rem",
-            height: "9rem",
+            width: "8.5rem",
+            height: "8.5rem",
             border: "2px solid #8080ff",
             borderStyle: "dashed",
             borderRadius: "5px",
             cursor: "pointer",
-            margin: '12px',
+            margin: "12px",
+            display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            flexDirection: "column",
+            textAlign: "center",
           } }
         >
-          <p
-            style={ {
-              textAlign: "center",
-              fontSize: "small",
-              marginTop: "2.5rem"
-            } }
-          >
+          <p style={ { fontSize: "small", margin: 0 } }>
             Click to upload or drag and drop
           </p>
           <input type="file" ref={ inputRef } style={ { display: "none" } } onChange={ handleFileChange } />
         </div>
-        <div style={ {
-          position: 'relative',
-          width: '9rem',
-          height: '9rem',
-          border: '2px solid gray',
-          borderStyle: 'inherit',
-          borderRadius: '5px',
-          overflow: 'hidden',
-        } }>
-          <img src={ primaryImage } alt="Sample" style={ { width: '100%', height: '100%', objectFit: 'cover', borderRadius: '5px' } } />
-          <div style={ {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(128, 128, 128, 0.5)',
-            borderRadius: '5px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          } }>
-            <div style={ {
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '0.5rem',
-            } }>
-              <Button
-                variant="text"
-                style={ { backgroundColor: 'white', color: 'black', borderRadius: '10px', textTransform: "none" } }
-                onClick={ handleReplaceClick }
+
+        {/* Display for images */ }
+        { images.length > 0 && (
+          <div
+            style={ {
+              display: "flex",
+              flexDirection: "row",
+              gap: "1rem",
+              alignItems: "flex-start",
+            } }
+          >
+            {/* Display primary image */ }
+            { primaryImage && images.includes( primaryImage ) && (
+              <div
+                style={ {
+                  position: "relative",
+                  width: "8.5rem",
+                  height: "8.5rem",
+                  border: "2px solid gray",
+                  borderRadius: "5px",
+                  overflow: "hidden",
+                } }
               >
-                Replace
-              </Button>
-              <Button
-                variant="text"
-                style={ { backgroundColor: 'white', color: 'black', borderRadius: '10px', textTransform: "none" } }
+                <img
+                  src={ primaryImage }
+                  alt="Primary Image"
+                  style={ { width: "100%", height: "100%", objectFit: "cover", borderRadius: "5px" } }
+                />
+                <div
+                  style={ {
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    backgroundColor: "yellow",
+                    borderRadius: "0 0 0 10px",
+                    padding: "0.2rem",
+                  } }
+                >
+                  <StarIcon style={ { color: "gold" } } />
+                </div>
+                <div
+                  style={ {
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    padding: "0.5rem",
+                    backgroundColor: "rgba(128, 128, 128, 0.5)",
+                    borderRadius: "5px",
+                  } }
+                >
+                  <Button
+                    variant="text"
+                    style={ {
+                      backgroundColor: "white",
+                      color: "black",
+                      borderRadius: "10px",
+                      textTransform: "none",
+                    } }
+                    onClick={ handleReplaceClick }
+                  >
+                    Replace
+                  </Button>
+                </div>
+              </div>
+            ) }
+
+            {/* Display one other image if available */ }
+            { images.filter( image => image !== primaryImage ).slice( 0, 1 ).map( ( image, index ) => (
+              <div
+                key={ index }
+                style={ {
+                  position: "relative",
+                  width: "8.5rem",
+                  height: "8.5rem",
+                  border: "2px solid gray",
+                  borderRadius: "5px",
+                  overflow: "hidden",
+                } }
               >
-                Remove
-              </Button>
-            </div>
+                <img
+                  src={ image }
+                  alt={ `Image ${ index }` }
+                  style={ { width: "100%", height: "100%", objectFit: "cover", borderRadius: "5px" } }
+                />
+                <div
+                  style={ {
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    padding: "0.5rem",
+                    backgroundColor: "rgba(128, 128, 128, 0.5)",
+                    borderRadius: "5px",
+                  } }
+                >
+                  <Button
+                    variant="text"
+                    style={ {
+                      backgroundColor: "white",
+                      color: "black",
+                      borderRadius: "10px",
+                      textTransform: "none",
+                    } }
+                    onClick={ () => handleRemoveImage( image ) }
+                  >
+                    Remove
+                  </Button>
+                </div>
+              </div>
+            ) ) }
+
+            {/* Display additional images as small rectangles if there are 3 or more images */ }
+            { images.length > 2 && (
+              <div
+                style={ {
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1rem",
+                } }
+              >
+                { images.filter( image => image !== primaryImage ).slice( 1, 3 ).map( ( image, index ) => (
+                  <div
+                    key={ index }
+                    style={ {
+                      position: "relative",
+                      width: "7rem",
+                      height: "3.5rem",
+                      border: "2px solid gray",
+                      borderRadius: "5px",
+                      overflow: "hidden",
+                    } }
+                  >
+                    <img
+                      src={ image }
+                      alt={ `Additional Image ${ index }` }
+                      style={ { width: "100%", height: "100%", objectFit: "cover", borderRadius: "5px" } }
+                    />
+                    <div
+                      style={ {
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        padding: "0.5rem",
+                        backgroundColor: "rgba(128, 128, 128, 0.5)",
+                        borderRadius: "5px",
+                      } }
+                    >
+                      <Button
+                        variant="text"
+                        style={ {
+                          backgroundColor: "white",
+                          color: "black",
+                          borderRadius: "10px",
+                          textTransform: "none",
+                        } }
+                        onClick={ () => handleRemoveImage( image ) }
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
+                ) ) }
+              </div>
+            ) }
           </div>
-        </div>
-        <div style={ {
-          width: '9rem',
-          height: '9rem',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '0.5rem',
-        } }>
-          <div style={ {
-            width: '100%',
-            height: '50%',
-            overflow: 'hidden',
-            borderRadius: '5px',
-          } }>
-            <img src={ img2 } alt="Sample" style={ {
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-            } } />
-          </div>
-          <div style={ {
-            width: '100%',
-            height: '50%',
-            overflow: 'hidden',
-            borderRadius: '5px',
-          } }>
-            <img src={ img2 } alt="Sample" style={ {
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-            } } />
-          </div>
-        </div>
+        ) }
       </div>
+
+
+
+
+
+
 
       {/* Dialog form */ }
       <Dialog open={ openForm } onClose={ handleCloseForm } fullWidth maxWidth="lg">
@@ -188,63 +298,77 @@ function ProductImage ()
             color="inherit"
             onClick={ handleCloseForm }
             aria-label="close"
-            style={ { position: 'absolute', top: 0, right: 0 } }
+            style={ { position: "absolute", top: "10px", right: "10px" } }
           >
             <CloseIcon />
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <div style={ { display: 'flex', flexDirection: 'row', gap: '1rem', } }>
+          <div style={ { display: "flex", flexDirection: "row", gap: "1rem" } }>
             {/* Primary Image */ }
-            <div style={ { width: '25%' } }>
-              <img src={ primaryImage || img1 } alt="Primary" style={ { width: '100%', height: 'auto', borderRadius: '5px' } } />
+            <div style={ { width: "25%" } }>
+              <img
+                src={ primaryImage || "" }
+                alt="Primary"
+                style={ { width: "100%", height: "auto", borderRadius: "5px" } }
+              />
             </div>
 
             {/* Wireframe Images */ }
-            <div style={ {
-              width: '73%',
-              display: 'grid',
-              gridTemplateColumns: 'repeat(5, 1fr)',
-              gridTemplateRows: `repeat(${ Math.ceil( ( images.length + 1 ) / 5 ) }, 1fr)`,
-              gap: '0.5rem',
-              position: 'relative'
-            } }>
+            <div
+              style={ {
+                width: "73%",
+                display: "grid",
+                gridTemplateColumns: "repeat(5, 1fr)",
+                gap: "0.5rem",
+              } }
+            >
               { images.map( ( image, index ) => (
-                <div key={ index } style={ {
-                  position: 'relative',
-                  width: '6rem',
-                  height: '6rem',
-                  borderRadius: '5px',
-                  overflow: 'hidden',
-                  border: selectedImage === image ? '2px solid #007bff' : 'none',
-                } }>
+                <div
+                  key={ index }
+                  style={ {
+                    position: "relative",
+                    width: "6rem",
+                    height: "6rem",
+                    borderRadius: "5px",
+                    overflow: "hidden",
+                    border: selectedImage === image ? "2px solid #007bff" : "none",
+                  } }
+                >
                   { primaryImage === image && (
-                    <div style={ {
-                      position: 'absolute',
-                      top: 0,
-                      right: 0,
-                      backgroundColor: 'yellow',
-                      borderRadius: '0 0 0 10px',
-                      padding: '0.2rem',
-                    } }>
-                      <StarIcon style={ { color: 'gold' } } />
+                    <div
+                      style={ {
+                        position: "absolute",
+                        top: 0,
+                        right: 0,
+                        backgroundColor: "yellow",
+                        borderRadius: "0 0 0 10px",
+                        padding: "0.2rem",
+                      } }
+                    >
+                      <StarIcon style={ { color: "gold" } } />
                     </div>
                   ) }
-                  <img src={ image } alt={ `Thumbnail ${ index }` } style={ {
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                  } } onClick={ () => handleSelectImage( image ) } />
+                  <img
+                    src={ image }
+                    alt={ `Thumbnail ${ index }` }
+                    style={ {
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                    } }
+                    onClick={ () => handleSelectImage( image ) }
+                  />
                   { primaryImage !== image && (
                     <IconButton
                       style={ {
-                        position: 'absolute',
+                        position: "absolute",
                         top: 0,
                         right: 0,
-                        backgroundColor: 'white',
-                        borderRadius: '0 0 0 10px',
+                        backgroundColor: "white",
+                        borderRadius: "0 0 0 10px",
                       } }
                       onClick={ () => handleRemoveImage( image ) }
                     >
@@ -257,21 +381,19 @@ function ProductImage ()
               { images.length < 10 && (
                 <div
                   style={ {
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    border: '2px dashed gray',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    backgroundColor: '#f5f5f5',
-                    height: '6rem',
-                    width: '6rem',
-                    gridColumn: 'span 1 / auto',
-                    gridRow: `auto / span ${ Math.ceil( ( images.length + 1 ) / 5 ) }`
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "2px dashed gray",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    backgroundColor: "#f5f5f5",
+                    height: "6rem",
+                    width: "6rem",
                   } }
                   onClick={ () => inputRef.current.click() }
                 >
-                  <AddIcon />
+                  <AddIcon style={ { fontSize: "2rem", color: "gray" } } />
                 </div>
               ) }
             </div>
@@ -279,11 +401,14 @@ function ProductImage ()
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={ handleCloseForm } color="primary">Cancel</Button>
+          <Button onClick={ handleCloseForm } color="primary">
+            Cancel
+          </Button>
           <Button
             onClick={ handleChoosePrimary }
             color="primary"
-            disabled={ primaryImage === selectedImage }
+            variant={ selectedImage === primaryImage || !selectedImage ? "contained" : "outlined" }
+            disabled={ selectedImage === primaryImage || !selectedImage }
           >
             Choose Primary
           </Button>

@@ -19,7 +19,7 @@ const lengthOptions = [
   { label: "m", id: 3 },
 ];
 
-function Shipping ()
+function Shipping ( { onWeightChange, onLengthChange, onWidthChange, onBreadthChange, onUnitOfWeightChange, onUnitOfLengthChange } )
 {
   const [ unitOfWeight, setUnitOfWeight ] = useState( weightOptions[ 0 ] );
   const [ unitOfLength, setUnitOfLength ] = useState( lengthOptions[ 0 ] );
@@ -59,7 +59,13 @@ function Shipping ()
               <Dropdown
                 options={ weightOptions }
                 selected={ unitOfWeight }
-                onChange={ handleDropdownChange( setUnitOfWeight ) }
+                onChange={
+                  ( unit ) =>
+                  {
+                    setUnitOfWeight( unit );
+                    onUnitOfWeightChange( unit );
+                  }
+                }
               />
             </InputAdornment>
           }
@@ -75,7 +81,13 @@ function Shipping ()
             backgroundColor: "white",
           } }
           value={ weight }
-          onChange={ handleInputChange( setWeight ) }
+          onChange={
+            ( e ) =>
+            {
+              setWeight( e.target.value );
+              onWeightChange( e.target.value );
+            }
+          }
           onKeyDown={ ( e ) => restrictAlphabets( e, weight ) }
         />
       </FormControl>
@@ -95,7 +107,13 @@ function Shipping ()
           <Dropdown
             options={ lengthOptions }
             selected={ unitOfLength }
-            onChange={ handleDropdownChange( setUnitOfLength ) }
+            onChange={
+              ( unit ) => 
+              {
+                setUnitOfLength( unit );
+                onUnitOfLengthChange( unit );
+              }
+            }
           />
         </div>
         <div>
@@ -138,13 +156,27 @@ function Shipping ()
                       ? breadth
                       : width
                 }
-                onChange={ handleInputChange(
-                  dimension === "Length"
-                    ? setLength
-                    : dimension === "Breadth"
-                      ? setBreadth
-                      : setWidth
-                ) }
+                onChange={
+                  ( e ) =>
+                  {
+                    if ( dimension === "Length" )
+                    {
+                      setLength( e.target.value );
+                      onLengthChange( e.target.value );
+                    }
+                    else if ( dimension === "Breadth" )
+                    {
+                      setBreadth( e.target.value );
+                      onBreadthChange( e.target.value );
+                    }
+                    else
+                    {
+                      setWidth( e.target.value );
+                      onWidthChange( e.target.value );
+                    }
+                  }
+
+                }
                 onKeyDown={ ( e ) =>
                   restrictAlphabets(
                     e,

@@ -1,12 +1,14 @@
 import { Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
-function Category ()
+function Category ( { onCategoryChange, onSubCategoryChange, onQuantityChange, onSKUChange, onSellingTypeChange } )
 {
   const [ categories, setCategories ] = useState( [] );
   const [ subCategories, setSubCategories ] = useState( [] );
   const [ selectedCategoryId, setSelectedCategoryId ] = useState( '' );
-
+  const [ quantity, setQuantity ] = useState( "" );
+  const [ quantityError, setQuantityError ] = useState( "" );
+  const [ sellingType, setSellingType ] = useState( "inStore" );
   const getSubCategories = async ( id ) =>
   {
     try
@@ -20,6 +22,34 @@ function Category ()
       console.log( error );
       setSubCategories( [] ); // Ensure it defaults to an empty array on error
     }
+  };
+  const handleSellingTypeChange = ( e ) =>
+  {
+    const selectedType = e.target.value;
+    setSellingType( selectedType );
+    onSellingTypeChange( selectedType );
+  };
+  const handleQuantityChange = ( e ) =>
+  {
+    const value = e.target.value;
+
+    // Kiểm tra xem đầu vào có phải là số nguyên dương hay không
+    if ( /^\d*$/.test( value ) )
+    {
+      // Kiểm tra phạm vi giá trị
+      if ( value === "" || ( parseInt( value, 10 ) >= 1 && parseInt( value, 10 ) <= 9999 ) )
+      {
+        setQuantity( value );
+        setQuantityError( "" );
+      } else
+      {
+        setQuantityError( "Quantity must be between 1 and 9999." );
+      }
+    } else
+    {
+      setQuantityError( "Please enter a valid number without commas or periods." );
+    }
+    onQuantityChange( value );
   };
 
   useEffect( () =>
@@ -54,6 +84,7 @@ function Category ()
   {
     const newCategoryId = e.target.value;
     setSelectedCategoryId( newCategoryId ); // Cập nhật selectedCategoryId
+    onCategoryChange( newCategoryId );
   };
 
   return (
@@ -97,13 +128,16 @@ function Category ()
             border: "1px solid #ccc",
             marginTop: "10px",
           } }
+          onChange={ ( e ) => onSubCategoryChange( e.target.value ) }
         >
           <option value="">Select Subcategory</option>
-          { subCategories.map( ( subCategory ) => (
-            <option key={ subCategory.id } value={ subCategory.id }>
-              { subCategory.name }
-            </option>
-          ) ) }
+          {
+            subCategories.map( ( subCategory ) => (
+              <option key={ subCategory.id } value={ subCategory.id }>
+                { subCategory.name }
+              </option>
+            ) )
+          }
         </select>
       </div>
 
@@ -123,7 +157,11 @@ function Category ()
             <label style={ { display: "block", fontSize: "small" } }>Quantity</label>
             <input
               type="number"
+              value={ quantity }
+              onChange={ handleQuantityChange }
               placeholder="Quantity"
+              min="1"
+              max="9999"
               style={ {
                 width: "90%",
                 flex: "1",
@@ -131,14 +169,17 @@ function Category ()
                 borderRadius: "4px",
                 border: "1px solid #ccc",
                 marginTop: "10px",
+                borderColor: quantityError ? "red" : "#ccc",
               } }
             />
+            { quantityError && <p style={ { color: "red", fontSize: "small" } }>{ quantityError }</p> }
           </form>
           <form style={ { width: "65%" } }>
-            <label style={ { display: "block", fontSize: "small" } }>SKU(Optional)</label>
+            <label style={ { display: "block", fontSize: "small" } }>SKU (Optional)</label>
             <input
               type="text"
-              placeholder="SKU(Optional)"
+              placeholder="SKU (Optional)"
+              onChange={ ( e ) => onSKUChange( e.target.value ) }
               style={ {
                 width: "90%",
                 flex: "1",
@@ -165,19 +206,20 @@ function Category ()
           } }
         >
           <div style={ { marginBottom: "10px" } }>
-            <input type="radio" id="inStore" name="sellingType" defaultChecked />
+            <input type="radio" id="inStore" name="sellingType" defaultChecked
+              onChange={ handleSellingTypeChange } />
             <label htmlFor="inStore" style={ { marginLeft: "10px", fontWeight: "bold" } }>
               In-store selling only
             </label>
           </div>
           <div style={ { marginBottom: "10px" } }>
-            <input type="radio" id="online" name="sellingType" />
+            <input type="radio" id="online" name="sellingType" onChange={ handleSellingTypeChange } />
             <label htmlFor="online" style={ { marginLeft: "10px", fontWeight: "bold" } }>
               Online selling only
             </label>
           </div>
           <div>
-            <input type="radio" id="both" name="sellingType" />
+            <input type="radio" id="both" name="sellingType" onChange={ handleSellingTypeChange } />
             <label htmlFor="both" style={ { marginLeft: "10px", fontWeight: "bold" } }>
               Available both in-store and online
             </label>
@@ -214,7 +256,7 @@ function Category ()
           </Button>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

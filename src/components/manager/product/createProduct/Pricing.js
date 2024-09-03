@@ -1,25 +1,26 @@
-import react, { useState } from 'react'
+import React, { useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import restrictAlphabets from './RestrictAlphabets';
 
-function Reuse ( { props, width } )
+function Reuse ( { label, width, value, onChange } )
 {
-  const [ inputValue, setInputValue ] = useState( "" );
-  const handleChange = ( event ) =>
-  {
-    setInputValue( event.target.value );
-  };
   return (
     <>
-      <FormControl sx={ { m: 3, width: { width }, marginBottom: "20px" } } variant="outlined">
-        <InputLabel shrink htmlFor="" sx={ {
-          top: '-14px',
-          left: '-13px',
-          fontSize: '18px',
-        } }>{ props }</InputLabel>
+      <FormControl sx={ { m: 3, width: width, marginBottom: "20px" } } variant="outlined">
+        <InputLabel
+          shrink
+          htmlFor=""
+          sx={ {
+            top: '-14px',
+            left: '-13px',
+            fontSize: '18px',
+          } }
+        >
+          { label }
+        </InputLabel>
         <OutlinedInput
           id="outlined-adornment-weight"
           startAdornment={ <InputAdornment position="start">$</InputAdornment> }
@@ -32,24 +33,55 @@ function Reuse ( { props, width } )
               padding: '8px',
             },
           } }
-          value={ inputValue }
-          onChange={ handleChange }
-          onKeyDown={ ( e ) => restrictAlphabets( e, inputValue ) }
+          value={ value }
+          onChange={ onChange }
+          onKeyDown={ ( e ) => restrictAlphabets( e, value ) }
         />
       </FormControl>
     </>
-  )
+  );
 }
 
-function Pricing ()
+function Pricing ( { onPriceChange, onDiscountChange, onMRRPPriceChange } )
 {
+  const [ price, setPrice ] = useState( "" );
+  const [ discount, setDiscount ] = useState( "" );
+  const [ MRRPPrice, setMRRPPrice ] = useState( "" );
+
   return (
     <>
-      <Reuse props={ "MRRP Price" } width={ "41%" } />
-      <Reuse props={ "Sale Price" } width={ "40%" } />
-      <Reuse props={ "Sale Price" } width={ "90%" } />
+      <Reuse
+        label="MRRP Price"
+        width="41%"
+        value={ MRRPPrice }
+        onChange={ ( e ) =>
+        {
+          setMRRPPrice( e.target.value );
+          onMRRPPriceChange( e.target.value );
+        } }
+      />
+      <Reuse
+        label="Sale Price"
+        width="40%"
+        value={ discount }
+        onChange={ ( e ) =>
+        {
+          setDiscount( e.target.value );
+          onDiscountChange( e.target.value );
+        } }
+      />
+      <Reuse
+        label="Price"
+        width="90%"
+        value={ price }
+        onChange={ ( e ) =>
+        {
+          setPrice( e.target.value );
+          onPriceChange( e.target.value );
+        } }
+      />
     </>
-  )
+  );
 }
 
 export default Pricing;

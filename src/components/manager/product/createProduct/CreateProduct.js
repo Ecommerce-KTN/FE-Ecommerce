@@ -10,16 +10,99 @@ import Box from '@mui/joy/Box';
 
 function CreateProduct ( { closeAddingProduct } )
 {
-  const width = useRef( window.innerWidth ).current;
+
   const [ productName, setProductName ] = useState( '' );
   const [ description, setDescription ] = useState( '' );
   const [ isAddingProduct, setIsAddingProduct ] = useState( false );
+  const [ category, setCategory ] = useState( [] );
+  const [ subCategory, setSubCategory ] = useState( [] );
+  const [ quantity, setQuantity ] = useState( 1 );
+  const [ SKU, setSKU ] = useState( '' );
+  const [ sellingType, setSellingType ] = useState( 'In-store selling only' );
+  const [ images, setImages ] = useState( [] );
+  const [ primaryImage, setPrimaryImage ] = useState( null );
+  const [ weight, setWeight ] = useState( '' );
+  const [ length, setLength ] = useState( '' );
+  const [ width, setWidth ] = useState( '' );
+  const [ breadth, setBreadth ] = useState( '' );
+  const [ unitOfWeight, setUnitOfWeight ] = useState( 'kg' );
+  const [ unitOfLength, setUnitOfLength ] = useState( 'cm' );
+  const [ MRRPPrice, setMRRPPrice ] = useState( '' );
+  const [ price, setPrice ] = useState( '' );
+  const [ discount, setDiscount ] = useState( '' );
+
+
 
   // Handle changes from Description component
   const handleDescriptionChange = ( newDescription ) =>
   {
     setDescription( newDescription );
   };
+  const handleCategoryOnChange = ( newCategory ) =>
+  {
+    setCategory( newCategory );
+  };
+  const handleSubCategoryOnChange = ( newSubCategory ) =>
+  {
+    setSubCategory( newSubCategory );
+  };
+  const handleQuantityOnChange = ( newQuantity ) =>
+  {
+    setQuantity( newQuantity );
+  };
+  const handleSKUOnChange = ( newSKU ) =>
+  {
+    setSKU( newSKU );
+  };
+  const handleSellingTypeOnChange = ( newSellingType ) =>
+  {
+    setSellingType( newSellingType );
+  };
+  const handleImagesOnChange = ( newImages ) =>
+  {
+    setImages( newImages );
+  };
+  const handlePrimaryImageOnChange = ( newPrimaryImage ) =>
+  {
+    setPrimaryImage( newPrimaryImage );
+  };
+  const handleWeightOnChange = ( newWeight ) =>
+  {
+    setWeight( newWeight );
+  };
+  const handleLengthOnChange = ( newLength ) =>
+  {
+    setLength( newLength );
+  };
+  const handleWidthOnChange = ( newWidth ) =>
+  {
+    setWidth( newWidth );
+  };
+  const handleBreadthOnChange = ( newBreadth ) =>
+  {
+    setBreadth( newBreadth );
+  };
+  const handleUnitOfWeightOnChange = ( newUnitOfWeight ) =>
+  {
+    setUnitOfWeight( newUnitOfWeight );
+  };
+  const handleUnitOfLengthOnChange = ( newUnitOfLength ) =>
+  {
+    setUnitOfLength( newUnitOfLength );
+  };
+  const handleMRRPPriceOnChange = ( newMRRPPrice ) =>
+  {
+    setMRRPPrice( newMRRPPrice );
+  };
+  const handlePriceOnChange = ( newPrice ) =>
+  {
+    setPrice( newPrice );
+  };
+  const handleDiscountOnChange = ( newDiscount ) =>
+  {
+    setDiscount( newDiscount );
+  };
+
 
   const handleProductNameChange = ( newProductName ) =>
   {
@@ -33,7 +116,7 @@ function CreateProduct ( { closeAddingProduct } )
   // Check if form is valid
   useEffect( () =>
   {
-    setIsAddingProduct( isValidProductName && isValidDescription );
+    setIsAddingProduct( isValidProductName && isValidDescription && price && MRRPPrice && discount && quantity && category && subCategory );
   }, [ isValidProductName, isValidDescription ] ); // Added dependencies here
 
   // Submit handler
@@ -46,7 +129,7 @@ function CreateProduct ( { closeAddingProduct } )
   };
 
   return (
-    <div style={ { display: "flex", flexDirection: "column", width: width, paddingLeft: "3rem", paddingRight: "3rem", backgroundColor: "white", height: '100%', overflow: 'auto' } }>
+    <div style={ { display: "flex", flexDirection: "column", width: '100%', paddingLeft: "3rem", paddingRight: "3rem", backgroundColor: "white", height: '100%', overflow: 'auto' } }>
       <div style={ { marginTop: 20 } }>
         <Header closeAddingProduct={ () => closeAddingProduct } />
       </div>
@@ -61,23 +144,44 @@ function CreateProduct ( { closeAddingProduct } )
               />
             </div>
           </div>
-          <Category />
+          <Category
+            onCategoryChange={ handleCategoryOnChange }
+            onSubCategoryChange={ handleSubCategoryOnChange }
+            onQuantityChange={ handleQuantityOnChange }
+            onSKUChange={ handleSKUOnChange }
+            onSellingTypeChange={ handleSellingTypeOnChange }
+          />
         </div>
         <div style={ { width: "48%" } }>
           <div>
             <h3>Product Images</h3>
-            <ProductImage />
+            <ProductImage
+              onImagesChange={ handleImagesOnChange }
+              onPrimaryImageChange={ handlePrimaryImageOnChange }
+            />
           </div>
           <div>
             <h3>Shipping and Delivery</h3>
             <div style={ { border: "1px solid #d9d9d9" } }>
-              <Shipping />
+              <Shipping
+                onWeightChange={ handleWeightOnChange }
+                onLengthChange={ handleLengthOnChange }
+                onWidthChange={ handleWidthOnChange }
+                onBreadthChange={ handleBreadthOnChange }
+                onUnitOfWeightChange={ handleUnitOfWeightOnChange }
+                onUnitOfLengthChange={ handleUnitOfLengthOnChange }
+
+              />
             </div>
           </div>
           <div>
             <h3>Pricing</h3>
             <div style={ { border: "1px solid #d9d9d9", paddingTop: "30px" } }>
-              <Pricing values />
+              <Pricing values
+                onMRRPPriceChange={ handleMRRPPriceOnChange }
+                onPriceChange={ handlePriceOnChange }
+                onDiscountChange={ handleDiscountOnChange }
+              />
             </div>
           </div>
           <div style={ { marginTop: '20px' } }>
