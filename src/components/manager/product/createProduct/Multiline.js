@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { IconButton, Typography } from '@mui/material';
 import { FormatBold, FormatItalic, FormatUnderlined, FormatListBulleted, Link as LinkIcon } from '@mui/icons-material';
 
-function Multiline ()
+function Multiline ( { value, onChange } )
 {
   const [ anchorPosition, setAnchorPosition ] = useState( null );
-  const [ charCount, setCharCount ] = useState( 0 );
+  const [ charCount, setCharCount ] = useState( value.length );
   const [ isBold, setIsBold ] = useState( false );
   const [ isItalic, setIsItalic ] = useState( false );
   const [ isUnderline, setIsUnderline ] = useState( false );
@@ -13,6 +13,15 @@ function Multiline ()
   const containerRef = useRef( null );
   const editorRef = useRef( null );
   const maxChars = 1000;
+
+  // Sync content with state
+  useEffect( () =>
+  {
+    if ( editorRef.current )
+    {
+      editorRef.current.innerHTML = value;
+    }
+  }, [ value ] );
 
   const handleMouseUp = ( e ) =>
   {
@@ -22,46 +31,38 @@ function Multiline ()
       const range = selection.getRangeAt( 0 );
       const rect = range.getBoundingClientRect();
 
-      // Get container's dimensions and position
       const containerRect = containerRef.current.getBoundingClientRect();
 
-      // Editor dimensions (rough estimates, adjust as needed)
       const editorWidth = 220;
       const editorHeight = 40;
 
-      // Calculate the initial position relative to the container
-      let editorTop = rect.top - containerRect.top > editorHeight ? rect.top - containerRect.top - editorHeight : rect.bottom - containerRect.top + 10;
+      let editorTop = rect.top - containerRect.top > editorHeight
+        ? rect.top - containerRect.top - editorHeight
+        : rect.bottom - containerRect.top + 10;
       let editorLeft = rect.left - containerRect.left + rect.width / 2 - editorWidth / 2;
 
-      // Adjust if the editor goes beyond the container on the right
       if ( editorLeft + editorWidth > containerRect.width )
       {
         editorLeft = containerRect.width - editorWidth - 10;
       }
 
-      // Adjust if the editor goes beyond the container on the left
       if ( editorLeft < 10 )
       {
         editorLeft = 10;
       }
 
-      // Adjust if the editor goes beyond the container on the top
       if ( editorTop < 10 )
       {
         editorTop = rect.bottom - containerRect.top + 10;
       }
 
-      // Adjust if the editor goes beyond the container on the bottom
       if ( editorTop + editorHeight > containerRect.height )
       {
         editorTop = rect.top - containerRect.top - editorHeight - 10;
       }
 
-      setAnchorPosition( {
-        top: editorTop,
-        left: editorLeft,
-      } );
-      // Kiểm tra trạng thái của các định dạng
+      setAnchorPosition( { top: editorTop, left: editorLeft } );
+
       setIsBold( document.queryCommandState( 'bold' ) );
       setIsItalic( document.queryCommandState( 'italic' ) );
       setIsUnderline( document.queryCommandState( 'underline' ) );
@@ -96,11 +97,26 @@ function Multiline ()
     if ( text.length <= maxChars )
     {
       setCharCount( text.length );
+      onChange( text );
     } else
     {
       const truncatedText = text.slice( 0, maxChars );
       e.currentTarget.textContent = truncatedText;
       setCharCount( maxChars );
+      onChange( truncatedText );
+    }
+  };
+
+  // Ensure only React handles the content
+  const handleBlur = () =>
+  {
+    const text = editorRef.current.textContent;
+    if ( text.length > maxChars )
+    {
+      const truncatedText = text.slice( 0, maxChars );
+      editorRef.current.textContent = truncatedText;
+      setCharCount( maxChars );
+      onChange( truncatedText );
     }
   };
 
@@ -111,6 +127,7 @@ function Multiline ()
         contentEditable
         onInput={ handleInput }
         onMouseUp={ handleMouseUp }
+        onBlur={ handleBlur }
         style={ {
           width: '95%',
           height: '150px',
@@ -118,8 +135,10 @@ function Multiline ()
           border: '1px solid #ccc',
           borderRadius: '4px',
           overflowY: 'auto',
+          whiteSpace: 'pre-wrap',
         } }
-      ></div>
+      >
+      </div>
       <Typography variant="caption" color={ charCount >= maxChars ? 'red' : 'black' }>
         { charCount }/{ maxChars } characters
       </Typography>

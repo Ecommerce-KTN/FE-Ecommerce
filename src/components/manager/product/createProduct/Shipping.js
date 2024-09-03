@@ -1,3 +1,4 @@
+// Shipping.js
 import React, { useState } from "react";
 import Dropdown from "./Dropdown";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -6,7 +7,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import restrictAlphabets from "./RestrictAlphabets";
 
-// Khai báo các tùy chọn trước khi sử dụng
+// Define options
 const weightOptions = [
   { label: "kg", id: 1 },
   { label: "pound", id: 2 },
@@ -20,7 +21,6 @@ const lengthOptions = [
 
 function Shipping ()
 {
-  // Khởi tạo state với các tùy chọn mặc định
   const [ unitOfWeight, setUnitOfWeight ] = useState( weightOptions[ 0 ] );
   const [ unitOfLength, setUnitOfLength ] = useState( lengthOptions[ 0 ] );
   const [ weight, setWeight ] = useState( "" );
@@ -55,7 +55,7 @@ function Shipping ()
         <OutlinedInput
           id="outlined-adornment-weight"
           endAdornment={
-            <InputAdornment style={ { width: "110px", } } position="end">
+            <InputAdornment style={ { width: "110px" } } position="end">
               <Dropdown
                 options={ weightOptions }
                 selected={ unitOfWeight }

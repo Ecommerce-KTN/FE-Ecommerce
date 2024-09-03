@@ -2,7 +2,6 @@ import React from 'react';
 import { IoNotificationsOutline } from "react-icons/io5";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import { FiArrowLeft } from "react-icons/fi";
-import { Link, useNavigate } from 'react-router-dom';
 import { IconButton, Button } from '@mui/material';
 
 function Header ( { closeAddingProduct } )

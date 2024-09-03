@@ -44,7 +44,7 @@ function Category ()
       <div style={ { width: "100%", marginBottom: "20px" } }>
         <label style={ { fontWeight: "bold" } }>Inventory</label>
         <div style={ { display: "flex", gap: "20px", border: "1px solid #d9d9d9", padding: "10px", marginTop: "15px" } }>
-          <from style={ { width: '35%' } }>
+          <form style={ { width: '35%' } }>
             <label style={ { display: "block", fontSize: "small" } }>Quantity</label>
             <input
               type="number"
@@ -56,11 +56,10 @@ function Category ()
                 borderRadius: "4px",
                 border: "1px solid #ccc",
                 marginTop: "10px"
-
               } }
             />
-          </from>
-          <from style={ { width: '65%' } }>
+          </form>
+          <form style={ { width: '65%' } }>
             <label style={ { display: "block", fontSize: "small" } }>SKU(Optional)</label>
             <input
               type="text"
@@ -72,10 +71,9 @@ function Category ()
                 borderRadius: "4px",
                 border: "1px solid #ccc",
                 marginTop: "10px"
-
               } }
             />
-          </from>
+          </form>
         </div>
       </div>
 
@@ -120,7 +118,7 @@ function Category ()
       {/* Variant Section */ }
       <div style={ { width: "100%" } }>
         <label style={ { fontWeight: "bold" } }>Variant</label>
-        <form style={ { border: "1px solid #d9d9d9", display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: "15px" } }>
+        <div style={ { border: "1px solid #d9d9d9", display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: "15px" } }>
           <p style={ { fontSize: "13px", marginLeft: "10px", fontWeight: 'bold' } }>Product Variant</p>
           <Button
             style={ {
@@ -134,7 +132,7 @@ function Category ()
           >
             + Add Variant
           </Button>
-        </form>
+        </div>
       </div>
     </div>
   );
