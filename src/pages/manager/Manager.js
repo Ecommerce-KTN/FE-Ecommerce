@@ -9,6 +9,7 @@ function Manager ()
 {
   const [ selectedMenuItem, setSelectedMenuItem ] = useState( "My shop-Products" );
   const width = useRef( window.innerWidth ).current
+  const height = useRef( window.innerHeight ).current
   const renderContent = () =>
   {
     switch ( selectedMenuItem )
@@ -28,11 +29,11 @@ function Manager ()
   };
   return (
 
-    <div style={ { display: "flex" } }>
-      <div style={ { width: width * 0.19, height: '100%', backgroundColor: '#F9F9F9' } }>
+    <div style={ { display: "flex", flexDirection: "row", backgroundColor: '#F9F9F9', width: width, height: height } }>
+      <div style={ { display: "flex", width: width * 0.19, height: '100%', backgroundColor: '#F9F9F9' } }>
         <SideBar onSelect={ setSelectedMenuItem } />
       </div>
-      <div style={ { width: width * 0.81, height: '100%' } }>
+      <div style={ { display: "flex", width: width * 0.81, height: '100%', backgroundColor: 'white', overflowY: 'auto' } }>
         { renderContent() }
       </div>
     </div>

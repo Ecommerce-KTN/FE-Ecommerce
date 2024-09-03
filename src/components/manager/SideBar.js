@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { ConfigProvider, Menu } from 'antd';
 
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
@@ -9,6 +9,8 @@ import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import { IconButton, InputBase, Paper } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+// icon logout
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 const icons = [ HomeOutlinedIcon, StorefrontOutlinedIcon, InsertChartOutlinedRoundedIcon, LocalOfferOutlinedIcon, TextsmsOutlinedIcon, SettingsOutlinedIcon ];
 const labels = [
   { name: "Page manager", childs: [ "Child 1", "Child 2" ] },
@@ -21,6 +23,7 @@ const labels = [
 
 function SideBar ( { onSelect } )
 {
+  const height = useRef( window.innerHeight ).current
   // Trạng thái lưu các submenu đang mở
   const [ openKeys, setOpenKeys ] = useState( [ 'My shop' ] );
   const [ selectedKeys, setSelectedKeys ] = useState( [ 'My shop-Products' ] );
@@ -92,13 +95,13 @@ function SideBar ( { onSelect } )
           },
         },
       } }
+      style={ { display: "flex", flexDirection: 'column', height: height, width: '100%' } }
     >
 
-      <div style={ { display: "flex", flexDirection: 'column', height: '100%', width: '100%' } }>
-        {/* avata và tên user */ }
-        <div style={ { display: "flex", alignItems: 'center', height: 60, borderBottom: '1px solid #ccc', marginLeft: 20 } }>
+      <div style={ { display: "flex", flexDirection: 'column', height: '100%', width: '100%', backgroundColor: '#F9F9F9' } }>
+        <div style={ { display: "flex", alignItems: 'center', height: 60, margin: 25 } }>
           <div style={ { width: 40, height: 40, borderRadius: '50%', backgroundColor: 'gray' } } />
-          <div style={ { marginLeft: 10 } }>User Name</div>
+          <div style={ { marginLeft: 10 } }>Manager</div>
         </div>
         <Paper component="form" sx={ { m: '10px 20px', p: '0px 4px', display: 'flex', alignItems: 'center', width: '85%', bgcolor: '#F9F9F9' } }>
           <IconButton type="button" sx={ { p: '5px' } } aria-label="search">
@@ -120,6 +123,19 @@ function SideBar ( { onSelect } )
             setSelectedKeys( [ key ] );
           } }
         />
+        {/* ở cuối cùng là email và icon material logout */ }
+        <div style={ { display: "flex", alignItems: 'center', justifyContent: 'space-between', height: 60, marginLeft: 20, marginBottom: 20 } }>
+          <div style={ { display: 'flex', flexDirection: 'row', alignItems: 'center' } }>
+            <div style={ { width: 40, height: 40, borderRadius: '50%', backgroundColor: 'gray' } } />
+            <div style={ { marginLeft: 10, flexDirection: 'column' } }>
+              <div style={ { fontWeight: 'bold', fontSize: 15 } }>Manager</div>
+              <div style={ { fontSize: 13 } }>email@gmail.com</div>
+            </div>
+          </div>
+          <IconButton style={ { marginRight: 10 } }>
+            <ExitToAppIcon />
+          </IconButton>
+        </div>
       </div>
     </ConfigProvider>
   );
