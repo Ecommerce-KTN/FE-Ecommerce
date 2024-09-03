@@ -8,20 +8,22 @@ import Button from '@mui/joy/Button';
 import Description from './Description';
 import Box from '@mui/joy/Box';
 import axios from 'axios';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 function CreateProduct ( { closeAddingProduct } )
 {
+  const [ showSuccessDialog, setShowSuccessDialog ] = useState( false );
 
   const [ productName, setProductName ] = useState( '' );
   const [ description, setDescription ] = useState( '' );
   const [ isAddingProduct, setIsAddingProduct ] = useState( false );
-  const [ category, setCategory ] = useState( {} );
-  const [ subCategory, setSubCategory ] = useState( {} );
+  const [ category, setCategory ] = useState( '' );
+  const [ subCategory, setSubCategory ] = useState( '' );
   const [ quantity, setQuantity ] = useState( 1 );
   const [ SKU, setSKU ] = useState( '' );
   const [ sellingType, setSellingType ] = useState( 'In-store selling only' );
   const [ images, setImages ] = useState( [] );
-  const [ primaryImage, setPrimaryImage ] = useState();
+  const [ primaryImage, setPrimaryImage ] = useState( null );
   const [ weight, setWeight ] = useState( '' );
   const [ length, setLength ] = useState( '' );
   const [ width, setWidth ] = useState( '' );
@@ -118,41 +120,34 @@ function CreateProduct ( { closeAddingProduct } )
   useEffect( () =>
   {
     setIsAddingProduct( isValidProductName && isValidDescription && price && MRRPPrice && discount && quantity && category && subCategory && primaryImage );
-  }, [ isValidProductName, isValidDescription ] ); // Added dependencies here
+  }, [ isValidProductName, isValidDescription, price,
+    MRRPPrice, discount, quantity, category, subCategory, primaryImage
+  ] ); // Added dependencies here
 
   // Submit handler
   const handleSubmit = async () =>
   {
+    console.log( "primaryimage", primaryImage );
 
     const formData = new FormData();
     formData.append( 'name', productName );
     formData.append( 'description', description );
     formData.append( 'quantity', quantity );
     formData.append( 'sellingType', sellingType );
-    formData.append( 'weight', weight );
-    formData.append( 'breadth', breadth );
-    formData.append( 'width', width );
-    formData.append( 'length', length );
-    formData.append( 'unitOfMass', unitOfWeight );
-    formData.append( 'unitOfLength', unitOfLength );
     formData.append( 'categoryId', category ); // Assuming category is an array of IDs
     formData.append( 'parentCategoryId', subCategory ); // Assuming subCategory is an array of IDs
     formData.append( 'costPrice', MRRPPrice );
     formData.append( 'price', price );
     formData.append( 'discountPrice', discount );
+    // formData.append( 'primaryImage', primaryImage );
 
-    if ( primaryImage )
-    {
-      formData.append( 'primaryImage', primaryImage );
-    }
-
-    if ( images.length > 0 )
-    {
-      images.forEach( ( image, index ) =>
-      {
-        formData.append( `images[${ index }]`, image );
-      } );
-    }
+    // if ( images.length > 0 )
+    // {
+    //   images.forEach( ( image, index ) =>
+    //   {
+    //     formData.append( `images[${ index }]`, image );
+    //   } );
+    // }
 
     try
     {
@@ -163,9 +158,11 @@ function CreateProduct ( { closeAddingProduct } )
       } );
 
       console.log( 'Product added successfully!', response.data );
+      setShowSuccessDialog( true );
+      closeAddingProduct();
     } catch ( error )
     {
-      console.error( 'Error adding product:', error );
+      console.error( 'Error adding product:', error.message );
 
     }
   };
@@ -245,6 +242,15 @@ function CreateProduct ( { closeAddingProduct } )
           </div>
         </div>
       </div>
+      <Dialog open={ showSuccessDialog } onClose={ () => setShowSuccessDialog( false ) }>
+        <DialogTitle>Success</DialogTitle>
+        <DialogContent>Your product has been added successfully.</DialogContent>
+        <DialogActions>
+          <Button onClick={ () => setShowSuccessDialog( false ) } color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
