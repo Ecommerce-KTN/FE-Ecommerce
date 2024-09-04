@@ -139,15 +139,23 @@ function CreateProduct ( { closeAddingProduct } )
     formData.append( 'costPrice', MRRPPrice );
     formData.append( 'price', price );
     formData.append( 'discountPrice', discount );
-    // formData.append( 'primaryImage', primaryImage );
 
-    // if ( images.length > 0 )
-    // {
-    //   images.forEach( ( image, index ) =>
-    //   {
-    //     formData.append( `images[${ index }]`, image );
-    //   } );
-    // }
+    formData.append( 'weight', weight );
+    formData.append( 'length', length );
+    formData.append( 'width', width );
+    formData.append( 'breadth', breadth );
+    formData.append( 'unitOfWeight', unitOfWeight );
+    formData.append( 'unitOfLength', unitOfLength );
+    formData.append( 'primaryImage', primaryImage );
+
+
+    if ( images.length > 0 )
+    {
+      images.forEach( ( image, index ) =>
+      {
+        formData.append( `images[${ index }]`, image );
+      } );
+    }
 
     try
     {
