@@ -9,6 +9,7 @@ import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import { IconButton, InputBase, Paper } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import avatarUser from './product/createProduct/image/imguser.jpg';
 // icon logout
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 const icons = [ HomeOutlinedIcon, StorefrontOutlinedIcon, InsertChartOutlinedRoundedIcon, LocalOfferOutlinedIcon, TextsmsOutlinedIcon, SettingsOutlinedIcon ];
@@ -100,7 +101,9 @@ function SideBar ( { onSelect } )
 
       <div style={ { display: "flex", flexDirection: 'column', height: '100%', width: '100%', backgroundColor: '#F9F9F9' } }>
         <div style={ { display: "flex", alignItems: 'center', height: 60, margin: 25 } }>
-          <div style={ { width: 40, height: 40, borderRadius: '50%', backgroundColor: 'gray' } } />
+          <div style={ { width: 40, height: 40, borderRadius: '50%' } }>
+            <img src={avatarUser} style={{height:"40px", width:"40px", borderRadius: '50%' }}></img>
+          </div>
           <div style={ { marginLeft: 10 } }>Manager</div>
         </div>
         <Paper component="form" sx={ { m: '10px 20px', p: '0px 4px', display: 'flex', alignItems: 'center', width: '85%', bgcolor: '#F9F9F9' } }>
@@ -126,7 +129,9 @@ function SideBar ( { onSelect } )
         {/* ở cuối cùng là email và icon material logout */ }
         <div style={ { display: "flex", alignItems: 'center', justifyContent: 'space-between', height: 60, marginLeft: 20, marginBottom: 20 } }>
           <div style={ { display: 'flex', flexDirection: 'row', alignItems: 'center' } }>
-            <div style={ { width: 40, height: 40, borderRadius: '50%', backgroundColor: 'gray' } } />
+            <div style={ { width: 40, height: 40, borderRadius: '50%'} } >
+            <img src={avatarUser} style={{height:"40px", width:"40px", borderRadius: '50%' }}></img>
+            </div>
             <div style={ { marginLeft: 10, flexDirection: 'column' } }>
               <div style={ { fontWeight: 'bold', fontSize: 15 } }>Manager</div>
               <div style={ { fontSize: 13 } }>email@gmail.com</div>
