@@ -9,6 +9,7 @@ function ProductImage ( { onImagesChange, onPrimaryImageChange } )
   const [ primaryImage, setPrimaryImage ] = useState( null );
   const [ selectedImage, setSelectedImage ] = useState( null );
   const [ images, setImages ] = useState( [] );
+  const [ imageFiles, setImageFiles ] = useState( [] );
 
   const clickToUpload = () =>
   {
@@ -17,9 +18,11 @@ function ProductImage ( { onImagesChange, onPrimaryImageChange } )
 
   const handleRemoveImage = ( image ) =>
   {
-    const updatedImages = images.filter( img => img !== image );
+    const updatedImages = images.filter( ( img ) => img !== image );
+    const updatedImageFiles = imageFiles.filter( ( img ) => img !== image );
     setImages( updatedImages );
-    onImagesChange( updatedImages );
+    setImageFiles( updatedImageFiles );
+    onImagesChange( updatedImageFiles );
     if ( primaryImage === image )
     {
       setPrimaryImage( null );
@@ -29,18 +32,25 @@ function ProductImage ( { onImagesChange, onPrimaryImageChange } )
 
   const handleFileChange = ( event ) =>
   {
-    const file = event.target.files[ 0 ];
-    if ( file )
+    const target = event.target;
+    const files = target.files;
+
+    if ( files && files.length > 0 )
     {
+      const file = files[ 0 ];
       const imageUrl = URL.createObjectURL( file );
       const updatedImages = [ ...images, imageUrl ];
+      const updatedImageFiles = [ ...imageFiles, file ];
+
       setImages( updatedImages );
+      setImageFiles( updatedImageFiles );
+      onImagesChange( updatedImageFiles );
+
       if ( !primaryImage )
       {
         setPrimaryImage( imageUrl );
-        onPrimaryImageChange( imageUrl );
+        onPrimaryImageChange( file );
       }
-      onImagesChange( updatedImages );
     }
   };
 
@@ -64,8 +74,9 @@ function ProductImage ( { onImagesChange, onPrimaryImageChange } )
   {
     if ( selectedImage && selectedImage !== primaryImage )
     {
+      const selectedImageFile = imageFiles[ images.indexOf( selectedImage ) ];
       setPrimaryImage( selectedImage );
-      onPrimaryImageChange( selectedImage );
+      onPrimaryImageChange( selectedImageFile );
       setSelectedImage( null );
     }
     handleCloseForm();

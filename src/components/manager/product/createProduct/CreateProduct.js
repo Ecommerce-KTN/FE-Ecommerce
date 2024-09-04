@@ -34,8 +34,6 @@ function CreateProduct ( { closeAddingProduct } )
   const [ price, setPrice ] = useState( '' );
   const [ discount, setDiscount ] = useState( '' );
 
-
-
   // Handle changes from Description component
   const handleDescriptionChange = ( newDescription ) =>
   {
@@ -61,7 +59,7 @@ function CreateProduct ( { closeAddingProduct } )
   {
     setSellingType( newSellingType );
   };
-  const handleImagesOnChange = ( newImages ) =>
+  const handleImagesOnChange = async ( newImages ) =>
   {
     setImages( newImages );
   };
@@ -105,8 +103,6 @@ function CreateProduct ( { closeAddingProduct } )
   {
     setDiscount( newDiscount );
   };
-
-
   const handleProductNameChange = ( newProductName ) =>
   {
     setProductName( newProductName );
@@ -119,15 +115,33 @@ function CreateProduct ( { closeAddingProduct } )
   // Check if form is valid
   useEffect( () =>
   {
-    setIsAddingProduct( isValidProductName && isValidDescription && price && MRRPPrice && discount && quantity && category && subCategory && primaryImage );
-  }, [ isValidProductName, isValidDescription, price,
-    MRRPPrice, discount, quantity, category, subCategory, primaryImage
+    setIsAddingProduct(
+      isValidProductName &&
+      isValidDescription &&
+      price &&
+      MRRPPrice &&
+      discount &&
+      quantity &&
+      category &&
+      subCategory &&
+      primaryImage
+    );
+  }, [
+    isValidProductName,
+    isValidDescription,
+    price,
+    MRRPPrice,
+    discount,
+    quantity,
+    category,
+    subCategory,
+    primaryImage,
   ] ); // Added dependencies here
 
   // Submit handler
   const handleSubmit = async () =>
   {
-    console.log( "primaryimage", primaryImage );
+    console.log( 'primaryimage', primaryImage );
 
     const formData = new FormData();
     formData.append( 'name', productName );
@@ -148,7 +162,6 @@ function CreateProduct ( { closeAddingProduct } )
     formData.append( 'unitOfLength', unitOfLength );
     formData.append( 'primaryImage', primaryImage );
 
-
     if ( images.length > 0 )
     {
       images.forEach( ( image, index ) =>
@@ -164,28 +177,41 @@ function CreateProduct ( { closeAddingProduct } )
           'Content-Type': 'multipart/form-data',
         },
       } );
-
       console.log( 'Product added successfully!', response.data );
-      setShowSuccessDialog( true );
-      closeAddingProduct();
     } catch ( error )
     {
       console.error( 'Error adding product:', error.message );
-
     }
+
+    setShowSuccessDialog( true );
+    setTimeout( () =>
+    {
+      setShowSuccessDialog( false );
+      closeAddingProduct();
+    }, 3000 )
   };
 
-
   return (
-    <div style={ { display: "flex", flexDirection: "column", width: '100%', paddingLeft: "3rem", paddingRight: "3rem", backgroundColor: "white", height: '100%', overflow: 'auto' } }>
+    <div
+      style={ {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        paddingLeft: '3rem',
+        paddingRight: '3rem',
+        backgroundColor: 'white',
+        height: '100%',
+        overflow: 'auto',
+      } }
+    >
       <div style={ { marginTop: 20 } }>
         <Header closeAddingProduct={ () => closeAddingProduct } />
       </div>
-      <div style={ { display: "flex", flexDirection: "row", backgroundColor: "white", gap: 20 } }>
-        <div style={ { width: "48%" } }>
+      <div style={ { display: 'flex', flexDirection: 'row', backgroundColor: 'white', gap: 20 } }>
+        <div style={ { width: '48%' } }>
           <div>
             <h3>Description</h3>
-            <div style={ { border: "1px solid #d9d9d9", padding: "10px", borderRadius: "5px" } }>
+            <div style={ { border: '1px solid #d9d9d9', padding: '10px', borderRadius: '5px' } }>
               <Description
                 onDescriptionChange={ handleDescriptionChange }
                 onProductNameChange={ handleProductNameChange }
@@ -200,7 +226,7 @@ function CreateProduct ( { closeAddingProduct } )
             onSellingTypeChange={ handleSellingTypeOnChange }
           />
         </div>
-        <div style={ { width: "48%" } }>
+        <div style={ { width: '48%' } }>
           <div>
             <h3>Product Images</h3>
             <ProductImage
@@ -210,7 +236,7 @@ function CreateProduct ( { closeAddingProduct } )
           </div>
           <div>
             <h3>Shipping and Delivery</h3>
-            <div style={ { border: "1px solid #d9d9d9" } }>
+            <div style={ { border: '1px solid #d9d9d9' } }>
               <Shipping
                 onWeightChange={ handleWeightOnChange }
                 onLengthChange={ handleLengthOnChange }
@@ -218,14 +244,14 @@ function CreateProduct ( { closeAddingProduct } )
                 onBreadthChange={ handleBreadthOnChange }
                 onUnitOfWeightChange={ handleUnitOfWeightOnChange }
                 onUnitOfLengthChange={ handleUnitOfLengthOnChange }
-
               />
             </div>
           </div>
           <div>
             <h3>Pricing</h3>
-            <div style={ { border: "1px solid #d9d9d9", paddingTop: "30px" } }>
-              <Pricing values
+            <div style={ { border: '1px solid #d9d9d9', paddingTop: '30px' } }>
+              <Pricing
+                values
                 onMRRPPriceChange={ handleMRRPPriceOnChange }
                 onPriceChange={ handlePriceOnChange }
                 onDiscountChange={ handleDiscountOnChange }
@@ -234,30 +260,25 @@ function CreateProduct ( { closeAddingProduct } )
           </div>
           <div style={ { marginTop: '20px' } }>
             <Box sx={ { display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' } }>
-              <Button variant="outlined" color="neutral">Discard</Button>
-              <Box sx={ { display: 'flex', gap: 3 } }>
-                <Button variant="outlined">Schedule</Button>
-                <Button
-                  variant="solid"
-                  type="button"
-                  disabled={ !isAddingProduct }
-                  onClick={ handleSubmit }
-                >
-                  Add Product
-                </Button>
-              </Box>
+              <Button variant="outlined" color="neutral">
+                Discard
+              </Button>
+              <Button
+                disabled={ !isAddingProduct }
+                onClick={ handleSubmit }
+                variant="solid"
+                color="primary"
+              >
+                Add Product
+              </Button>
             </Box>
           </div>
         </div>
       </div>
-      <Dialog open={ showSuccessDialog } onClose={ () => setShowSuccessDialog( false ) }>
+
+      <Dialog open={ showSuccessDialog }>
         <DialogTitle>Success</DialogTitle>
-        <DialogContent>Your product has been added successfully.</DialogContent>
-        <DialogActions>
-          <Button onClick={ () => setShowSuccessDialog( false ) } color="primary">
-            Close
-          </Button>
-        </DialogActions>
+        <DialogContent>Product added successfully!</DialogContent>
       </Dialog>
     </div>
   );
