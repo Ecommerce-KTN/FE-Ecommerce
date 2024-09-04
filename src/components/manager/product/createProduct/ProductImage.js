@@ -9,7 +9,6 @@ function ProductImage ( { onImagesChange, onPrimaryImageChange } )
   const [ primaryImage, setPrimaryImage ] = useState( null );
   const [ selectedImage, setSelectedImage ] = useState( null );
   const [ images, setImages ] = useState( [] );
-  const [ imageFiles, setImageFiles ] = useState( [] );
 
   const clickToUpload = () =>
   {
@@ -18,11 +17,9 @@ function ProductImage ( { onImagesChange, onPrimaryImageChange } )
 
   const handleRemoveImage = ( image ) =>
   {
-    const updatedImages = images.filter( ( img ) => img !== image );
-    const updatedImageFiles = imageFiles.filter( ( img ) => img !== image );
+    const updatedImages = images.filter( img => img !== image );
     setImages( updatedImages );
-    setImageFiles( updatedImageFiles );
-    onImagesChange( updatedImageFiles );
+    onImagesChange( updatedImages );
     if ( primaryImage === image )
     {
       setPrimaryImage( null );
@@ -32,25 +29,18 @@ function ProductImage ( { onImagesChange, onPrimaryImageChange } )
 
   const handleFileChange = ( event ) =>
   {
-    const target = event.target;
-    const files = target.files;
-
-    if ( files && files.length > 0 )
+    const file = event.target.files[ 0 ];
+    if ( file )
     {
-      const file = files[ 0 ];
       const imageUrl = URL.createObjectURL( file );
       const updatedImages = [ ...images, imageUrl ];
-      const updatedImageFiles = [ ...imageFiles, file ];
-
       setImages( updatedImages );
-      setImageFiles( updatedImageFiles );
-      onImagesChange( updatedImageFiles );
-
       if ( !primaryImage )
       {
         setPrimaryImage( imageUrl );
-        onPrimaryImageChange( file );
+        onPrimaryImageChange( imageUrl );
       }
+      onImagesChange( updatedImages );
     }
   };
 
@@ -74,9 +64,8 @@ function ProductImage ( { onImagesChange, onPrimaryImageChange } )
   {
     if ( selectedImage && selectedImage !== primaryImage )
     {
-      const selectedImageFile = imageFiles[ images.indexOf( selectedImage ) ];
       setPrimaryImage( selectedImage );
-      onPrimaryImageChange( selectedImageFile );
+      onPrimaryImageChange( selectedImage );
       setSelectedImage( null );
     }
     handleCloseForm();
@@ -99,7 +88,7 @@ function ProductImage ( { onImagesChange, onPrimaryImageChange } )
           onClick={ clickToUpload }
           style={ {
             backgroundColor: '#efeff5',
-            width: '8.5rem',
+            width: '95%',
             height: '8.5rem',
             border: '2px solid #8080ff',
             borderStyle: 'dashed',
@@ -116,7 +105,7 @@ function ProductImage ( { onImagesChange, onPrimaryImageChange } )
           <p style={ { fontSize: 'small', margin: 0 } }>
             Click to upload or drag and drop
           </p>
-          <input type="file" ref={ inputRef } style={ { display: 'none' } } onChange={ handleFileChange } />
+          <input multiple type="file" ref={ inputRef } style={ { display: 'none' } } onChange={ handleFileChange } />
         </div>
 
         { images.length > 0 && (
