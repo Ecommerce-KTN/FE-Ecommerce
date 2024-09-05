@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import axios from 'axios';
 
 function Category({ onCategoryChange, onSubCategoryChange, onQuantityChange, onSKUChange, onSellingTypeChange }) {
   const [categories, setCategories] = useState([]);
@@ -8,6 +9,7 @@ function Category({ onCategoryChange, onSubCategoryChange, onQuantityChange, onS
   const [quantity, setQuantity] = useState("");
   const [quantityError, setQuantityError] = useState("");
   const [sellingType, setSellingType] = useState("inStore");
+  const hasFetched = useRef(false);
 
   const getSubCategories = async (id) => {
     try {
@@ -44,6 +46,9 @@ function Category({ onCategoryChange, onSubCategoryChange, onQuantityChange, onS
   };
 
   useEffect(() => {
+    if(hasFetched.current) return;
+    hasFetched.current = true;
+
     const getCategories = async () => {
       try {
         const response = await fetch("http://localhost:8080/api/v1/categories/parents");
