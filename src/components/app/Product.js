@@ -1,5 +1,6 @@
 import React from 'react';
 import '../../App.css';
+import StarIcon from '@mui/icons-material/Star';
 
 const products = [
   { name: 'Smart Watch', price: '$24.56', rating: '4.7', sold: '7,489', image: '../image/watch.png' },
@@ -18,16 +19,28 @@ const Product = () => {
       <h2>Popular Products 2023</h2>
       <div className="products-list">
         {products.map((product, index) => (
-          <div key={index} className="product-item">
-            <div className="product-image-container">
+          <div className="product-card">
+            <div key={index} className="product-image-container">
               <img src={product.image} alt={product.name} />
-              <div className="add-to-cart" onClick={() => handleAddToCart(product.name)}>+</div>
             </div>
-            <h3>{product.name}</h3>
-            <p>Brand Name</p>
-            <p>Rating: {product.rating}</p>
-            <p>{product.sold} Sold</p>
-            <p className="price">{product.price}</p>
+            <div>
+              <h3 className="font-bold text-xl">{product.name}</h3>
+              <p className="text-sm text-zinc-400 mt-2">Brand Name</p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex justify-between gap-2 mt-2">
+                    <p><StarIcon style={{color: "#FF9A27"}}/> {product.rating}</p>
+                    <p className="leading-snug">|</p>
+                    <p className="bg-slate-300 rounded-md px-2">{product.sold} Sold</p>
+                  </div>
+                  <div className="flex gap-4 mt-2">
+                    <p className="line-through text-zinc-400">{product.price}</p>
+                    <p className="price font-bold">{product.price}</p>
+                  </div>
+                </div>
+                <div className="add-to-cart" onClick={() => handleAddToCart(product.name)}>+</div>
+              </div>
+            </div>
           </div>
         ))}
       </div>
