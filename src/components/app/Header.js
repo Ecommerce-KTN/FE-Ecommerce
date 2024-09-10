@@ -8,7 +8,7 @@ import MenuOpenOutlinedIcon from '@mui/icons-material/MenuOpenOutlined';
 
 const Header = () => {
   return (
-    <header className="border-b border-gray-300 px-11">
+    <header className="border-b border-gray-300">
       {/* Logo Section */}
       <div className="flex justify-between items-center py-2">
         <div className="flex items-center">
