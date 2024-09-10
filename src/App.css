@@ -158,6 +158,5 @@ body {
 .product-card {
   overflow: hidden; /* Ẩn nội dung vượt quá khung */
   position: relative; /* Đảm bảo các phần tử con như icon được định vị chính xác */
-  padding: 10px;
-  width: 17%;
+  width: 23%;
 }

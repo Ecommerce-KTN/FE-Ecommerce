@@ -16,11 +16,11 @@ const Product = () => {
 
   return (
     <div className="products">
-      <h2>Popular Products 2023</h2>
+      <h2 className="text-[30px] font-bold">Popular Products 2023</h2>
       <div className="products-list">
         {products.map((product, index) => (
           <div className="product-card">
-            <div key={index} className="product-image-container">
+            <div key={index} className="product-image-container rounded-[10px]">
               <img src={product.image} alt={product.name} />
             </div>
             <div>
@@ -29,7 +29,10 @@ const Product = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex justify-between gap-2 mt-2">
-                    <p><StarIcon style={{color: "#FF9A27"}}/> {product.rating}</p>
+                    <div className="flex justify-center items-center gap-1">
+                      <StarIcon style={{color: "#FF9A27"}}/> 
+                      <p>{product.rating}</p>
+                    </div>
                     <p className="leading-snug">|</p>
                     <p className="bg-slate-300 rounded-md px-2">{product.sold} Sold</p>
                   </div>

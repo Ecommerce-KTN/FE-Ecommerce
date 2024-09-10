@@ -9,7 +9,7 @@ import Header from './components/app/Header';
 function App ()
 {
   return (
-    <div className="mx-auto w-10/12">
+    <div className="mx-auto w-8/12">
       <div>
         <h1>Manager</h1>
         <Link to="/Manager">
