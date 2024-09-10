@@ -6,20 +6,21 @@ import Product from './components/app/Product';
 import { Button } from '@mui/material';
 import Header from './components/app/Header';
 
-function App() {
+function App ()
+{
   return (
-    <div>
-        <div>
-          <h1>Manager</h1>
-          <Link to="/Manager">
-            <Button variant="contained">Manager</Button>
-          </Link>
-        </div>
-        <Header/>
-        <EmblaCarousel />
-        <Category />
-        <Product />
-    </div>
+    <div className="mx-auto w-10/12">
+      <div>
+        <h1>Manager</h1>
+        <Link to="/Manager">
+          <Button variant="contained">Manager</Button>
+        </Link>
+      </div>
+      <Header />
+      <EmblaCarousel />
+      <Category />
+      <Product />
+    </div >
   );
 }
 
