@@ -9,17 +9,20 @@ import Header from './components/app/Header';
 function App ()
 {
   return (
-    <div className="mx-auto w-8/12">
+    <div className="">
       <div>
         <h1>Manager</h1>
         <Link to="/Manager">
           <Button variant="contained">Manager</Button>
         </Link>
       </div>
-      <Header />
-      <EmblaCarousel />
-      <Category />
-      <Product />
+      <div className="border-b border-gray-300"><Header/></div>
+      
+      <div className="mx-auto w-8/12">
+        <EmblaCarousel />
+        <Category />
+        <Product />
+      </div>
     </div >
   );
 }
