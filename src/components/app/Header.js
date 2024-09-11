@@ -8,7 +8,7 @@ import MenuOpenOutlinedIcon from '@mui/icons-material/MenuOpenOutlined';
 
 const Header = () => {
   return (
-    <header className="border-b border-gray-300">
+    <header className="mx-auto w-8/12">
       {/* Logo Section */}
       <div className="flex justify-between items-center py-2">
         <div className="flex items-center">
@@ -45,7 +45,7 @@ const Header = () => {
           <FavoriteBorderIcon />
 
           <div className="flex items-center">
-            <ShoppingCartOutlinedIcon sx={{ fontSize: 35}}/>
+            <ShoppingCartOutlinedIcon sx={{ fontSize: 30}}/>
             <div>
               <div className="cursor-pointer text-gray-700 text-[10px]">Total</div>
               <div className="cursor-pointer text-gray-700">$0.00</div>

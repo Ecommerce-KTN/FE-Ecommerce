@@ -17,20 +17,23 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(to right, #ff5e62, #de4116);
-  padding: 20px 40px;  
-  margin-bottom: 20px;
-  border-radius: 10px;
+  background: linear-gradient(90deg, #ff5e63, #ffa142);
+  position: relative;
 }
 
 .banner-content {
   flex: 1;
   color: white;
+  position: absolute;
+  top: 130px;
+  left: 80px;
 }
 
 .banner-content h1 {
   font-size: 2.5rem;  
   margin-bottom: 10px;
+  display:block;
+  
 }
 
 .banner-content h2 {
@@ -48,10 +51,13 @@ body {
   border-radius: 8px;  
 }
 
-.banner-image {
-  width: 40%;  
-  height: auto;
-  object-fit: contain;
+.banner-container img {
+  max-width: 95%;
+  max-height: 95%;
+  position: absolute;
+  bottom: 450px;
+  right: 5px;
+  top: 50px
 }
 
 .categories-header {
@@ -111,14 +117,17 @@ body {
   flex-wrap: wrap;
 }
 .product-image-container {
-  max-height: 100%;
-  background-color: #d2d2d2;
+  height: 300px;
+  background-color: #ebebeb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .product-image-container img {
-  width: 200px;
-  height: 200px;
-  object-fit: cover;
+  max-width: 180px;
+  max-height: 180px;
+  object-fit: contain;
 }
 
 .add-to-cart-1 {

@@ -1,7 +1,9 @@
 import React from 'react';
 import '../../App.css';
 import StarIcon from '@mui/icons-material/Star';
-
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 const products = [
   { name: 'Smart Watch', price: '$24.56', rating: '4.7', sold: '7,489', image: '../image/watch.png' },
   { name: 'Headphones', price: '$24.56', rating: '4.7', sold: '7,489', image: '../image/Headphones.png' },
@@ -9,6 +11,13 @@ const products = [
   { name: 'Laptop', price: '$24.56', rating: '4.7', sold: '7,489', image: '../image/laptop.png' },
 ];
 
+function ButtonHeart() {
+  return (
+    <>
+      <button className="rounded-full bg-white p-2 absolute top-5 left-5"><FavoriteBorderIcon/></button>
+    </>
+  )
+}
 const Product = () => {
   const handleAddToCart = (productName) => {
     alert(`${productName} added to cart!`);
@@ -16,15 +25,22 @@ const Product = () => {
 
   return (
     <div className="products">
-      <h2 className="text-[30px] font-bold">Popular Products 2023</h2>
+      <div className="flex justify-between items-start mb-3">
+        <h2 className="text-[30px] font-bold mb-4">Popular Products 2023</h2>
+        <div className="flex space-x-2">
+          <button className="rounded-full bg-slate-200 p-1.5"><KeyboardArrowLeftIcon/></button>
+          <button className="rounded-full bg-slate-200 p-1.5"><KeyboardArrowRightIcon/></button>
+        </div>
+      </div>
       <div className="products-list">
         {products.map((product, index) => (
-          <div className="product-card">
+          <div className="product-card relative">
+            <ButtonHeart className=""/>
             <div key={index} className="product-image-container rounded-[10px]">
               <img src={product.image} alt={product.name} />
             </div>
             <div>
-              <h3 className="font-bold text-xl">{product.name}</h3>
+              <h3 className="font-bold text-xl mt-3">{product.name}</h3>
               <p className="text-sm text-zinc-400 mt-2">Brand Name</p>
               <div className="flex items-center justify-between">
                 <div>

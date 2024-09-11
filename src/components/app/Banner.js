@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 function EmblaCarousel ()
 {
@@ -29,8 +30,14 @@ function EmblaCarousel ()
   return (
     <div className=" w-12/12 h-500 overflow-hidden relative embla rounded-[20px] mt-10" ref={ emblaRef }>
       <div className="flex">
-        <div className="min-w-full embla__slide">
-          <img src="https://images.pexels.com/photos/383568/pexels-photo-383568.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Slide 1" className="w-full"></img>
+        <div className="min-w-full banner-container">
+          <div className="banner-content">
+            <h1>New Year Sale </h1>
+            <h1>Offer 2024</h1>
+            <h1 className="font-medium">20% OFF</h1>
+            <button className="banner-button"> <ShoppingCartIcon/> Start Shopping</button>
+          </div>
+          <img src="./image/banner.png" alt="Slide 1" className=""></img>
         </div>
         <div className="min-w-full embla__slide">
           <img src="https://images.pexels.com/photos/1209462/pexels-photo-1209462.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Slide 2" className="w-full"></img>

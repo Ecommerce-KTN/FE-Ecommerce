@@ -26,7 +26,7 @@ const categories = [
 
 function Category(){
   return (
-    <div style={{ margin: "20px 0", padding: "0 0px" }}>
+    <div style={{ margin: "40px 0", padding: "0 0px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
         <h2 className="text-[25px] font-bold">Our Top Categories</h2>
         <button style={{ textDecoration: "none", fontSize: "14px", fontWeight: "500" }}>See All</button>
