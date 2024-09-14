@@ -169,3 +169,21 @@ body {
   position: relative; /* Đảm bảo các phần tử con như icon được định vị chính xác */
   width: 23%;
 }
+.slick-slide > div{
+  margin: 0 10px;
+  
+}
+
+.navbar {
+  position: static;
+  top: 0;
+  transform: translateY(0);
+  transition: transform 0.5s ease;
+}
+
+.navbar.active {
+  position: sticky;
+  transform: translateY(-50px); /* Di chuyển navbar lên 50px */
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+}
+

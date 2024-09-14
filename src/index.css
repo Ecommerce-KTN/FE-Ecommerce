@@ -18,7 +18,14 @@ code {
 
 @layer utilities {
   ul.nav li a {
-    padding-left: 25px;
+    margin-left: 25px;
+    font-weight: 700;
+    color: rgb(117, 117, 117);
+    transition: color 0.3s ease;
+    
+  }
+  ul.nav li a:hover {
+    color: rgb(0, 0, 0); /* Đảm bảo a:hover nằm trong phạm vi ul.nav li a */
   }
 }
 

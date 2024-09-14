@@ -12,16 +12,16 @@ import ChairOutlinedIcon from '@mui/icons-material/ChairOutlined';
 
 
 const categories = [
-  { name: 'Electronics', icon: <PhoneAndroidOutlinedIcon/> },
-  { name: 'Books', icon: <DnsOutlinedIcon/> },
-  { name: 'Jewelry', icon: <DiamondOutlinedIcon/> },
-  { name: 'Toys', icon: <ToysOutlinedIcon/> },
-  { name: 'Sports', icon: <SportsBaseballOutlinedIcon/> },
-  { name: 'Watches', icon: <WatchOutlinedIcon/> },  
-  { name: 'Games', icon: <VideogameAssetOutlinedIcon/> },
-  { name: 'Fine Arts', icon: <DrawOutlinedIcon/> },
-  { name: 'Software', icon: <FlutterDashOutlinedIcon/> },
-  { name: 'Furniture', icon: <ChairOutlinedIcon/> },
+  { name: 'Electronics', icon: <PhoneAndroidOutlinedIcon style={{fontSize: '40px'}}/> },
+  { name: 'Books', icon: <DnsOutlinedIcon style={{fontSize: '40px'}}/> },
+  { name: 'Jewelry', icon: <DiamondOutlinedIcon style={{fontSize: '40px'}}/> },
+  { name: 'Toys', icon: <ToysOutlinedIcon style={{fontSize: '40px'}}/> },
+  { name: 'Sports', icon: <SportsBaseballOutlinedIcon style={{fontSize: '40px'}}/> },
+  { name: 'Watches', icon: <WatchOutlinedIcon style={{fontSize: '40px'}}/> },  
+  { name: 'Games', icon: <VideogameAssetOutlinedIcon style={{fontSize: '40px'}}/> },
+  { name: 'Fine Arts', icon: <DrawOutlinedIcon style={{fontSize: '40px'}}/> },
+  { name: 'Software', icon: <FlutterDashOutlinedIcon style={{fontSize: '40px'}}/> },
+  { name: 'Furniture', icon: <ChairOutlinedIcon style={{fontSize: '40px'}}/> },
 ];
 
 function Category(){
