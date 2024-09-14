@@ -5,12 +5,94 @@ import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import SportsVolleyballIcon from "@mui/icons-material/SportsVolleyball";
 import Button from "@mui/material/Button";
+
+const specification = [
+  {
+    name: "Specification",
+    item: [
+      { name: "Display" },
+      { name: "Processor" },
+      { name: "Battery" },
+      { name: "Opperating System" },
+      { name: "Water Resistance" },
+    ],
+  },
+  {
+    name: "Demension",
+    item: [
+      { name: "Height" },
+      { name: "Width" },
+      { name: "Depth" },
+      { name: "Weight" },
+    ],
+  },
+  {
+    name: "Camera",
+    item: [{ name: "Front" }, { name: "Rear" }],
+  },
+];
+
+function ListItem() {
+  return (
+    <div>
+      {specification.map((data) => (
+        <div className="mt-2">
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+              sx={{ height: '40px'}}
+            >
+              <SportsVolleyballIcon sx={{ marginRight: "5px" }} />
+              {data.name}
+            </AccordionSummary>
+            <AccordionDetails>
+              <ul className="list-specification">
+                {data.item.map((items, index) => (
+                  <li
+                    className="border-b-2 border-b-gray-200 py-2 last:border-b-0"
+                    key={index}
+                  >
+                    <a href="">{items.name}</a>
+                  </li>
+                ))}
+              </ul>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Review() {
+    return (
+        <>
+            <div className="bg-white rounded-md border-2 my-5">
+                <div className="flex justify-between items-center">
+                    <div>Reviews ({}) </div>
+                    <div>Write a Review</div>
+                </div>
+                <div className="flex justify-between items-center">
+                    <div>Overall rating </div>
+                    <div>4.90 ⭐</div>
+                </div>
+                <div className="flex justify-center items-center">
+                    <button className="text-center w-full bg-white border-2 rounded-md">Show all</button>
+                </div>
+            </div>
+        </>
+    )
+}
+
 
 function ProductDetail() {
   return (
-    <div className="container">
-      <Header />
+    <div className="m-auto w-10/12">
+      <Header/>
       <div className="flex">
         <div className="w-7/12 bg-red-200">Ảnh Product</div>
         <div className="w-5/12 bg-blue-200">
@@ -55,58 +137,8 @@ function ProductDetail() {
             </div>
           </div>
           {/* list */}
-          <div>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1-content"
-                id="panel1-header"
-              >
-                Accordion 1
-              </AccordionSummary>
-              <AccordionDetails>
-                <ul>
-                    <li className="border-b-2 border-black"><a href="">Display</a></li>
-                    <li><a href="">Processor</a></li>
-                    <li><a href="">Battery</a></li>
-                    <li><a href="">Opperating System</a></li>
-                    <li><a href="">Water Resistance</a></li>
-                </ul>
-              </AccordionDetails>
-            </Accordion>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel2-content"
-                id="panel2-header"
-              >
-                Accordion 2
-              </AccordionSummary>
-              <AccordionDetails>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                eget.
-              </AccordionDetails>
-            </Accordion>
-            <Accordion defaultExpanded>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel3-content"
-                id="panel3-header"
-              >
-                Accordion Actions
-              </AccordionSummary>
-              <AccordionDetails>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                eget.
-              </AccordionDetails>
-              <AccordionActions>
-                <Button>Cancel</Button>
-                <Button>Agree</Button>
-              </AccordionActions>
-            </Accordion>
-          </div>
+          <ListItem />
+          <Review/>
         </div>
       </div>
     </div>

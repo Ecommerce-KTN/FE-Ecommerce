@@ -17,7 +17,7 @@ function App ()
       </div>
       <Header/>
       
-      <div className="mx-auto w-9/12">
+      <div className="mx-auto w-10/12">
           <EmblaCarousel />
           <Category />
           <div className="h-[500px] w-full">

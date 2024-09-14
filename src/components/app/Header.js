@@ -20,7 +20,7 @@ const Header = () => {
   window.addEventListener("scroll", handleScroll);
   return (
     <div className={`${nav ? 'navbar active' : 'navbar'} border-b border-gray-300 top-0 z-50 bg-white`}>
-      <header className="mx-auto w-9/12 ">
+      <header className="mx-auto w-10/12 ">
         {/* Logo Section */}
         <div className="flex justify-between items-center py-2">
           <div className="flex items-center">
