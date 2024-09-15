@@ -4,6 +4,8 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import StarIcon from '@mui/icons-material/Star';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 
 const products = [
   {
@@ -41,9 +43,9 @@ function SampleNextArrow(props) {
   return (
     <div
       className="w-8 h-8 flex justify-center absolute items-center top-[-58px] right-[0px] z-10 cursor-pointer rounded-full bg-slate-200 p-1.5"
-      onClick={onClick} 
+      onClick={onClick}
     >
-      <KeyboardArrowRightIcon/>
+      <KeyboardArrowRightIcon />
     </div>
   );
 }
@@ -53,15 +55,14 @@ function SamplePrevArrow(props) {
   return (
     <div
       className="w-8 h-8 flex justify-center absolute items-center top-[-58px] right-[50px] z-10 cursor-pointer rounded-full bg-slate-200 p-1.5"
-      onClick={onClick} 
+      onClick={onClick}
     >
-      <KeyboardArrowLeftIcon/>
+      <KeyboardArrowLeftIcon />
     </div>
   );
 }
 
 function Product() {
-
   const handleAddToCart = (productName) => {
     alert(`${productName} added to cart!`);
   };
@@ -73,21 +74,19 @@ function Product() {
     slidesToShow: 4,
     slidesToScroll: 1,
     nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />
+    prevArrow: <SamplePrevArrow />,
   };
 
   return (
     <div>
-      <div className="text-3xl font-semibold mb-6">{nameTitle}</div>
+      <div className="text-3xl font-semibold mb-6">Featured Products</div>
       <div className="slider-container relative mx-[-10px]">
-      
-        <Slider {...settings} className="">
+        <Slider {...settings}>
           {products.map((product, index) => (
             <div className="" key={index}>
-              
-              <Link to ="/ProductDetail" element={<ProductDetail />}>
+              <Link to="/ProductDetail">
                 <div className="rounded-[10px] h-[300px] bg-[#EFEFEF] flex justify-center items-center hover:shadow-xl transition-shadow duration-300">
-                  <img src={product.image} alt={product.name} className="max-w-[180px]"/>
+                  <img src={product.image} alt={product.name} className="max-w-[180px]" />
                 </div>
               </Link>
 
@@ -110,11 +109,11 @@ function Product() {
                     </div>
                   </div>
                 </div>
-                <div className="add-to-cart" onClick={ () => handleAddToCart( product.name ) }>+</div>
+                <div className="add-to-cart cursor-pointer" onClick={() => handleAddToCart(product.name)}>+</div>
               </div>
             </div>
-          </div>
-        ) ) }
+          ))}
+        </Slider>
       </div>
     </div>
   );
