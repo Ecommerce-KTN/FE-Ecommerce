@@ -4,9 +4,6 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import StarIcon from '@mui/icons-material/Star';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import ProductDetail from '../../pages/ProductDetail/ProductDetail';
 
 const products = [
   {
@@ -39,34 +36,9 @@ const products = [
   },
 ];
 
-function SampleNextArrow(props) {
-  const { onClick } = props;
-  return (
-    <div
-      className="w-8 h-8 flex justify-center absolute items-center top-[-58px] right-[0px] z-10 cursor-pointer rounded-full bg-slate-200 p-1.5"
-      onClick={onClick} 
-    >
-      <KeyboardArrowRightIcon/>
-    </div>
-  );
-}
-
-function SamplePrevArrow(props) {
-  const { onClick } = props;
-  return (
-    <div
-      className="w-8 h-8 flex justify-center absolute items-center top-[-58px] right-[50px] z-10 cursor-pointer rounded-full bg-slate-200 p-1.5"
-      onClick={onClick} 
-    >
-      <KeyboardArrowLeftIcon/>
-    </div>
-  );
-}
-
-function Product() {
-
-  const handleAddToCart = (productName) => {
-    alert(`${productName} added to cart!`);
+const Product = () => {
+  const handleAddToCart = ( productName ) => {
+    alert( `${ productName } added to cart!` );
   };
 
   const settings = {
@@ -80,44 +52,34 @@ function Product() {
   };
 
   return (
-    <div>
-      <div className="text-3xl font-semibold mb-6">Popular Product 2023</div>
-      <div className="slider-container relative mx-[-10px]">
-      
-        <Slider {...settings} className="">
-          {products.map((product, index) => (
-            <div className="" key={index}>
-              
-              <Link to ="/ProductDetail" element={<ProductDetail />}>
-                <div className="rounded-[10px] h-[300px] bg-[#EFEFEF] flex justify-center items-center hover:shadow-xl transition-shadow duration-300">
-                  <img src={product.image} alt={product.name} className="max-w-[180px]"/>
-                </div>
-              </Link>
-
-              <div>
-                <h3 className="font-bold text-xl mt-3">{product.name}</h3>
-                <p className="text-sm text-zinc-400 mt-2">Brand Name</p>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="flex justify-between gap-2 mt-2">
-                      <div className="flex justify-center items-center gap-1">
-                        <StarIcon style={{ color: "#FF9A27" }} />
-                        <p>{product.rating}</p>
-                      </div>
-                      <p className="leading-snug">|</p>
-                      <p className="bg-slate-300 rounded-md px-2">{product.sold} Sold</p>
-                    </div>
-                    <div className="flex gap-4 mt-2">
-                      <p className="line-through text-zinc-400">{product.price}</p>
-                      <p className="price font-bold">{product.price}</p>
-                    </div>
+    <div className="products">
+      <h2>Popular Products 2023</h2>
+      <div className="products-list">
+        { products.map( ( product, index ) => (
+          <div className="product-card">
+            <div key={ index } className="product-image-container">
+              <img src={ product.image } alt={ product.name } />
+            </div>
+            <div>
+              <h3 className="font-bold text-xl">{ product.name }</h3>
+              <p className="text-sm text-zinc-400 mt-2">Brand Name</p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex justify-between gap-2 mt-2">
+                    <p><StarIcon style={ { color: "#FF9A27" } } /> { product.rating }</p>
+                    <p className="leading-snug">|</p>
+                    <p className="bg-slate-300 rounded-md px-2">{ product.sold } Sold</p>
                   </div>
-                  <div className="add-to-cart" onClick={() => handleAddToCart(product.name)}>+</div>
+                  <div className="flex gap-4 mt-2">
+                    <p className="line-through text-zinc-400">{ product.price }</p>
+                    <p className="price font-bold">{ product.price }</p>
+                  </div>
                 </div>
+                <div className="add-to-cart" onClick={ () => handleAddToCart( product.name ) }>+</div>
               </div>
             </div>
-          ))}
-        </Slider>
+          </div>
+        ) ) }
       </div>
     </div>
   );
