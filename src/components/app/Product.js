@@ -4,9 +4,6 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import StarIcon from '@mui/icons-material/Star';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import ProductDetail from '../../pages/ProductDetail/ProductDetail';
 
 const products = [
   {
@@ -63,7 +60,7 @@ function SamplePrevArrow(props) {
   );
 }
 
-function Product({nameTitle}) {
+function Product() {
 
   const handleAddToCart = (productName) => {
     alert(`${productName} added to cart!`);
@@ -112,12 +109,12 @@ function Product({nameTitle}) {
                       <p className="price font-bold">{product.price}</p>
                     </div>
                   </div>
-                  <div className="add-to-cart" onClick={() => handleAddToCart(product.name)}>+</div>
                 </div>
+                <div className="add-to-cart" onClick={ () => handleAddToCart( product.name ) }>+</div>
               </div>
             </div>
-          ))}
-        </Slider>
+          </div>
+        ) ) }
       </div>
     </div>
   );
