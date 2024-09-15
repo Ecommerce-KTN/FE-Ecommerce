@@ -63,7 +63,7 @@ function SamplePrevArrow(props) {
   );
 }
 
-function Product() {
+function Product({nameTitle}) {
 
   const handleAddToCart = (productName) => {
     alert(`${productName} added to cart!`);
@@ -81,7 +81,7 @@ function Product() {
 
   return (
     <div>
-      <div className="text-3xl font-semibold mb-6">Popular Product 2023</div>
+      <div className="text-3xl font-semibold mb-6">{nameTitle}</div>
       <div className="slider-container relative mx-[-10px]">
       
         <Slider {...settings} className="">

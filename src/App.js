@@ -21,7 +21,7 @@ function App ()
           <EmblaCarousel />
           <Category />
           <div className="h-[500px] w-full">
-            <Product/>
+            <Product nameTitle={'Product Popular 2023'}/>
           <div/> 
         </div>
       </div>
