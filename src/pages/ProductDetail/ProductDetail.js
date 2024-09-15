@@ -91,7 +91,7 @@ function ProductDetail() {
   return (
     <>
     <Header/>
-    <div className="m-auto w-10/12 relative">
+    <div className="m-auto w-11/12 relative">
       
       <div className="flex">
         <div className="w-8/12 h-[280px] mr-5 ">
