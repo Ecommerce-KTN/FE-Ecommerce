@@ -152,7 +152,7 @@ function Review() {
               <Select
                 indicator={<KeyboardArrowDown />}
                 sx={{
-                  width: 240,
+                  width: 100,
                   [`& .${selectClasses.indicator}`]: {
                     transition: "0.2s",
                     [`&.${selectClasses.expanded}`]: {
@@ -160,6 +160,7 @@ function Review() {
                     },
                   },
                 }}
+              
               >
                 <Option value="1">Read all</Option>
                 <Option value="2">{renderStars(1)}</Option>
@@ -200,7 +201,7 @@ function Review() {
       </div>
       {/* Write review */}
       <div
-        className={`write-review top-3 right-0 bottom-3 fixed bg-blue-200 transform transition-transform duration-300 ease-in-out z-50 px-3 ${
+        className={`write-review top-3 right-0 bottom-3 fixed bg-blue-200 transform transition-transform duration-300 ease-in-out z-50 ${
           isWrite ? "translate-x-0 " : "translate-x-full "
         } w-2/6 rounded-lg`}
       >
@@ -211,7 +212,7 @@ function Review() {
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto overflow-x-hidden h-[calc(100dvh-70px)]">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden h-[calc(100dvh-70px)] px-4">
           <div className="flex gap-4 bg-white rounded-lg">
             <div className="w-max">
               <img
@@ -260,7 +261,7 @@ function Review() {
           </div>
           <div>
             <div>Review</div>
-            <textarea rows="10" cols="50">
+            <textarea rows="5" cols="" className="rounded-lg w-full">
               welcome to GeeksforGeeks Aman Rathod. A perfect Portal for Geeks
             </textarea>
             <p className="text-sm">
@@ -300,7 +301,9 @@ function Review() {
             <button className="bg-black text-white rounded-xl px-2.5 py-1 w-6/12">
               Save
             </button>
-            <button className="bg-white rounded-xl border-1 border-black px-2.5 py-1 w-6/12">
+            <button className="bg-white rounded-xl border-1 border-black px-2.5 py-1 w-6/12"
+            onClick={() => setIsWrite(false)}
+            >
               Cancel
             </button>
           </div>
