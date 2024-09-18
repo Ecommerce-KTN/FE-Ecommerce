@@ -6,9 +6,8 @@ import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 import { TextareaAutosize as BaseTextareaAutosize } from "@mui/base/TextareaAutosize";
 import Input from "@mui/joy/Input";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { KeyboardArrowUp } from "@mui/icons-material";
-import { useAsyncError } from "react-router-dom";
 
 const data = [
   {
@@ -81,6 +80,9 @@ function ListReview() {
     </>
   );
 }
+
+
+
 function renderStars(count) {
   return Array.from({ length: count }, (_, index) => (
     <StarOutlinedIcon key={index} sx={{ fontSize: "12px" }} />
@@ -90,11 +92,7 @@ function renderStars(count) {
 function Review() {
   const [isOpen, setIsOpen] = useState(false);
   const [isWrite, setIsWrite] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(null);
-  const [status, setStatus] = useState(false);
-  const handleClickStatus = () => {
-    setStatus(!status);
-  }
+  const [status, setStatus] = useState(null);
 
   const [selectedRating, setSelectedRating] = useState("★★★★★"); // Giá trị ngôi sao mặc định
 
@@ -105,7 +103,7 @@ function Review() {
 
   const handleOpen = () => {
     setIsOpen(!isOpen);
-  }
+  };
 
   const toggleTab = () => {
     setIsOpen(!isOpen);
@@ -129,12 +127,60 @@ function Review() {
   //   };
   // }, [isOpen]);
 
+  const [selectedButton, setSelectedButton] = useState(null); // State lưu button được chọn
+
+  const handleButton = (button) => {
+    setSelectedButton(button); // Cập nhật state khi button được click
+  };
+
+  const [selectedOrder, setSelectedOrder] = useState(null); // State lưu button được chọn
+
+  const handleOrder = (button) => {
+    setSelectedOrder(button); // Cập nhật state khi button được click
+  };
+
+  const [titleReview, setTitleReview] = useState('');
+
+  const handleChangeTitle = (e) => {
+    setTitleReview(e.target.value);
+    console.log("Title Review:", titleReview); 
+  }
+  const [descriptionReview, setDescriptionReview] = useState('');
+  const handleDescriptionReview = (e) => {
+    setDescriptionReview(e.target.value);
+    console.log("desription: ", descriptionReview);
+  }
+
+  const [score, setScore] = useState("");
+  const handleScore = (e) => {
+    setScore(e.target.value);
+    console.log(e.target.value);
+    switch(e.target.value) {
+      case "0": 
+        return console.log("★");
+      case "1": 
+        return console.log("★★");
+      case "2": 
+        return console.log("★★★");
+      case "3": 
+        return console.log("★★★★");
+      case "4": 
+        return console.log("★★★★★");
+    }
+  }
+
+  const writeReview = () => {
+    data.push({
+      
+    })
+  }
+
   return (
     <>
       {/* review section */}
       <div className="bg-white rounded-2xl border-2 my-5 p-3">
         <div className="flex justify-between items-center">
-          <div className="font-semibold">Reviews ({ }) </div>
+          <div className="font-semibold">Reviews ({}) </div>
           <div className="font-medium">Write a Review</div>
         </div>
         <div className="flex justify-between items-center my-4">
@@ -152,13 +198,14 @@ function Review() {
       </div>
       {/* show list review */}
       <div
-        className={`fixed top-3 bottom-3 right-0 bg-gray-200 transform transition-transform duration-300 ease-in-out z-50 ${isOpen ? "translate-x-0" : "translate-x-full opacity-50"
-          } w-4/12 rounded-lg`}
+        className={`fixed top-3 bottom-3 right-0 bg-gray-200 transform transition-transform duration-300 ease-in-out z-50 ${
+          isOpen ? "translate-x-0" : "translate-x-full opacity-50"
+        } w-4/12 rounded-lg`}
       >
         {/* Nội dung Review */}
-        <div className="view-list-review m-4">
-          <div className="flex justify-between">
-            <div>Reviews ({ })</div>
+        <div className="view-list-review">
+          <div className="flex justify-between h-12 items-center px-3">
+            <div>Reviews ({})</div>
             <button onClick={() => setIsOpen(false)}>
               <CloseIcon />
             </button>
@@ -167,53 +214,26 @@ function Review() {
           {/* h-[calc(100dvh-100px)] mặc dù chưa hiểu rõ là như thế nào nhưng mà cái này nó sẽ giới hạn height và tạo ra sroll 
           overflow-y-scroll h-[calc(100dvh-120px)]
           */}
-          <div className="">
+          <div className="px-3 py-3">
             <div className="flex justify-between rounded-md bg-gray-300">
               <div>Overall rating</div>
               <div>
                 4.74 <StarOutlinedIcon sx={{ color: "#eb345e" }} />
               </div>
             </div>
-            <div className="flex justify-between">
-              <Select
-                value={selectedValue}
-                onChange={(e) => setSelectedValue(e.target.value)}
-                indicator={<KeyboardArrowDown />}
-                renderValue={(selected) => renderStars(selected)} // Hiển thị icon ngôi sao khi chọn
-                sx={{
-                  width: "100%",
-                  [`& .${selectClasses.indicator}`]: {
-                    transition: "0.2s",
-                    [`&.${selectClasses.expanded}`]: {
-                      transform: "rotate(-180deg)",
-                    },
-                  },
-                }}
-              >
-                <Option value="1" data-icon="">
-                  {renderStars(1)}
-                </Option>
-                <Option value="2">{renderStars(2)}</Option>
-                <Option value="3">{renderStars(3)}</Option>
-                <Option value="4">{renderStars(4)}</Option>
-                <Option value="5">{renderStars(5)}</Option>
-              </Select>
-              <Select
-                indicator={<KeyboardArrowDown />}
-                sx={{
-                  width: 240,
-                  [`& .${selectClasses.indicator}`]: {
-                    transition: "0.2s",
-                    [`&.${selectClasses.expanded}`]: {
-                      transform: "rotate(-180deg)",
-                    },
-                  },
-                }}
-              >
-                <Option value="1">Most relevant</Option>
-                <Option value="2">Most recent</Option>
-                <Option value="3">By rating</Option>
-              </Select>
+            <div className="flex justify-between gap-2">
+              <select className="filter-rating w-6/12 px-[12px] py-2.5 rounded-lg">
+                <option>Read all</option>
+                <option>★</option>
+                <option>★★</option>
+                <option>★★★★</option>
+                <option>★★★★★</option>
+              </select>
+              <select className="filter-view w-6/12 px-[12px] py-2.5 rounded-lg">
+                <option>Most relevant</option>
+                <option>Most recent</option>
+                <option>By rating</option>
+              </select>
             </div>
             <ListReview />
             <ListReview />
@@ -230,8 +250,9 @@ function Review() {
       </div>
       {/* Write review */}
       <div
-        className={`write-review top-3 right-0 bottom-3 fixed bg-gray-100 transform transition-transform duration-300 ease-in-out z-50 ${isWrite ? "translate-x-0 " : "translate-x-full "
-          } w-2/6 rounded-lg`}
+        className={`write-review top-3 right-0 bottom-3 fixed bg-gray-100 transform transition-transform duration-300 ease-in-out z-50 ${
+          isWrite ? "translate-x-0 " : "translate-x-full "
+        } w-2/6 rounded-lg`}
       >
         <div className="flex justify-between">
           <div>Write a Review</div>
@@ -265,30 +286,30 @@ function Review() {
           <div className="my-3">
             <div>Score</div>
             <div className="relative">
-              <button className="w-full text-left bg-white rounded-md py-1.5 px-[12px] flex justify-between" onClick={handleOpen}>
-                <p>{selectedRating}</p>
-                <div>{isOpen ? <KeyboardArrowUp /> : <KeyboardArrowDown />}</div>
-              </button>
-              <div className={`bg-slate-50 absolute z-50 cursor-pointer w-full mt-2 rounded-md px-[12px] 
-                transition-all ease-in-out duration-175 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'}`}>
-                {rating.map((item) => (
-                  <div className="py-2" key={item.value} onClick={() => handleSelect(item.icon)}>
-                    {item.icon}
-                  </div>
-                ))}
-              </div>
-
+              <select className="filter-rating w-full px-[12px] py-2.5 rounded-lg" onChange={handleScore} value={score}>
+                <option value = "0">★</option>
+                <option value = "1">★★</option>
+                <option value = "2">★★★</option>
+                <option value = "3">★★★★</option>
+                <option value = "4" selected>★★★★★</option>
+              </select>
             </div>
-
-
           </div>
           <div>
             <div>Title</div>
-            <Input placeholder="Choose a title" />
+            <Input placeholder="Choose a title" onChange={handleChangeTitle} value={titleReview}/>
+            
           </div>
           <div className="my-3">
             <div>Review</div>
-            <textarea rows="5" cols="" className="rounded-lg w-full px-[12px] py-2.5 focus:outline-blue-700" placeholder="Write a review">
+            <textarea
+              rows="5"
+              cols=""
+              className="rounded-lg w-full px-[12px] py-2.5 focus:outline-blue-700"
+              placeholder="Write a review"
+              onChange={handleDescriptionReview}
+              value={descriptionReview}
+            >
               {/* welcome to GeeksforGeeks Aman Rathod. A perfect Portal for Geeks */}
             </textarea>
             <p className="text-sm">
@@ -299,33 +320,59 @@ function Review() {
           <div className="my-3">
             <div>Recommended</div>
             <div className="flex gap-4">
-              <button className={`btn-yes-no bg-white rounded-xl px-2.5 py-1 ${status ? 'bg-pink-600 text-white' : ''}`} onClick={handleClickStatus}>Yes</button>
-              <button className="btn-yes-no bg-white rounded-xl px-2.5 py-1">No</button>
+              <button
+                className={`btn-yes-no rounded-xl px-2.5 py-1 ${
+                  selectedButton === "yes"
+                    ? "bg-pink-600 text-white"
+                    : "bg-white text-black"
+                }`}
+                onClick={() => handleButton("yes")}
+              >
+                Yes
+              </button>
+              <button
+                className={`btn-yes-no rounded-xl px-2.5 py-1 ${
+                  selectedButton === "no"
+                    ? "bg-pink-600 text-white"
+                    : "bg-white text-black"
+                }`}
+                onClick={() => handleButton("no")}
+              >
+                No
+              </button>
             </div>
           </div>
-          <div className="my-3">
-            <div>Fitting</div>
-            <div className="flex gap-4">
-              <button className="bg-white rounded-xl px-1.5 py-1">
-                True to size
-              </button>
-              <button className="bg-white rounded-xl px-1.5 py-1">
-                Tighter than expected
-              </button>
-              <button className="bg-white rounded-xl px-1.5 py-1">
-                Larger than expected
-              </button>
-            </div>
-          </div>
+        
           <div className="my-3">
             <div>Did your order arrive within the time mentioned?</div>
             <div className="flex gap-4">
-              <button className="bg-white rounded-xl px-2.5 py-1">Yes</button>
-              <button className="bg-white rounded-xl px-2.5 py-1">No</button>
+              <button
+                className={`btn-yes-no1 rounded-xl px-2.5 py-1 ${
+                  selectedOrder === "yes"
+                    ? "bg-pink-600 text-white"
+                    : "bg-white text-black"
+                }`}
+                onClick={() => handleOrder("yes")}
+              >
+                Yes
+              </button>
+              <button
+                className={`btn-yes-no1 rounded-xl px-2.5 py-1 ${
+                  selectedOrder === "no"
+                    ? "bg-pink-600 text-white"
+                    : "bg-white text-black"
+                }`}
+                onClick={() => handleOrder("no")}
+              >
+                No
+              </button>
             </div>
           </div>
           <div className="flex sticky bottom-0 justify-between">
-            <button className="bg-black text-white rounded-xl px-2.5 py-1 w-6/12">
+            <button className="bg-black text-white rounded-xl px-2.5 py-1 w-6/12"
+              onClick={writeReview}
+              
+            >
               Save
             </button>
             <button
