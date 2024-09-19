@@ -9,6 +9,7 @@ import Description from './Description';
 import Box from '@mui/joy/Box';
 import axios from 'axios';
 import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import Select from "react-select";
 
 function CreateProduct ( { closeAddingProduct } )
 {
@@ -33,7 +34,10 @@ function CreateProduct ( { closeAddingProduct } )
   const [ MRRPPrice, setMRRPPrice ] = useState( '' );
   const [ price, setPrice ] = useState( '' );
   const [ discount, setDiscount ] = useState( '' );
-
+  const [selectOptions, setSelectOptions] = useState([]);
+  const handleChangeCollection = (selectedOptions) => {
+    setSelectOptions(selectedOptions);
+  }
   // Handle changes from Description component
   const handleDescriptionChange = ( newDescription ) =>
   {
@@ -107,6 +111,8 @@ function CreateProduct ( { closeAddingProduct } )
   {
     setProductName( newProductName );
   };
+
+  
 
   // Validate inputs
   const isValidProductName = productName.trim().length >= 5 && productName.trim().length <= 120;
@@ -191,6 +197,12 @@ function CreateProduct ( { closeAddingProduct } )
     }, 3000 )
   };
 
+  const collections = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+  ];
+
   return (
     <div
       style={ {
@@ -257,6 +269,15 @@ function CreateProduct ( { closeAddingProduct } )
                 onDiscountChange={ handleDiscountOnChange }
               />
             </div>
+          </div>
+          {/* section collection */}
+          <div>
+            <Select 
+            options={collections}
+            value={selectOptions}
+            onChange={handleChangeCollection}
+            isMulti
+            />
           </div>
           <div style={ { marginTop: '20px' } }>
             <Box sx={ { display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' } }>
