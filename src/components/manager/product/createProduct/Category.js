@@ -1,6 +1,8 @@
 import { Button } from "@mui/material";
 import React, { useEffect, useState, useRef } from "react";
 import axios from 'axios';
+import CloseIcon from "@mui/icons-material/Close";
+import Select from "react-select";
 
 function Category({ onCategoryChange, onSubCategoryChange, onQuantityChange, onSKUChange, onSellingTypeChange }) {
   const [categories, setCategories] = useState([]);
@@ -10,6 +12,43 @@ function Category({ onCategoryChange, onSubCategoryChange, onQuantityChange, onS
   const [quantityError, setQuantityError] = useState("");
   const [sellingType, setSellingType] = useState("inStore");
   const hasFetched = useRef(false);
+
+  const [openVariant, setOpenVariant] = useState(false)
+  const handleClickVariant = () => {
+    setOpenVariant(!openVariant);
+  }
+
+  const optionsColor = [
+    { value: 'red', label: 'Red' },
+    { value: 'blue', label: 'Blue' },
+    { value: 'gray', label: 'Gray' },
+  ]
+
+  const optionsRam = [
+    { value: '4gb', label: '4GB' },
+    { value: '8gb', label: '8GB' },
+    { value: '16gb', label: '16GB' },
+  ]
+
+  const optionsStorage = [
+    { value: '32gb', label: '32GB' },
+    { value: '64gb', label: '64GB' },
+    { value: '128gb', label: '128GB' },
+  ]
+  const [selectColor, setColor] = useState([]);
+  const handleColor = (selectColor) => {
+    setColor(selectColor);
+  }
+
+  const [selectRam, setRam] = useState([]);
+  const handleRam = (selectRam) => {
+    setRam(selectRam);
+  }
+
+  const [selectStorage, setStorage] = useState([]);
+  const handleStorage = (selectStorage) => {
+    setStorage(selectStorage);
+  }
 
   const getSubCategories = async (id) => {
     try {
@@ -76,7 +115,7 @@ function Category({ onCategoryChange, onSubCategoryChange, onQuantityChange, onS
   };
 
   return (
-    <div style={{ boxSizing: "border-box", marginBottom: "20px" }}>
+    <div style={{ boxSizing: "border-box", marginBottom: "20px", position: "relative" }}>
       {/* Category Section */}
       <h3>Category *</h3>
       <div
@@ -254,9 +293,112 @@ function Category({ onCategoryChange, onSubCategoryChange, onQuantityChange, onS
               textAlign: "right",
               textTransform: "none",
             }}
+            onClick={handleClickVariant}
           >
             + Add Variant
           </Button>
+          
+        </div>
+      </div>
+      <div className={`${openVariant ? 'fixed top-0 bottom-0 w-8/12 h-full rounded-lg border-gray-300 bg-white z-50' : 'hidden'}`}>
+        <div className="flex justify-center">
+          <div className="text-center">Add Variant</div>
+          <div onClick={() => setOpenVariant(false)}><CloseIcon/></div>
+        </div>
+        <div className="flex gap-4">
+          <div>Primary Variant</div>
+          <div>Primary Variant</div>
+        </div>
+        {/* chon ram, color, storage */}
+        <div className="section-rsc">
+          
+          <div className="flex items-center gap-4 justify-center">
+            <div><p>Color</p></div>
+            <div className="w-5/12">
+              <Select
+              options={optionsColor}
+              value={selectColor}
+              onChange={handleColor}
+              isMulti
+              className=""
+              />
+            </div>
+          </div>
+          {/* section ram */}
+          <div className="flex items-center gap-4 justify-center">
+            <div><p>Ram</p></div>
+            <div className="w-5/12">
+              <Select
+              options={optionsRam}
+              value={selectRam}
+              onChange={handleRam}
+              isMulti
+              classNaStorage
+              />
+            </div>
+          </div>
+          {/* section storage */}
+          <div className="flex items-center gap-5 justify-center">
+            <div><p>Storage</p></div>
+            <div className="w-5/12">
+              <Select
+              options={optionsStorage}
+              value={selectStorage}
+              onChange={handleStorage}
+              isMulti
+              className=""
+              />
+            </div>
+          </div>
+        </div>
+        {/* section variants images */}
+        <div>
+            <p>Variant Images</p>
+            <div>
+              {/*  */}
+              <div className="flex gap-4 mt-5">
+                <input type="text" placeholder="color" className="h-8"></input>
+                <div className="w-full h-12 bg-gray-300"></div>
+              </div>
+              {/*  */}
+              <div className="flex gap-4 mt-5">
+                <input type="text" placeholder="color" className="h-8"></input>
+                <div className="w-full h-12 bg-gray-300"></div>
+              </div>
+              {/*  */}
+              <div className="flex gap-4 mt-5">
+                <input type="text" placeholder="color" className="h-8"></input>
+                <div className="w-full h-12 bg-gray-300"></div>
+              </div>
+              
+            </div>
+            
+        </div>
+        {/* product variant */}
+        <div className="flex justify-between mt-5">
+          <div>Product Variant</div>
+          <div>
+            <button className="bg-blue-500 text-white py-2 px-3 rounded-lg">Apply for all</button>
+          </div>
+        </div>
+        {/* product */}
+        <div className="flex justify-between">
+          <div className="flex gap-3 items-center">
+            <div>Price</div>
+            <input type="text" className="px-3 py-2 rounded-lg "></input>
+          </div>
+          <div className="flex gap-3 items-center">
+            <div>Price</div>
+            <input type="text" className="px-3 py-2 rounded-lg "></input>
+          </div>
+          <div className="flex gap-3 items-center">
+            <div>Price</div>
+            <input type="text" className="px-3 py-2 rounded-lg "></input>
+          </div>
+          <div className="flex gap-3 items-center">
+            <div>Price</div>
+            <input type="text" className="px-3 py-2 rounded-lg "></input>
+          </div>
         </div>
       </div>
     </div>
