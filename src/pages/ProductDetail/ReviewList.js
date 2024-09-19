@@ -11,32 +11,30 @@ import { KeyboardArrowUp } from "@mui/icons-material";
 
 const data = [
   {
-    ratingStar: 5,
-    createdDay: "2024-09-15",
+    ratingStar: "★★★★★",
+    createdDay: "Sep 19, 2024",
     title: "Great Product",
     description:
       "The product quality is excellent, very satisfied with my purchase.",
     recommend: "Highly recommended",
     fitting: "Perfect",
-    shipping: true, // yes
+    shipping: 'Yes', // yes
   },
   {
-    ratingStar: 4,
-    createdDay: "2024-09-10",
+    ratingStar: "★★★★★",
+    createdDay: "Sep 19, 2024",
     title: "Good Value",
     description: "Good value for the price. Could improve the packaging.",
     recommend: "Recommended",
-    fitting: "Slightly loose",
-    shipping: true, // yes
+    shipping: "Yes", // yes
   },
   {
-    ratingStar: 3,
-    createdDay: "2024-09-05",
+    ratingStar:"★★★★★",
+    createdDay: "Sep 19, 2024",
     title: "Average Product",
     description: "The product is okay, but didn’t meet my expectations.",
     recommend: "Not recommended",
-    fitting: "Tight",
-    shipping: false, // no
+    shipping: "Yes", // no
   },
 ];
 
@@ -50,38 +48,33 @@ const rating = [
 function ListReview() {
   return (
     <>
-      <div className="bg-white rounded-lg mt-5">
-        {/* start and date */}
-        <div className="flex justify-between">
-          <div>5 start</div>
-          <div>dd/mm/yyyy</div>
+      {data.map((item) => (
+        <div className="bg-white rounded-lg my-5 p-3">
+          {/* start and date */}
+          <div className="flex justify-between">
+            <div className="text-pink-600 text-[22px]">{item.ratingStar}</div>
+            <div>{item.createdDay}</div>
+          </div>
+          {/* title and description */}
+          <div className="py-4">
+            <h2 className="font-bold">{item.title}</h2>
+            <div>{item.description}</div>
+          </div>
+          {/* shipping */}
+          <div className="flex justify-between py-3 border-y-[1px] border-gray-200 text-base font-medium">
+            <div>Shipping</div>
+            <div>{item.shipping}</div>
+          </div>
+          {/* Recommended */}
+          <div className="flex justify-between py-3 text-base font-medium">
+            <div>Recommended</div>
+            <div>{item.recommend}</div>
+          </div>
         </div>
-        {/* title and description */}
-        <div>
-          <h2>Title</h2>
-          <div>Description</div>
-        </div>
-        {/* shipping */}
-        <div className="flex justify-between">
-          <div>Shipping</div>
-          <div>Yes</div>
-        </div>
-        {/* Fitting */}
-        <div className="flex justify-between">
-          <div>Fitting</div>
-          <div>True to size</div>
-        </div>
-        {/* Recommended */}
-        <div className="flex justify-between">
-          <div>Recommended</div>
-          <div>10 - I'll recommended to everyone</div>
-        </div>
-      </div>
+      ))}
     </>
   );
 }
-
-
 
 function renderStars(count) {
   return Array.from({ length: count }, (_, index) => (
@@ -139,48 +132,72 @@ function Review() {
     setSelectedOrder(button); // Cập nhật state khi button được click
   };
 
-  const [titleReview, setTitleReview] = useState('');
+  const [titleReview, setTitleReview] = useState("");
 
   const handleChangeTitle = (e) => {
     setTitleReview(e.target.value);
-    console.log("Title Review:", titleReview); 
-  }
-  const [descriptionReview, setDescriptionReview] = useState('');
+    console.log("Title Review:", titleReview);
+  };
+  const [descriptionReview, setDescriptionReview] = useState("");
   const handleDescriptionReview = (e) => {
     setDescriptionReview(e.target.value);
     console.log("desription: ", descriptionReview);
-  }
+  };
 
   const [score, setScore] = useState("");
   const handleScore = (e) => {
     setScore(e.target.value);
     console.log(e.target.value);
-    switch(e.target.value) {
-      case "0": 
+    switch (e.target.value) {
+      case "0":
         return console.log("★");
-      case "1": 
+      case "1":
         return console.log("★★");
-      case "2": 
+      case "2":
         return console.log("★★★");
-      case "3": 
+      case "3":
         return console.log("★★★★");
-      case "4": 
+      case "4":
         return console.log("★★★★★");
     }
-  }
+  };
+
+  const renderScore = (score) => {
+    switch(score) {
+      case "0":
+        return "★";
+      case "1":
+        return "★★";
+      case "2":
+        return "★★★";
+      case "3":
+        return "★★★★";
+      case "4":
+        return "★★★★★";
+      default:
+        return ""; // Trường hợp mặc định khi score không phải là 0-4
+    }
+  };
+  
 
   const writeReview = () => {
     data.push({
-      
-    })
-  }
+      ratingStar: renderScore(score),
+      createdDay: "2024-09-15",
+      title: titleReview,
+      description: descriptionReview,
+      recommend: selectedButton,
+      shipping: selectedOrder,
+    });
+    console.log(data);
+  };
 
   return (
     <>
       {/* review section */}
       <div className="bg-white rounded-2xl border-2 my-5 p-3">
         <div className="flex justify-between items-center">
-          <div className="font-semibold">Reviews ({}) </div>
+          <div className="font-semibold">Reviews ({ }) </div>
           <div className="font-medium">Write a Review</div>
         </div>
         <div className="flex justify-between items-center my-4">
@@ -198,14 +215,13 @@ function Review() {
       </div>
       {/* show list review */}
       <div
-        className={`fixed top-3 bottom-3 right-0 bg-gray-200 transform transition-transform duration-300 ease-in-out z-50 ${
-          isOpen ? "translate-x-0" : "translate-x-full opacity-50"
-        } w-4/12 rounded-lg`}
+        className={`fixed top-3 bottom-3 right-0 bg-gray-200 transform transition-transform duration-300 ease-in-out z-50 ${isOpen ? "translate-x-0" : "translate-x-full opacity-50"
+          } w-4/12 rounded-lg`}
       >
         {/* Nội dung Review */}
         <div className="view-list-review">
-          <div className="flex justify-between h-12 items-center px-3">
-            <div>Reviews ({})</div>
+          <div className="flex justify-between h-12 items-center px-3 mt-1">
+            <div className="font-bold text-base">Reviews ({ })</div>
             <button onClick={() => setIsOpen(false)}>
               <CloseIcon />
             </button>
@@ -214,45 +230,53 @@ function Review() {
           {/* h-[calc(100dvh-100px)] mặc dù chưa hiểu rõ là như thế nào nhưng mà cái này nó sẽ giới hạn height và tạo ra sroll 
           overflow-y-scroll h-[calc(100dvh-120px)]
           */}
-          <div className="px-3 py-3">
-            <div className="flex justify-between rounded-md bg-gray-300">
-              <div>Overall rating</div>
-              <div>
-                4.74 <StarOutlinedIcon sx={{ color: "#eb345e" }} />
+          <div className="overflow-x-auto h-[calc(100dvh-100px)] px-3">
+            <div className="">
+              <div className="flex justify-between items-center rounded-lg bg-gray-300 px-[12px] py-2">
+                <div className="font-bold">Overall rating</div>
+                <div className="flex items-center justify-center gap-1">
+                  <div className="font-bold">4.74</div>
+                  <div className="text-pink-600 text-[22px]">★</div>
+                </div>
               </div>
+              <div className="flex justify-between gap-2 mt-5">
+                <select className="filter-rating w-6/12 px-[12px] py-2.5 rounded-lg">
+                  <option>Read all</option>
+                  <option>★</option>
+                  <option>★★</option>
+                  <option>★★★★</option>
+                  <option>★★★★★</option>
+                </select>
+                <div className="relative w-6/12">
+                  <select className="filter-view appearance-none w-full px-[12px] py-2.5 rounded-lg">
+                    <option className="mt-3">Most relevant</option>
+                    <option>Most recent</option>
+                    <option>By rating</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                    <svg className="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <ListReview />
             </div>
-            <div className="flex justify-between gap-2">
-              <select className="filter-rating w-6/12 px-[12px] py-2.5 rounded-lg">
-                <option>Read all</option>
-                <option>★</option>
-                <option>★★</option>
-                <option>★★★★</option>
-                <option>★★★★★</option>
-              </select>
-              <select className="filter-view w-6/12 px-[12px] py-2.5 rounded-lg">
-                <option>Most relevant</option>
-                <option>Most recent</option>
-                <option>By rating</option>
-              </select>
+            <div className="flex justify-center sticky bottom-0">
+              <button
+                className="bg-black rounded-lg text-white w-screen py-2"
+                onClick={toggleWriteReview}
+              >
+                Write a Review
+              </button>
             </div>
-            <ListReview />
-            <ListReview />
-          </div>
-          <div className="flex justify-center">
-            <button
-              className="bg-black rounded-lg text-white w-screen py-2"
-              onClick={toggleWriteReview}
-            >
-              Write a Review
-            </button>
           </div>
         </div>
       </div>
       {/* Write review */}
       <div
-        className={`write-review top-3 right-0 bottom-3 fixed bg-gray-100 transform transition-transform duration-300 ease-in-out z-50 ${
-          isWrite ? "translate-x-0 " : "translate-x-full "
-        } w-2/6 rounded-lg`}
+        className={`write-review top-3 right-0 bottom-3 fixed bg-gray-100 transform transition-transform duration-300 ease-in-out z-50 ${isWrite ? "translate-x-0 " : "translate-x-full "
+          } w-2/6 rounded-lg`}
       >
         <div className="flex justify-between">
           <div>Write a Review</div>
@@ -286,19 +310,28 @@ function Review() {
           <div className="my-3">
             <div>Score</div>
             <div className="relative">
-              <select className="filter-rating w-full px-[12px] py-2.5 rounded-lg" onChange={handleScore} value={score}>
-                <option value = "0">★</option>
-                <option value = "1">★★</option>
-                <option value = "2">★★★</option>
-                <option value = "3">★★★★</option>
-                <option value = "4" selected>★★★★★</option>
+              <select
+                className="filter-rating w-full px-[12px] py-2.5 rounded-lg"
+                onChange={handleScore}
+                value={score}
+              >
+                <option value="0">★</option>
+                <option value="1">★★</option>
+                <option value="2">★★★</option>
+                <option value="3">★★★★</option>
+                <option value="4" selected>
+                  ★★★★★
+                </option>
               </select>
             </div>
           </div>
           <div>
             <div>Title</div>
-            <Input placeholder="Choose a title" onChange={handleChangeTitle} value={titleReview}/>
-            
+            <Input
+              placeholder="Choose a title"
+              onChange={handleChangeTitle}
+              value={titleReview}
+            />
           </div>
           <div className="my-3">
             <div>Review</div>
@@ -321,47 +354,43 @@ function Review() {
             <div>Recommended</div>
             <div className="flex gap-4">
               <button
-                className={`btn-yes-no rounded-xl px-2.5 py-1 ${
-                  selectedButton === "yes"
+                className={`btn-yes-no rounded-xl px-2.5 py-1 ${selectedButton === "yes"
                     ? "bg-pink-600 text-white"
                     : "bg-white text-black"
-                }`}
+                  }`}
                 onClick={() => handleButton("yes")}
               >
                 Yes
               </button>
               <button
-                className={`btn-yes-no rounded-xl px-2.5 py-1 ${
-                  selectedButton === "no"
+                className={`btn-yes-no rounded-xl px-2.5 py-1 ${selectedButton === "no"
                     ? "bg-pink-600 text-white"
                     : "bg-white text-black"
-                }`}
+                  }`}
                 onClick={() => handleButton("no")}
               >
                 No
               </button>
             </div>
           </div>
-        
+
           <div className="my-3">
             <div>Did your order arrive within the time mentioned?</div>
             <div className="flex gap-4">
               <button
-                className={`btn-yes-no1 rounded-xl px-2.5 py-1 ${
-                  selectedOrder === "yes"
+                className={`btn-yes-no1 rounded-xl px-2.5 py-1 ${selectedOrder === "yes"
                     ? "bg-pink-600 text-white"
                     : "bg-white text-black"
-                }`}
+                  }`}
                 onClick={() => handleOrder("yes")}
               >
                 Yes
               </button>
               <button
-                className={`btn-yes-no1 rounded-xl px-2.5 py-1 ${
-                  selectedOrder === "no"
+                className={`btn-yes-no1 rounded-xl px-2.5 py-1 ${selectedOrder === "no"
                     ? "bg-pink-600 text-white"
                     : "bg-white text-black"
-                }`}
+                  }`}
                 onClick={() => handleOrder("no")}
               >
                 No
@@ -369,9 +398,9 @@ function Review() {
             </div>
           </div>
           <div className="flex sticky bottom-0 justify-between">
-            <button className="bg-black text-white rounded-xl px-2.5 py-1 w-6/12"
+            <button
+              className="bg-black text-white rounded-xl px-2.5 py-1 w-6/12"
               onClick={writeReview}
-              
             >
               Save
             </button>
