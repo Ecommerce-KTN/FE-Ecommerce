@@ -198,7 +198,7 @@ function Review() {
       <div className="bg-white rounded-2xl border-2 my-5 p-3">
         <div className="flex justify-between items-center">
           <div className="font-semibold">Reviews ({ }) </div>
-          <div className="font-medium">Write a Review</div>
+          <div className="font-medium cursor-pointer" onClick={toggleWriteReview}>Write a Review</div>
         </div>
         <div className="flex justify-between items-center my-4">
           <div className="font-medium">Overall rating </div>
@@ -300,15 +300,15 @@ function Review() {
             </div>
           </div>
           <div className="my-3">
-            <div>Your name</div>
+            <div className="mb-1.5">Your name</div>
             <Input placeholder="Name" />
           </div>
           <div className="my-3">
-            <div>Your email address</div>
+            <div className="mb-1.5">Your email address</div>
             <Input placeholder="Email" />
           </div>
           <div className="my-3">
-            <div>Score</div>
+            <div className="mb-1.5 mt-5">Score</div>
             <div className="relative">
               <select
                 className="filter-rating w-full px-[12px] py-2.5 rounded-lg"
@@ -326,7 +326,7 @@ function Review() {
             </div>
           </div>
           <div>
-            <div>Title</div>
+            <div className="mb-1.5" >Title</div>
             <Input
               placeholder="Choose a title"
               onChange={handleChangeTitle}
@@ -334,7 +334,7 @@ function Review() {
             />
           </div>
           <div className="my-3">
-            <div>Review</div>
+            <div className="mb-1.5">Review</div>
             <textarea
               rows="5"
               cols=""
@@ -345,13 +345,13 @@ function Review() {
             >
               {/* welcome to GeeksforGeeks Aman Rathod. A perfect Portal for Geeks */}
             </textarea>
-            <p className="text-sm">
+            <p className="text-sm text-gray-400">
               Make sure you describe what you like and didn’t like about the
               product you feel other users should know about.
             </p>
           </div>
           <div className="my-3">
-            <div>Recommended</div>
+            <div className="mb-1.5">Recommended</div>
             <div className="flex gap-4">
               <button
                 className={`btn-yes-no rounded-xl px-2.5 py-1 ${selectedButton === "yes"
@@ -375,23 +375,23 @@ function Review() {
           </div>
 
           <div className="my-3">
-            <div>Did your order arrive within the time mentioned?</div>
+            <div className="mb-1.5">Did your order arrive within the time mentioned?</div>
             <div className="flex gap-4">
               <button
-                className={`btn-yes-no1 rounded-xl px-2.5 py-1 ${selectedOrder === "yes"
+                className={`btn-yes-no1 rounded-xl px-2.5 py-1 ${selectedOrder === "Yes"
                     ? "bg-pink-600 text-white"
                     : "bg-white text-black"
                   }`}
-                onClick={() => handleOrder("yes")}
+                onClick={() => handleOrder("Yes")}
               >
                 Yes
               </button>
               <button
-                className={`btn-yes-no1 rounded-xl px-2.5 py-1 ${selectedOrder === "no"
+                className={`btn-yes-no1 rounded-xl px-2.5 py-1 ${selectedOrder === "No"
                     ? "bg-pink-600 text-white"
                     : "bg-white text-black"
                   }`}
-                onClick={() => handleOrder("no")}
+                onClick={() => handleOrder("No")}
               >
                 No
               </button>
