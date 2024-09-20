@@ -6,10 +6,12 @@ import Category from './Category';
 import Pricing from './Pricing';
 import Button from '@mui/joy/Button';
 import Description from './Description';
+import Specification from './Specification';
 import Box from '@mui/joy/Box';
 import axios from 'axios';
 import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import Select from "react-select";
+
 
 function CreateProduct ( { closeAddingProduct } )
 {
@@ -257,6 +259,12 @@ function CreateProduct ( { closeAddingProduct } )
                 onUnitOfWeightChange={ handleUnitOfWeightOnChange }
                 onUnitOfLengthChange={ handleUnitOfLengthOnChange }
               />
+            </div>
+          </div>
+          <div>
+            
+            <div>
+              <Specification/>
             </div>
           </div>
           <div>
