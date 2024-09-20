@@ -94,8 +94,8 @@ function ProductDetail() {
     <div className="m-auto w-11/12 relative">
       
       <div className="flex">
-        <div className="w-8/12 h-[280px] mr-5 ">
-          <img src="https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_s24_ultra_256gb_-_2.png"className="rounded-xl"></img>
+        <div className="w-8/12 mr-5 ">
+          <img src="https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_s24_ultra_256gb_-_2.png"className="rounded-xl w-full"></img>
         </div>
         <div className="w-4/12 ">
           <div className="flex gap-4 items-start">
