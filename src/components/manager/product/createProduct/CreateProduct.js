@@ -306,7 +306,8 @@ function CreateProduct({ closeAddingProduct }) {
           </div>
 
           {/* section collection */}
-          <div>
+          <div className="mt-5">
+            <h3 className="font-bold mb-2">Collection</h3>
             <Select
               options={collections}
               value={selectOptions}
