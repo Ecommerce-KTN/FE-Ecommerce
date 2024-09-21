@@ -100,6 +100,18 @@ function Description({ onDescriptionChange, onProductNameChange }) {
           maxLength={120}
         />
         {productError && <FormHelperText>{productError}</FormHelperText>}
+
+        <FormLabel htmlFor="product-name" className="pt-2">Brand Name*</FormLabel>
+        <Input
+          id="product-name"
+          value={productName}
+          onChange={handleProductNameChange}
+          onBlur={handleBlur}
+          placeholder="Enter product name"
+          maxLength={120}
+        />
+        {productError && <FormHelperText>{productError}</FormHelperText>}
+        
       </FormControl>
       <FormControl style={{ marginTop: "15px" }} error={Boolean(descriptionError || fileError)}>
         <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>

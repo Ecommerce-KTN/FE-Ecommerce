@@ -40,38 +40,41 @@ function Input() {
 
   return (
     <>
-      {specification.map((data, index) => (
-        <div className="mt-2" key={index}>
-          <Accordion
-            expanded={expanded === index} // Kiểm tra xem có phải accordion đang mở hay không
-            onChange={handleChange(index)} // Xử lý thay đổi trạng thái accordion
-            style={{ borderRadius: '10px' }}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls={`panel${index}-content`}
-              id={`panel${index}-header`}
-              sx={{ height: '40px' }}
+    <div className="border-2 px-5 py-4">
+      
+        {specification.map((data, index) => (
+          <div className="py-3" key={index}>
+            <Accordion
+              expanded={expanded === index} // Kiểm tra xem có phải accordion đang mở hay không
+              onChange={handleChange(index)} // Xử lý thay đổi trạng thái accordion
+              style={{ borderRadius: '10px' }}
             >
-              <SportsVolleyballIcon sx={{ marginRight: "5px" }} />
-              {data.name}
-            </AccordionSummary>
-            <AccordionDetails>
-              <ul className="list-specification">
-                {data.item.map((items, idx) => (
-                  <li
-                    className=" bg-white py-2 transition ease-in-out duration-100 flex gap-2 items-center"
-                    key={idx}
-                  >
-                    <label className='w-2/12'>{items.name}</label>
-                    <input type='text' className='w-10/12 py-1 px-3 border-2 border-gray-300 flex-1 rounded-lg'/>
-                  </li>
-                ))}
-              </ul>
-            </AccordionDetails>
-          </Accordion>
-        </div>
-      ))}
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls={`panel${index}-content`}
+                id={`panel${index}-header`}
+                sx={{ height: '40px' }}
+              >
+                <SportsVolleyballIcon sx={{ marginRight: "5px" }} />
+                {data.name}
+              </AccordionSummary>
+              <AccordionDetails>
+                <ul className="list-specification">
+                  {data.item.map((items, idx) => (
+                    <li
+                      className=" bg-white py-2 transition ease-in-out duration-100 flex gap-2 items-center"
+                      key={idx}
+                    >
+                      <label className='w-2/12'>{items.name}</label>
+                      <input type='text' className='w-10/12 py-1 px-3 border-2 border-gray-300 flex-1 rounded-lg'/>
+                    </li>
+                  ))}
+                </ul>
+              </AccordionDetails>
+            </Accordion>
+          </div>
+        ))}
+    </div>
     </>
   );
 }
