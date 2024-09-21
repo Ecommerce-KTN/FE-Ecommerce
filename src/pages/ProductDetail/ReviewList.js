@@ -18,7 +18,7 @@ const data = [
       "The product quality is excellent, very satisfied with my purchase.",
     recommend: "Highly recommended",
     fitting: "Perfect",
-    shipping: 'Yes', // yes
+    shipping: "Yes", // yes
   },
   {
     ratingStar: "★★★★★",
@@ -29,7 +29,7 @@ const data = [
     shipping: "Yes", // yes
   },
   {
-    ratingStar:"★★★★★",
+    ratingStar: "★★★★★",
     createdDay: "Sep 19, 2024",
     title: "Average Product",
     description: "The product is okay, but didn’t meet my expectations.",
@@ -163,7 +163,7 @@ function Review() {
   };
 
   const renderScore = (score) => {
-    switch(score) {
+    switch (score) {
       case "0":
         return "★";
       case "1":
@@ -178,27 +178,87 @@ function Review() {
         return ""; // Trường hợp mặc định khi score không phải là 0-4
     }
   };
-  
+
+  const [errorMessages, setErrorMessages] = useState({});
+
+  const resetForm = () => {
+    setScore(5);
+    setTitleReview("");
+    setDescriptionReview("");
+    setSelectedButton("");
+    setSelectedOrder("");
+    setErrorMessages({}); // Đặt lại thông báo lỗi
+  };
 
   const writeReview = () => {
+    let errors = {
+      score: '',
+      title: '',
+      description: '',
+      recommended: '',
+      orderArrival: ''
+    };
+  
+    // Kiểm tra điểm số
+    if (score === 0) {
+      errors.score = "Please select a score.";
+    }
+  
+    // Kiểm tra tiêu đề
+    if (!titleReview) {
+      errors.title = "Title is required.";
+    }
+  
+    // Kiểm tra mô tả
+    if (!descriptionReview) {
+      errors.description = "Review is required.";
+    } else if (descriptionReview.length < 10) {
+      errors.description = "Review must be at least 10 characters long.";
+    }
+  
+    // Kiểm tra có chọn 'Recommended' hay không
+    if (!selectedButton) {
+      errors.recommended = "Please indicate if you recommend this product.";
+    }
+  
+    // Kiểm tra có chọn 'Order arrival' hay không
+    if (!selectedOrder) {
+      errors.orderArrival = "Please indicate if the order arrived on time.";
+    }
+  
+    // Nếu có lỗi, hiển thị thông báo và không gửi form
+    if (Object.values(errors).some((error) => error !== '')) {
+      setErrorMessages(errors); // Cập nhật thông báo lỗi
+      return;
+    }
+  
+    // Nếu không có lỗi, thực hiện hành động lưu đánh giá
     data.push({
       ratingStar: renderScore(score),
-      createdDay: "2024-09-15",
+      createdDay: new Date().toISOString().split('T')[0],
       title: titleReview,
       description: descriptionReview,
       recommend: selectedButton,
       shipping: selectedOrder,
     });
+  
     console.log(data);
+    resetForm(); // Gọi hàm resetForm nếu bạn có
   };
+  
 
   return (
     <>
       {/* review section */}
       <div className="bg-white rounded-2xl border-2 my-5 p-3">
         <div className="flex justify-between items-center">
-          <div className="font-semibold">Reviews ({ }) </div>
-          <div className="font-medium cursor-pointer" onClick={toggleWriteReview}>Write a Review</div>
+          <div className="font-semibold">Reviews ({}) </div>
+          <div
+            className="font-medium cursor-pointer"
+            onClick={toggleWriteReview}
+          >
+            Write a Review
+          </div>
         </div>
         <div className="flex justify-between items-center my-4">
           <div className="font-medium">Overall rating </div>
@@ -215,13 +275,14 @@ function Review() {
       </div>
       {/* show list review */}
       <div
-        className={`fixed top-3 bottom-3 right-0 bg-gray-200 transform transition-transform duration-300 ease-in-out z-50 ${isOpen ? "translate-x-0" : "translate-x-full opacity-50"
-          } w-4/12 rounded-lg`}
+        className={`fixed top-3 bottom-3 right-0 bg-gray-200 transform transition-transform duration-300 ease-in-out z-50 ${
+          isOpen ? "translate-x-0" : "translate-x-full opacity-50"
+        } w-4/12 rounded-lg`}
       >
         {/* Nội dung Review */}
         <div className="view-list-review">
           <div className="flex justify-between h-12 items-center px-3 mt-1">
-            <div className="font-bold text-base">Reviews ({ })</div>
+            <div className="font-bold text-base">Reviews ({})</div>
             <button onClick={() => setIsOpen(false)}>
               <CloseIcon />
             </button>
@@ -254,8 +315,19 @@ function Review() {
                     <option>By rating</option>
                   </select>
                   <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                    <svg className="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    <svg
+                      className="w-4 h-4 text-gray-500"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 9l-7 7-7-7"
+                      />
                     </svg>
                   </div>
                 </div>
@@ -275,8 +347,9 @@ function Review() {
       </div>
       {/* Write review */}
       <div
-        className={`write-review top-3 right-0 bottom-3 fixed bg-gray-100 transform transition-transform duration-300 ease-in-out z-50 ${isWrite ? "translate-x-0 " : "translate-x-full "
-          } w-2/6 rounded-lg`}
+        className={`write-review top-3 right-0 bottom-3 fixed bg-gray-100 transform transition-transform duration-300 ease-in-out z-50 ${
+          isWrite ? "translate-x-0 " : "translate-x-full "
+        } w-2/6 rounded-lg`}
       >
         <div className="flex justify-between">
           <div>Write a Review</div>
@@ -326,13 +399,14 @@ function Review() {
             </div>
           </div>
           <div>
-            <div className="mb-1.5" >Title</div>
+            <div className="mb-1.5">Title</div>
             <Input
               placeholder="Choose a title"
               onChange={handleChangeTitle}
               value={titleReview}
             />
           </div>
+          {errorMessages.title && <div className="text-red-500">{errorMessages.title}</div>}
           <div className="my-3">
             <div className="mb-1.5">Review</div>
             <textarea
@@ -350,53 +424,62 @@ function Review() {
               product you feel other users should know about.
             </p>
           </div>
+          {errorMessages.description && <div className="text-red-500">{errorMessages.description}</div>}
           <div className="my-3">
             <div className="mb-1.5">Recommended</div>
             <div className="flex gap-4">
               <button
-                className={`btn-yes-no rounded-xl px-2.5 py-1 ${selectedButton === "yes"
+                className={`btn-yes-no rounded-xl px-2.5 py-1 ${
+                  selectedButton === "Yes"
                     ? "bg-pink-600 text-white"
                     : "bg-white text-black"
-                  }`}
-                onClick={() => handleButton("yes")}
+                }`}
+                onClick={() => handleButton("Yes")}
               >
                 Yes
               </button>
               <button
-                className={`btn-yes-no rounded-xl px-2.5 py-1 ${selectedButton === "no"
+                className={`btn-yes-no rounded-xl px-2.5 py-1 ${
+                  selectedButton === "No"
                     ? "bg-pink-600 text-white"
                     : "bg-white text-black"
-                  }`}
-                onClick={() => handleButton("no")}
+                }`}
+                onClick={() => handleButton("No")}
               >
                 No
               </button>
             </div>
           </div>
+          {errorMessages.recommended && <div className="text-red-500">{errorMessages.recommended}</div>}
 
           <div className="my-3">
-            <div className="mb-1.5">Did your order arrive within the time mentioned?</div>
+            <div className="mb-1.5">
+              Did your order arrive within the time mentioned?
+            </div>
             <div className="flex gap-4">
               <button
-                className={`btn-yes-no1 rounded-xl px-2.5 py-1 ${selectedOrder === "Yes"
+                className={`btn-yes-no1 rounded-xl px-2.5 py-1 ${
+                  selectedOrder === "Yes"
                     ? "bg-pink-600 text-white"
                     : "bg-white text-black"
-                  }`}
+                }`}
                 onClick={() => handleOrder("Yes")}
               >
                 Yes
               </button>
               <button
-                className={`btn-yes-no1 rounded-xl px-2.5 py-1 ${selectedOrder === "No"
+                className={`btn-yes-no1 rounded-xl px-2.5 py-1 ${
+                  selectedOrder === "No"
                     ? "bg-pink-600 text-white"
                     : "bg-white text-black"
-                  }`}
+                }`}
                 onClick={() => handleOrder("No")}
               >
                 No
               </button>
             </div>
           </div>
+          {errorMessages.orderArrival && <div className="text-red-500">{errorMessages.orderArrival}</div>}
           <div className="flex sticky bottom-0 justify-between">
             <button
               className="bg-black text-white rounded-xl px-2.5 py-1 w-6/12"
