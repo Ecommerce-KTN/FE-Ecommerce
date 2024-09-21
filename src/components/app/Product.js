@@ -6,7 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 import StarIcon from '@mui/icons-material/Star';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-
+import { useState } from 'react';
 const products = [
   {
     name: "Smart Watch",
@@ -39,6 +39,7 @@ const products = [
 ];
 
 function SampleNextArrow(props) {
+
   const { onClick } = props;
   return (
     <div
@@ -63,6 +64,7 @@ function SamplePrevArrow(props) {
 }
 
 function Product() {
+
   const handleAddToCart = (productName) => {
     alert(`${productName} added to cart!`);
   };
@@ -85,11 +87,11 @@ function Product() {
           {products.map((product, index) => (
             <div className="" key={index}>
               <Link to="/ProductDetail">
-                <div className="rounded-[10px] h-[300px] bg-[#EFEFEF] flex justify-center items-center hover:shadow-xl transition-shadow duration-300">
+                <div href="" className="rounded-[10px] h-[300px] bg-[#EFEFEF] flex justify-center items-center hover:shadow-xl transition-shadow duration-300">
                   <img src={product.image} alt={product.name} className="max-w-[180px]" />
                 </div>
               </Link>
-
+              
               <div>
                 <h3 className="font-bold text-xl mt-3">{product.name}</h3>
                 <p className="text-sm text-zinc-400 mt-2">Brand Name</p>
@@ -115,6 +117,7 @@ function Product() {
           ))}
         </Slider>
       </div>
+      
     </div>
   );
 }
