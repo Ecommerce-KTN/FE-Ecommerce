@@ -10,6 +10,7 @@ import SportsVolleyballIcon from "@mui/icons-material/SportsVolleyball";
 import Button from "@mui/material/Button";
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import ReviewList from "./ReviewList";
+import { useEffect } from "react";
 
 const specification = [
   {
@@ -88,8 +89,12 @@ function AddCart() {
 
 
 function ProductDetail() {
+  useEffect(() => {
+    window.scrollTo(0, 0); // Cuộn lên đầu trang khi load trang
+  }, []);
   return (
     <>
+    
     <Header/>
     <div className="m-auto w-11/12 relative">
       
