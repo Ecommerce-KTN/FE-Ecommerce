@@ -95,23 +95,26 @@ function Product() {
               <div>
                 <h3 className="font-bold text-xl mt-3">{product.name}</h3>
                 <p className="text-sm text-zinc-400 mt-2">Brand Name</p>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="flex justify-between gap-2 mt-2">
-                      <div className="flex justify-center items-center gap-1">
-                        <StarIcon style={{ color: "#FF9A27" }} />
-                        <p>{product.rating}</p>
+
+                <div className="flex justify-between">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="flex justify-between gap-2 mt-2">
+                        <div className="flex justify-center items-center gap-1">
+                          <StarIcon style={{ color: "#FF9A27" }} />
+                          <p>{product.rating}</p>
+                        </div>
+                        <p className="leading-snug">|</p>
+                        <p className="bg-slate-300 rounded-md px-2">{product.sold} Sold</p>
                       </div>
-                      <p className="leading-snug">|</p>
-                      <p className="bg-slate-300 rounded-md px-2">{product.sold} Sold</p>
-                    </div>
-                    <div className="flex gap-4 mt-2">
-                      <p className="line-through text-zinc-400">{product.price}</p>
-                      <p className="price font-bold">{product.price}</p>
+                      <div className="flex gap-4 mt-2">
+                        <p className="line-through text-zinc-400">{product.price}</p>
+                        <p className="price font-bold">{product.price}</p>
+                      </div>
                     </div>
                   </div>
+                  <div className="add-to-cart cursor-pointer" onClick={() => handleAddToCart(product.name)}>+</div>
                 </div>
-                <div className="add-to-cart cursor-pointer" onClick={() => handleAddToCart(product.name)}>+</div>
               </div>
             </div>
           ))}
