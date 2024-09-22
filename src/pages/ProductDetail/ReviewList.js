@@ -32,18 +32,19 @@ const data = [
     ratingStar: "★★★★★",
     createdDay: "Sep 19, 2024",
     title: "Average Product",
-    description: "The product is okay, but didn’t meet my expectations.The product is okay, but didn’t meet my expectations.The product is okay, but didn’t meet my expectations.The product is okay, but didn’t meet my expectations.The product is okay, but didn’t meet my expectations.",
+    description:
+      "The product is okay, but didn’t meet my expectations.The product is okay, but didn’t meet my expectations.The product is okay, but didn’t meet my expectations.The product is okay, but didn’t meet my expectations.The product is okay, but didn’t meet my expectations.",
     recommend: "Not recommended",
     shipping: "Yes", // no
   },
 ];
 
 const rating = [
-  { icon: "★", value: 1 },
-  { icon: "★★", value: 2 },
-  { icon: "★★★", value: 3 },
-  { icon: "★★★★", value: 4 },
-  { icon: "★★★★★", value: 5 },
+  { icon: "★", value: 0 },
+  { icon: "★★", value: 1 },
+  { icon: "★★★", value: 2 },
+  { icon: "★★★★", value: 3 },
+  { icon: "★★★★★", value: 4 },
 ];
 function ListReview() {
   return (
@@ -83,12 +84,20 @@ function renderStars(count) {
 }
 
 function Review() {
+
+  // State hooks
   const [isOpen, setIsOpen] = useState(false);
   const [isWrite, setIsWrite] = useState(false);
   const [status, setStatus] = useState(null);
+  const [selectedRating, setSelectedRating] = useState(""); // Giá trị ngôi sao mặc định
+  const [score, setScore] = useState();
+  const [selectedButton, setSelectedButton] = useState(null); // State lưu button được chọn
+  const [selectedOrder, setSelectedOrder] = useState(null); // State lưu button được chọn
+  const [titleReview, setTitleReview] = useState("");
+  const [descriptionReview, setDescriptionReview] = useState("");
+  const [errorMessages, setErrorMessages] = useState({});
 
-  const [selectedRating, setSelectedRating] = useState("★★★★★"); // Giá trị ngôi sao mặc định
-
+  // Handlers
   const handleSelect = (rating) => {
     setSelectedRating(rating);
     setIsOpen(false); // Đóng dropdown sau khi chọn
@@ -96,30 +105,29 @@ function Review() {
 
   const handleOpen = () => {
     setIsOpen(!isOpen);
-    
   };
 
-  const [score, setScore] = useState(4);
   const handleScore = (e) => {
     setScore(e.target.value);
     console.log(e.target.value);
   };
 
-  const renderScore = (score) => {
-    switch (score) {
-      case "0":
-        return "★";
-      case "1":
-        return "★★";
-      case "2":
-        return "★★★";
-      case "3":
-        return "★★★★";
-      case "4":
-        return "★★★★★";
-      default:
-        return ""; // Trường hợp mặc định khi score không phải là 0-4
-    }
+  const handleButton = (button) => {
+    setSelectedButton(button); // Cập nhật state khi button được click
+  };
+
+  const handleOrder = (button) => {
+    setSelectedOrder(button); // Cập nhật state khi button được click
+  };
+
+  const handleChangeTitle = (e) => {
+    setTitleReview(e.target.value);
+    console.log("Title Review:", titleReview);
+  };
+
+  const handleDescriptionReview = (e) => {
+    setDescriptionReview(e.target.value);
+    console.log("description: ", descriptionReview);
   };
 
   const toggleTab = () => {
@@ -129,7 +137,7 @@ function Review() {
   const toggleWriteReview = () => {
     setIsWrite(!isWrite);
     setIsOpen(false);
-    
+
     // khi người dùng hủy trở vào lại thì dữ liệu sẽ reset về null
     setScore(4);
     setTitleReview("");
@@ -145,8 +153,34 @@ function Review() {
     console.log(selectedButton);
   };
 
-  
+  const resetForm = () => {
+    setScore(4);
+    setTitleReview("");
+    setDescriptionReview("");
+    setSelectedButton("");
+    setSelectedOrder("");
+    setErrorMessages({}); // Đặt lại thông báo lỗi
+  };
 
+  // Render functions
+  const renderScore = (score) => {
+    switch (score) {
+      case "0":
+        return "★";
+      case "1":
+        return "★★";
+      case "2":
+        return "★★★";
+      case "3":
+        return "★★★★";
+      case "4":
+        return "★★★★★";
+      default:
+        return "★★★★★"; // Trường hợp mặc định khi score không phải là 0-4
+    }
+  };
+
+  // Effects
   useEffect(() => {
     if (isOpen || isWrite) {
       document.body.style.overflowY = "hidden"; // Tắt thanh cuộn
@@ -159,43 +193,6 @@ function Review() {
       document.body.style.overflowY = "auto";
     };
   });
-
-  const [selectedButton, setSelectedButton] = useState(null); // State lưu button được chọn
-
-  const handleButton = (button) => {
-    setSelectedButton(button); // Cập nhật state khi button được click
-  };
-
-  const [selectedOrder, setSelectedOrder] = useState(null); // State lưu button được chọn
-
-  const handleOrder = (button) => {
-    setSelectedOrder(button); // Cập nhật state khi button được click
-  };
-
-  const [titleReview, setTitleReview] = useState("");
-
-  const handleChangeTitle = (e) => {
-    setTitleReview(e.target.value);
-    console.log("Title Review:", titleReview);
-  };
-  const [descriptionReview, setDescriptionReview] = useState("");
-  const handleDescriptionReview = (e) => {
-    setDescriptionReview(e.target.value);
-    console.log("desription: ", descriptionReview);
-  };
-
-  
-
-  const [errorMessages, setErrorMessages] = useState({});
-
-  const resetForm = () => {
-    setScore(4);
-    setTitleReview("");
-    setDescriptionReview("");
-    setSelectedButton("");
-    setSelectedOrder("");
-    setErrorMessages({}); // Đặt lại thông báo lỗi
-  };
 
   const writeReview = () => {
     let errors = {
@@ -258,7 +255,6 @@ function Review() {
       recommend: selectedButton,
       shipping: selectedOrder,
     });
-    
 
     console.log(data);
     resetForm(); // Gọi hàm resetForm nếu bạn có
@@ -422,9 +418,7 @@ function Review() {
                 <option value="1">★★</option>
                 <option value="2">★★★</option>
                 <option value="3">★★★★</option>
-                <option value="4" select>
-                  ★★★★★
-                </option>
+                <option value="4">★★★★★</option>
               </select>
             </div>
           </div>
