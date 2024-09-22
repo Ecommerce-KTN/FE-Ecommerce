@@ -192,60 +192,59 @@ function Review() {
 
   const writeReview = () => {
     let errors = {
-      score: '',
-      title: '',
-      description: '',
-      recommended: '',
-      orderArrival: ''
+      score: "",
+      title: "",
+      description: "",
+      recommended: "",
+      orderArrival: "",
     };
-  
+
     // Kiểm tra điểm số
     if (score === 0) {
       errors.score = "Please select a score.";
     }
-  
+
     // Kiểm tra tiêu đề
     if (!titleReview) {
       errors.title = "Title is required.";
     }
-  
+
     // Kiểm tra mô tả
     if (!descriptionReview) {
       errors.description = "Review is required.";
     } else if (descriptionReview.length < 10) {
       errors.description = "Review must be at least 10 characters long.";
     }
-  
+
     // Kiểm tra có chọn 'Recommended' hay không
     if (!selectedButton) {
       errors.recommended = "Please indicate if you recommend this product.";
     }
-  
+
     // Kiểm tra có chọn 'Order arrival' hay không
     if (!selectedOrder) {
       errors.orderArrival = "Please indicate if the order arrived on time.";
     }
-  
+
     // Nếu có lỗi, hiển thị thông báo và không gửi form
-    if (Object.values(errors).some((error) => error !== '')) {
+    if (Object.values(errors).some((error) => error !== "")) {
       setErrorMessages(errors); // Cập nhật thông báo lỗi
       return;
     }
-  
+
     // Nếu không có lỗi, thực hiện hành động lưu đánh giá
     data.push({
       ratingStar: renderScore(score),
-      createdDay: new Date().toISOString().split('T')[0],
+      createdDay: new Date().toISOString().split("T")[0],
       title: titleReview,
       description: descriptionReview,
       recommend: selectedButton,
       shipping: selectedOrder,
     });
-  
+
     console.log(data);
     resetForm(); // Gọi hàm resetForm nếu bạn có
   };
-  
 
   return (
     <>
@@ -274,10 +273,19 @@ function Review() {
         </div>
       </div>
       {/* show list review */}
+
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-50"
+          onClick={() => setIsOpen(false)}
+        ></div>
+      )}
+
+      {/* Review List */}
       <div
         className={`fixed top-3 bottom-3 right-0 bg-gray-200 transform transition-transform duration-300 ease-in-out z-50 ${
           isOpen ? "translate-x-0" : "translate-x-full opacity-50"
-        } w-4/12 rounded-lg`}
+        } w-[33.5rem] rounded-lg`}
       >
         {/* Nội dung Review */}
         <div className="view-list-review">
@@ -287,10 +295,7 @@ function Review() {
               <CloseIcon />
             </button>
           </div>
-          {/* Body nội dung*/}
-          {/* h-[calc(100dvh-100px)] mặc dù chưa hiểu rõ là như thế nào nhưng mà cái này nó sẽ giới hạn height và tạo ra sroll 
-          overflow-y-scroll h-[calc(100dvh-120px)]
-          */}
+          {/* Body nội dung */}
           <div className="overflow-x-auto h-[calc(100dvh-100px)] px-3">
             <div className="">
               <div className="flex justify-between items-center rounded-lg bg-gray-300 px-[12px] py-2">
@@ -334,7 +339,7 @@ function Review() {
               </div>
               <ListReview />
             </div>
-            <div className="flex justify-center sticky bottom-0">
+            <div className="flex justify-center sticky bottom-0 bg-gray-200 pt-5">
               <button
                 className="bg-black rounded-lg text-white w-screen py-2"
                 onClick={toggleWriteReview}
@@ -345,31 +350,38 @@ function Review() {
           </div>
         </div>
       </div>
+
       {/* Write review */}
+      {isWrite && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-50"
+          onClick={() => setIsWrite(false)}
+        ></div>
+      )}
       <div
         className={`write-review top-3 right-0 bottom-3 fixed bg-gray-100 transform transition-transform duration-300 ease-in-out z-50 ${
-          isWrite ? "translate-x-0 " : "translate-x-full "
+          isWrite ? "translate-x-0 w-[33.5rem]" : "translate-x-full "
         } w-2/6 rounded-lg`}
       >
-        <div className="flex justify-between">
-          <div>Write a Review</div>
+        <div className="flex justify-between px-4 py-3">
+          <div className="font-bold">Write a Review</div>
           <button onClick={() => setIsWrite(false)}>
             <CloseIcon />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto overflow-x-hidden h-[calc(100dvh-70px)] px-4">
-          <div className="flex gap-4 bg-white rounded-lg">
-            <div className="w-max">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden h-[calc(100dvh-90px)] px-4">
+          <div className="flex gap-4 bg-white rounded-lg items-center p-2">
+            <div className="h-16 w-16">
               <img
                 src="https://cdn.shopify.com/s/files/1/0515/8079/7116/files/PDP4-5_DaphneStills_SS_dbdce076-1797-41fb-af0f-5391459bdca0_1000x.png.webp?v=1725270498"
-                className="w-14 h-14"
+                className="h-16 w-16 rounded-lg object-cover"
               ></img>
             </div>
             <div>
-              <p>Name of Product</p>
-              <p>Category</p>
-              <p>$</p>
+              <p className="font-bold">Name of Product</p>
+              <p className="text-gray-500">Category</p>
+              <p>$10</p>
             </div>
           </div>
           <div className="my-3">
@@ -406,7 +418,9 @@ function Review() {
               value={titleReview}
             />
           </div>
-          {errorMessages.title && <div className="text-red-500">{errorMessages.title}</div>}
+          {errorMessages.title && (
+            <div className="text-red-500">{errorMessages.title}</div>
+          )}
           <div className="my-3">
             <div className="mb-1.5">Review</div>
             <textarea
@@ -424,7 +438,9 @@ function Review() {
               product you feel other users should know about.
             </p>
           </div>
-          {errorMessages.description && <div className="text-red-500">{errorMessages.description}</div>}
+          {errorMessages.description && (
+            <div className="text-red-500">{errorMessages.description}</div>
+          )}
           <div className="my-3">
             <div className="mb-1.5">Recommended</div>
             <div className="flex gap-4">
@@ -450,7 +466,9 @@ function Review() {
               </button>
             </div>
           </div>
-          {errorMessages.recommended && <div className="text-red-500">{errorMessages.recommended}</div>}
+          {errorMessages.recommended && (
+            <div className="text-red-500">{errorMessages.recommended}</div>
+          )}
 
           <div className="my-3">
             <div className="mb-1.5">
@@ -479,16 +497,18 @@ function Review() {
               </button>
             </div>
           </div>
-          {errorMessages.orderArrival && <div className="text-red-500">{errorMessages.orderArrival}</div>}
-          <div className="flex sticky bottom-0 justify-between">
+          {errorMessages.orderArrival && (
+            <div className="text-red-500">{errorMessages.orderArrival}</div>
+          )}
+          <div className="flex sticky bottom-0 justify-between bg-gray-100 pt-5 gap-4">
             <button
-              className="bg-black text-white rounded-xl px-2.5 py-1 w-6/12"
+              className="bg-black text-white rounded-lg px-2.5 py-2 w-6/12"
               onClick={writeReview}
             >
               Save
             </button>
             <button
-              className="bg-white rounded-xl border-1 border-black px-2.5 py-1 w-6/12"
+              className="bg-white rounded-lg border-1 border-black px-2.5 py-2 w-6/12"
               onClick={() => setIsWrite(false)}
             >
               Cancel
