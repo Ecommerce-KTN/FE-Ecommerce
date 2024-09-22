@@ -9,10 +9,12 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SportsVolleyballIcon from "@mui/icons-material/SportsVolleyball";
 import Button from "@mui/material/Button";
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import ReviewList from "./ReviewList";
 import { useEffect } from "react";
 import { useState } from "react";
 import Banner from "../../../src/components/app/Banner"
+
 
 const specification = [
   {
@@ -59,7 +61,7 @@ function ListItem() {
               <ul className="list-specification">
                 {data.item.map((items, index) => (
                   <li
-                    className="border-b-2 border-b-gray-200 bg-white py-2 last:border-b-0 transistion ease-in-out duration-100 hover:bg-gray-200"
+                    className="border-b-2 border-b-gray-200 bg-white py-2 last:border-b-0 transistion ease-in-out duration-100"
                     key={index}
                   >
                     <a href="" className="block w-full h-full">{items.name}</a>
@@ -76,13 +78,20 @@ function ListItem() {
 
 
 function AddCart() {
+
+  const [favorite, setAddFavorite] = useState(false);
+  const handleChangeFavorite = () => {
+    setAddFavorite(!favorite);
+  }
   return (
     <>
       <div>
         <p className="my-3 font-semibold">Delivery on March 5th-11th</p>
-        <div className="flex justify-between">
-          <button className="text-center text-white w-[29rem] bg-gray-900 border-2 rounded-lg py-2">Add to cart</button>
-          <button className="p-2 rounded-lg border-2 border-black"><FavoriteBorderOutlinedIcon /></button>
+        <div className="flex justify-between gap-4">
+          <button className="text-center text-white w-[29rem] bg-gray-800 border-2 rounded-lg py-2">Add to cart</button>
+          <button className="p-2 rounded-lg border-2 border-gray-500" onClick={handleChangeFavorite}> 
+              {favorite ? <FavoriteBorderOutlinedIcon/> : <FavoriteIcon sx={{color: "rgb(247 74 73)"}}/> }
+          </button>
         </div>
       </div>
     </>
@@ -123,19 +132,19 @@ function ProductDetail() {
             <Banner />
           </div>
           <div className="w-4/12">
-            <div className="flex gap-4 items-start">
-              <div className="w-8/12">
-                <h2 className="font-bold text-xl">Flamenco Frilled & High Waisted</h2>
+            <div className="flex justify-between items-start">
+              <div className="w-9/12">
+                <h2 className="font-bold text-2xl">Flamenco Frilled & High Waisted</h2>
                 <p className="font-bold text-xl text-gray-400">Bikini</p>
               </div>
-              <div className="w-4/12">
-                <p className="font-bold line-through text-xl">$155</p>
-                <p className="font-bold text-xl text-orange-600">$140</p>
+              <div className="w-5/12 flex flex-col items-end">
+                <p className="font-bold line-through text-2xl opacity-60">$155</p>
+                <p className="font-bold text-3xl text-orange-600">$140</p>
               </div>
             </div>
             {/* color */}
             <div className="my-3">
-              <div className="my-1 font-bold">Color: {color}</div>
+              <div className="my-2 font-bold">Color: {color}</div>
               <div className="flex gap-3">
                 <button onClick={() => handleChangeColor("Gray")} className="bg-gray-300 min-w-[40px] min-h-[40px] rounded-lg focus:outline-none focus:ring focus:ring-gray-600"></button>
                 <button onClick={() => handleChangeColor("Blue")} className="bg-blue-500 min-w-[40px] min-h-[40px] rounded-lg focus:outline-none focus:ring focus:ring-gray-600"></button>
@@ -145,7 +154,7 @@ function ProductDetail() {
             </div>
             {/* ram */}
             <div className="my-3">
-              <div className="my-1 font-bold">Ram: { ram}</div>
+              <div className="my-2 font-bold">Ram: { ram}</div>
               <div className="flex gap-3">
                 <button onClick={() => handleChangeRam("4GB")} className="min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600">4GB</button>
                 <button onClick={() => handleChangeRam("8GB")} className="min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600">8GB</button>
@@ -155,7 +164,7 @@ function ProductDetail() {
             </div>
             {/* Storage */}
             <div className="my-3">
-              <div className="my-1 font-bold">Storage: { storage}</div>
+              <div className="my-2 font-bold">Storage: { storage}</div>
               <div className="flex gap-3">
                 <button onClick={() => handleChangeStorage("32GB")} className="min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600">32GB</button>
                 <button onClick={() => handleChangeStorage("64GB")} className="min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600">64GB</button>

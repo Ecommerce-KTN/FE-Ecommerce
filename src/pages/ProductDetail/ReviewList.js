@@ -32,7 +32,7 @@ const data = [
     ratingStar: "★★★★★",
     createdDay: "Sep 19, 2024",
     title: "Average Product",
-    description: "The product is okay, but didn’t meet my expectations.",
+    description: "The product is okay, but didn’t meet my expectations.The product is okay, but didn’t meet my expectations.The product is okay, but didn’t meet my expectations.The product is okay, but didn’t meet my expectations.The product is okay, but didn’t meet my expectations.",
     recommend: "Not recommended",
     shipping: "Yes", // no
   },
@@ -56,9 +56,9 @@ function ListReview() {
             <div>{item.createdDay}</div>
           </div>
           {/* title and description */}
-          <div className="py-4">
-            <h2 className="font-bold">{item.title}</h2>
-            <div>{item.description}</div>
+          <div className="py-4 w-full">
+            <h2 className="font-bold max-w-fit">{item.title}</h2>
+            <div className="max-w-fit">{item.description}</div>
           </div>
           {/* shipping */}
           <div className="flex justify-between py-3 border-y-[1px] border-gray-200 text-base font-medium">
@@ -96,6 +96,30 @@ function Review() {
 
   const handleOpen = () => {
     setIsOpen(!isOpen);
+    
+  };
+
+  const [score, setScore] = useState(4);
+  const handleScore = (e) => {
+    setScore(e.target.value);
+    console.log(e.target.value);
+  };
+
+  const renderScore = (score) => {
+    switch (score) {
+      case "0":
+        return "★";
+      case "1":
+        return "★★";
+      case "2":
+        return "★★★";
+      case "3":
+        return "★★★★";
+      case "4":
+        return "★★★★★";
+      default:
+        return ""; // Trường hợp mặc định khi score không phải là 0-4
+    }
   };
 
   const toggleTab = () => {
@@ -105,20 +129,36 @@ function Review() {
   const toggleWriteReview = () => {
     setIsWrite(!isWrite);
     setIsOpen(false);
+    
+    // khi người dùng hủy trở vào lại thì dữ liệu sẽ reset về null
+    setScore(4);
+    setTitleReview("");
+    setSelectedButton("");
+    setDescriptionReview("");
+    setSelectedOrder("");
+    setErrorMessages("");
+
+    console.log(score);
+    console.log(titleReview);
+    console.log(descriptionReview);
+    console.log(selectedOrder);
+    console.log(selectedButton);
   };
 
-  // useEffect(() => {
-  //   if (isOpen) {
-  //     document.body.style.overflowY = "hidden"; // Tắt thanh cuộn
-  //   } else {
-  //     document.body.style.overflowY = "auto"; // Bật lại thanh cuộn
-  //   }
+  
 
-  //   // Cleanup để reset overflow về trạng thái bình thường khi component bị unmount
-  //   return () => {
-  //     document.body.style.overflowY = "auto";
-  //   };
-  // }, [isOpen]);
+  useEffect(() => {
+    if (isOpen || isWrite) {
+      document.body.style.overflowY = "hidden"; // Tắt thanh cuộn
+    } else {
+      document.body.style.overflowY = "auto"; // Bật lại thanh cuộn
+    }
+
+    // Cleanup để reset overflow về trạng thái bình thường khi component bị unmount
+    return () => {
+      document.body.style.overflowY = "auto";
+    };
+  });
 
   const [selectedButton, setSelectedButton] = useState(null); // State lưu button được chọn
 
@@ -144,45 +184,12 @@ function Review() {
     console.log("desription: ", descriptionReview);
   };
 
-  const [score, setScore] = useState("");
-  const handleScore = (e) => {
-    setScore(e.target.value);
-    console.log(e.target.value);
-    switch (e.target.value) {
-      case "0":
-        return console.log("★");
-      case "1":
-        return console.log("★★");
-      case "2":
-        return console.log("★★★");
-      case "3":
-        return console.log("★★★★");
-      case "4":
-        return console.log("★★★★★");
-    }
-  };
-
-  const renderScore = (score) => {
-    switch (score) {
-      case "0":
-        return "★";
-      case "1":
-        return "★★";
-      case "2":
-        return "★★★";
-      case "3":
-        return "★★★★";
-      case "4":
-        return "★★★★★";
-      default:
-        return ""; // Trường hợp mặc định khi score không phải là 0-4
-    }
-  };
+  
 
   const [errorMessages, setErrorMessages] = useState({});
 
   const resetForm = () => {
-    setScore(5);
+    setScore(4);
     setTitleReview("");
     setDescriptionReview("");
     setSelectedButton("");
@@ -207,6 +214,10 @@ function Review() {
     // Kiểm tra tiêu đề
     if (!titleReview) {
       errors.title = "Title is required.";
+    } else if (titleReview.length < 5) {
+      errors.title = "Title must be at least 5 characters long.";
+    } else if (titleReview.length > 50) {
+      errors.title = "Description must not exceed 50 characters.";
     }
 
     // Kiểm tra mô tả
@@ -214,16 +225,18 @@ function Review() {
       errors.description = "Review is required.";
     } else if (descriptionReview.length < 10) {
       errors.description = "Review must be at least 10 characters long.";
+    } else if (descriptionReview.length > 500) {
+      errors.description = "Review must not exceed 500 characters.";
     }
 
     // Kiểm tra có chọn 'Recommended' hay không
     if (!selectedButton) {
-      errors.recommended = "Please indicate if you recommend this product.";
+      errors.recommended = "Please select one option.";
     }
 
     // Kiểm tra có chọn 'Order arrival' hay không
     if (!selectedOrder) {
-      errors.orderArrival = "Please indicate if the order arrived on time.";
+      errors.orderArrival = "Please select one option.";
     }
 
     // Nếu có lỗi, hiển thị thông báo và không gửi form
@@ -235,12 +248,17 @@ function Review() {
     // Nếu không có lỗi, thực hiện hành động lưu đánh giá
     data.push({
       ratingStar: renderScore(score),
-      createdDay: new Date().toISOString().split("T")[0],
+      createdDay: new Date().toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }),
       title: titleReview,
       description: descriptionReview,
       recommend: selectedButton,
       shipping: selectedOrder,
     });
+    
 
     console.log(data);
     resetForm(); // Gọi hàm resetForm nếu bạn có
@@ -384,14 +402,14 @@ function Review() {
               <p>$10</p>
             </div>
           </div>
-          <div className="my-3">
+          {/* <div className="my-3">
             <div className="mb-1.5">Your name</div>
             <Input placeholder="Name" />
           </div>
           <div className="my-3">
             <div className="mb-1.5">Your email address</div>
             <Input placeholder="Email" />
-          </div>
+          </div> */}
           <div className="my-3">
             <div className="mb-1.5 mt-5">Score</div>
             <div className="relative">
@@ -404,7 +422,7 @@ function Review() {
                 <option value="1">★★</option>
                 <option value="2">★★★</option>
                 <option value="3">★★★★</option>
-                <option value="4" selected>
+                <option value="4" select>
                   ★★★★★
                 </option>
               </select>
