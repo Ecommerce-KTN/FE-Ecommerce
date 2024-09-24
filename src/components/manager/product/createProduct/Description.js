@@ -9,6 +9,7 @@ import { VscCloudUpload } from "react-icons/vsc";
 function Description({ onDescriptionChange, onProductNameChange }) {
   const inputRef = useRef(null);
   const [productName, setProductName] = useState("");
+  const [productBrName, setProductBrName] = useState("");
   const [productError, setProductError] = useState("");
   const [description, setDescription] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
@@ -76,7 +77,7 @@ function Description({ onDescriptionChange, onProductNameChange }) {
         const charCount = fileContent.length;
         if (charCount > 1000) {
           setFileError("The file contains more than 1000 characters.");
-          setDescription(""); 
+          setDescription("");
         } else {
           setFileError("");
           setDescription(fileContent);
@@ -101,23 +102,43 @@ function Description({ onDescriptionChange, onProductNameChange }) {
         />
         {productError && <FormHelperText>{productError}</FormHelperText>}
 
-        <FormLabel htmlFor="product-name" className="pt-2">Brand Name*</FormLabel>
+        <FormLabel htmlFor="product-name" className="pt-2">
+          Brand Name*
+        </FormLabel>
         <Input
-          id="product-name"
-          value={productName}
+          id="product-brName"
+          value={productBrName}
           onChange={handleProductNameChange}
           onBlur={handleBlur}
-          placeholder="Enter product name"
+          placeholder="Enter product brand name"
           maxLength={120}
         />
         {productError && <FormHelperText>{productError}</FormHelperText>}
-        
       </FormControl>
-      <FormControl style={{ marginTop: "15px" }} error={Boolean(descriptionError || fileError)}>
-        <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+      <FormControl
+        style={{ marginTop: "15px" }}
+        error={Boolean(descriptionError || fileError)}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
           <FormLabel>Business Description *</FormLabel>
           <div onClick={clickToUpload}>
-            <p style={{ cursor: "pointer", margin: "0px", color: "#1a1aff", fontSize : "15px", fontStyle : 'bold' }}><VscCloudUpload /> Upload .txt file</p>
+            <p
+              style={{
+                cursor: "pointer",
+                margin: "0px",
+                color: "#1a1aff",
+                fontSize: "15px",
+                fontStyle: "bold",
+              }}
+            >
+              <VscCloudUpload /> Upload .txt file
+            </p>
             <input
               type="file"
               ref={inputRef}
@@ -128,7 +149,9 @@ function Description({ onDescriptionChange, onProductNameChange }) {
           </div>
         </div>
         <Multiline value={description} onChange={handleDescriptionChange} />
-        {(descriptionError || fileError) && <FormHelperText>{descriptionError || fileError}</FormHelperText>}
+        {(descriptionError || fileError) && (
+          <FormHelperText>{descriptionError || fileError}</FormHelperText>
+        )}
       </FormControl>
     </>
   );
