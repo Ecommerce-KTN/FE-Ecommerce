@@ -32,11 +32,11 @@ const CheckboxOption = (props) => {
 };
 
 const collections = [
-  { value: 'living-room', label: 'Living Room Collection' },
-  { value: 'bedroom', label: 'Bedroom Collection' },
-  { value: 'dining-room', label: 'Dining Room Collection' },
-  { value: 'office', label: 'Office Furniture Collection' },
-  { value: 'outdoor', label: 'Outdoor Furniture Collection' },
+  { value: "living-room", label: "Living Room Collection" },
+  { value: "bedroom", label: "Bedroom Collection" },
+  { value: "dining-room", label: "Dining Room Collection" },
+  { value: "office", label: "Office Furniture Collection" },
+  { value: "outdoor", label: "Outdoor Furniture Collection" },
 ];
 
 const MultiValueContainer = ({ selectProps, data }) => {
@@ -50,7 +50,7 @@ const MultiValueContainer = ({ selectProps, data }) => {
     }
     return null; // Ẩn các giá trị còn lại
   }
-}
+};
 function CreateProduct({ closeAddingProduct }) {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
@@ -73,7 +73,7 @@ function CreateProduct({ closeAddingProduct }) {
   const [MRRPPrice, setMRRPPrice] = useState("");
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
- 
+
   // Handle changes from Description component
   const handleDescriptionChange = (newDescription) => {
     setDescription(newDescription);
@@ -217,7 +217,6 @@ function CreateProduct({ closeAddingProduct }) {
   const handleChangeCollection = (selectedOptions) => {
     setSelectOptions(selectedOptions); // Cập nhật giá trị khi người dùng chọn
   };
-  
 
   return (
     <div

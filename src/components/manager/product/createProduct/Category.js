@@ -3,7 +3,8 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import CloseIcon from "@mui/icons-material/Close";
 import Select from "react-select";
-import Switch from '@mui/material/Switch'
+import Switch from "@mui/material/Switch";
+import AddVariant from "./AddVariant";
 
 function UploadImage() {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -31,7 +32,6 @@ function UploadImage() {
     }
     setSelectedImages(imageUrls); // Lưu trữ tất cả URL hình ảnh vào state
   };
-
 
   return (
     <div className="space-y-6">
@@ -77,7 +77,6 @@ function Category({
 
   const [openVariant, setOpenVariant] = useState(false);
 
-
   const optionsColor = [
     { value: "red", label: "Red" },
     { value: "blue", label: "Blue" },
@@ -121,7 +120,6 @@ function Category({
 
   const handleClickVariant = () => {
     // Mở tab mới
-
 
     // Hiển thị overlay
     setOverlayVisible(true);
@@ -205,15 +203,40 @@ function Category({
     onCategoryChange(newCategoryId);
   };
 
-
-  const headers = ["Color", "Ram", "Storage", "SKU", "Quantity", "Price", "Sale Price", "MRSP Price"];
-
-  const data = [
-    { color: "Blue", ram: "8GB", storage: "128GB", sku: "SKU12345", quantity: 50, price: "$500", salePrice: "$450", msrpPrice: "$550" },
-    { color: "Red", ram: "16GB", storage: "256GB", sku: "SKU67890", quantity: 30, price: "$600", salePrice: "$550", msrpPrice: "$650" }
-    // Add more rows as needed
+  const headers = [
+    "Color",
+    "Ram",
+    "Storage",
+    "SKU",
+    "Quantity",
+    "Price",
+    "Sale Price",
+    "MRSP Price",
   ];
 
+  const data = [
+    {
+      color: "Blue",
+      ram: "8GB",
+      storage: "128GB",
+      sku: "SKU12345",
+      quantity: 50,
+      price: "$500",
+      salePrice: "$450",
+      msrpPrice: "$550",
+    },
+    {
+      color: "Red",
+      ram: "16GB",
+      storage: "256GB",
+      sku: "SKU67890",
+      quantity: 30,
+      price: "$600",
+      salePrice: "$550",
+      msrpPrice: "$650",
+    },
+    // Add more rows as needed
+  ];
 
   return (
     <div
@@ -390,11 +413,9 @@ function Category({
       <div className="flex justify-between">
         <div className="font-bold">Have Variant?</div>
         <div>
-          <Switch /> 
+          <Switch />
         </div>
-        
       </div>
-      
 
       {/* Variant Section */}
       <div style={{ width: "100%" }}>
@@ -429,136 +450,137 @@ function Category({
         </div>
       </div>
       {isOverlayVisible && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 overflow-x-auto">
-          <div className="relative bg-white w-8/12 mx-auto my-5 p-6 rounded-lg shadow-lg">
-            <button
-              className="absolute top-3 right-3 bg-blue-400 text-white px-4 py-1 rounded-lg"
-              onClick={closeOverlay}
-            >
-              Close
-            </button>
-            <h2 className="text-2xl font-bold mb-4 text-center">Add Variant</h2>
+        <AddVariant onClose={closeOverlay}></AddVariant>
+        // <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 overflow-x-auto">
+        //   <div className="relative bg-white w-8/12 mx-auto my-5 p-6 rounded-lg shadow-lg">
+        //     <button
+        //       className="absolute top-3 right-3 bg-blue-400 text-white px-4 py-1 rounded-lg"
+        //       onClick={closeOverlay}
+        //     >
+        //       Close
+        //     </button>
+        //     <h2 className="text-2xl font-bold mb-4 text-center">Add Variant</h2>
 
-            {/* Select Sections */}
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-4 justify-center py-4">
-                <div className="w-1/4">
-                  <p>Color</p>
-                </div>
-                <div className="w-3/4">
-                  <Select
-                    options={optionsColor}
-                    value={selectColor}
-                    onChange={setColor}
-                    isMulti
-                  />
-                </div>
-              </div>
+        //     {/* Select Sections */}
+        //     <div className="flex flex-col gap-4">
+        //       <div className="flex items-center gap-4 justify-center py-4">
+        //         <div className="w-1/4">
+        //           <p>Color</p>
+        //         </div>
+        //         <div className="w-3/4">
+        //           <Select
+        //             options={optionsColor}
+        //             value={selectColor}
+        //             onChange={setColor}
+        //             isMulti
+        //           />
+        //         </div>
+        //       </div>
 
-              <div className="flex items-center gap-4 justify-center py-4">
-                <div className="w-1/4">
-                  <p>Ram</p>
-                </div>
-                <div className="w-3/4">
-                  <Select
-                    options={optionsRam}
-                    value={selectRam}
-                    onChange={setRam}
-                    isMulti
-                  />
-                </div>
-              </div>
+        //       <div className="flex items-center gap-4 justify-center py-4">
+        //         <div className="w-1/4">
+        //           <p>Ram</p>
+        //         </div>
+        //         <div className="w-3/4">
+        //           <Select
+        //             options={optionsRam}
+        //             value={selectRam}
+        //             onChange={setRam}
+        //             isMulti
+        //           />
+        //         </div>
+        //       </div>
 
-              <div className="flex items-center gap-4 justify-center py-4">
-                <div className="w-1/4">
-                  <p>Storage</p>
-                </div>
-                <div className="w-3/4">
-                  <Select
-                    options={optionsStorage}
-                    value={selectStorage}
-                    onChange={setStorage}
-                    isMulti
-                  />
-                </div>
-              </div>
+        //       <div className="flex items-center gap-4 justify-center py-4">
+        //         <div className="w-1/4">
+        //           <p>Storage</p>
+        //         </div>
+        //         <div className="w-3/4">
+        //           <Select
+        //             options={optionsStorage}
+        //             value={selectStorage}
+        //             onChange={setStorage}
+        //             isMulti
+        //           />
+        //         </div>
+        //       </div>
 
-              {/* Image Upload Section */}
-              <div>
-                <div>
-                  <p>Variant Images</p>
-                  <div>
-                    {/*  */}
-                    <div className="flex gap-4 mt-5">
-                      <input type="text" placeholder="Color" className="h-8 border-2 border-gray-200 rounded-lg px-3"></input>
-                      <div className="w-full h-12 bg-gray-300">
-                        <UploadImage />
-                      </div>
-                    </div>
-                    {/*  */}
-                    <div className="flex gap-4 mt-5">
-                      <input type="text" placeholder="Color" className="h-8 border-2 border-gray-200 rounded-lg px-3"></input>
-                      <div className="w-full h-12 bg-gray-300"></div>
-                    </div>
-                    {/*  */}
-                    <div className="flex gap-4 mt-5">
-                      <input type="text" placeholder="Color" className="h-8 border-2 border-gray-200 rounded-lg px-3"></input>
-                      <div className="w-full h-12 bg-gray-300"></div>
-                    </div>
-                  </div>
-                </div>
-                {/* product variant */}
-                <div className="flex justify-between my-10">
-                  <div>Product Variant</div>
-                  <div>
-                    <button className="bg-blue-500 text-white py-2 px-3 rounded-lg">
-                      Apply for all
-                    </button>
-                  </div>
-                </div>
-                {/* product */}
-                <div className="flex justify-between">
-                  {price.map((item) => (
-                    <div className="flex gap-3 items-center">
-                      <div>{item.label}</div>
-                      <input
-                        type="number"
-                        className="px-3 py-2 rounded-lg border-2 border-gray-200 w-7/12"
-                      ></input>
-                    </div>
-                  ))}
-                </div>
+        //       {/* Image Upload Section */}
+        //       <div>
+        //         <div>
+        //           <p>Variant Images</p>
+        //           <div>
+        //             {/*  */}
+        //             <div className="flex gap-4 mt-5">
+        //               <input type="text" placeholder="Color" className="h-8 border-2 border-gray-200 rounded-lg px-3"></input>
+        //               <div className="w-full h-12 bg-gray-300">
+        //                 <UploadImage />
+        //               </div>
+        //             </div>
+        //             {/*  */}
+        //             <div className="flex gap-4 mt-5">
+        //               <input type="text" placeholder="Color" className="h-8 border-2 border-gray-200 rounded-lg px-3"></input>
+        //               <div className="w-full h-12 bg-gray-300"></div>
+        //             </div>
+        //             {/*  */}
+        //             <div className="flex gap-4 mt-5">
+        //               <input type="text" placeholder="Color" className="h-8 border-2 border-gray-200 rounded-lg px-3"></input>
+        //               <div className="w-full h-12 bg-gray-300"></div>
+        //             </div>
+        //           </div>
+        //         </div>
+        //         {/* product variant */}
+        //         <div className="flex justify-between my-10">
+        //           <div>Product Variant</div>
+        //           <div>
+        //             <button className="bg-blue-500 text-white py-2 px-3 rounded-lg">
+        //               Apply for all
+        //             </button>
+        //           </div>
+        //         </div>
+        //         {/* product */}
+        //         <div className="flex justify-between">
+        //           {price.map((item) => (
+        //             <div className="flex gap-3 items-center">
+        //               <div>{item.label}</div>
+        //               <input
+        //                 type="number"
+        //                 className="px-3 py-2 rounded-lg border-2 border-gray-200 w-7/12"
+        //               ></input>
+        //             </div>
+        //           ))}
+        //         </div>
 
-                {/* table */}
-                <table className="w-full border-collapse border border-gray-300 mt-8">
-                  <thead>
-                    <tr>
-                      {headers.map((header, index) => (
-                        <th key={index} className="border border-gray-300 p-2">
-                          {header}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.map((row, index) => (
-                      <tr key={index}>
-                        <td className="border border-gray-300 p-2">{row.color}</td>
-                        <td className="border border-gray-300 p-2">{row.ram}</td>
-                        <td className="border border-gray-300 p-2">{row.storage}</td>
-                        <td className="border border-gray-300 p-2">{row.sku}</td>
-                        <td className="border border-gray-300 p-2">{row.quantity}</td>
-                        <td className="border border-gray-300 p-2">{row.price}</td>
-                        <td className="border border-gray-300 p-2">{row.salePrice}</td>
-                        <td className="border border-gray-300 p-2">{row.msrpPrice}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
+        //         {/* table */}
+        //         <table className="w-full border-collapse border border-gray-300 mt-8">
+        //           <thead>
+        //             <tr>
+        //               {headers.map((header, index) => (
+        //                 <th key={index} className="border border-gray-300 p-2">
+        //                   {header}
+        //                 </th>
+        //               ))}
+        //             </tr>
+        //           </thead>
+        //           <tbody>
+        //             {data.map((row, index) => (
+        //               <tr key={index}>
+        //                 <td className="border border-gray-300 p-2">{row.color}</td>
+        //                 <td className="border border-gray-300 p-2">{row.ram}</td>
+        //                 <td className="border border-gray-300 p-2">{row.storage}</td>
+        //                 <td className="border border-gray-300 p-2">{row.sku}</td>
+        //                 <td className="border border-gray-300 p-2">{row.quantity}</td>
+        //                 <td className="border border-gray-300 p-2">{row.price}</td>
+        //                 <td className="border border-gray-300 p-2">{row.salePrice}</td>
+        //                 <td className="border border-gray-300 p-2">{row.msrpPrice}</td>
+        //               </tr>
+        //             ))}
+        //           </tbody>
+        //         </table>
+        //       </div>
+        //     </div>
+        //   </div>
+        // </div>
       )}
     </div>
   );
