@@ -297,9 +297,9 @@ function Review() {
 
       {/* Review List */}
       <div
-        className={`fixed top-3 bottom-3 right-0 bg-gray-200 transform transition-transform duration-300 ease-in-out z-50 ${
-          isOpen ? "translate-x-0" : "translate-x-full opacity-50"
-        } w-[33.5rem] rounded-lg`}
+        className={`fixed bg-gray-200 top-0 bottom-0 right-0 lg:top-3 lg:bottom-3 lg:right-0 lg:transform lg:transition-transform lg:duration-300 lg:ease-in-out transform transition-transform duration-300 ease-in-out z-50 ${
+          isOpen ? "translate-y-0 lg:translate-x-0" : "-translate-y-full lg:translate-x-full lg:translate-y-0"
+        } lg:w-[33.5rem] w-full rounded-lg`}
       >
         {/* Nội dung Review */}
         <div className="view-list-review">
@@ -373,9 +373,9 @@ function Review() {
         ></div>
       )}
       <div
-        className={`write-review top-3 right-0 bottom-3 fixed bg-gray-100 transform transition-transform duration-300 ease-in-out z-50 ${
-          isWrite ? "translate-x-0 w-[33.5rem]" : "translate-x-full "
-        } w-2/6 rounded-lg`}
+        className={`fixed bg-gray-100 top-0 bottom-0 right-0 lg:top-3 lg:bottom-3 lg:right-0 lg:transform lg:transition-transform lg:duration-300 lg:ease-in-out transform transition-transform duration-300 ease-in-out z-50 ${
+          isWrite ? "translate-y-0 lg:translate-x-0" : "-translate-y-full lg:translate-x-full lg:translate-y-0"
+        } lg:w-[33.5rem] w-full rounded-lg`}
       >
         <div className="flex justify-between px-4 py-3">
           <div className="font-bold">Write a Review</div>

@@ -87,11 +87,32 @@ function Product() {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 4, // Số slide hiển thị mặc định
     slidesToScroll: 1,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
+    responsive: [
+      {
+        breakpoint: 640, // Mobile nhỏ hơn 640px
+        settings: {
+          slidesToShow: 1, // Hiển thị 1 slide
+        },
+      },
+      {
+        breakpoint: 768, // Tablet và laptop
+        settings: {
+          slidesToShow: 2, // Hiển thị 2 slide cho tablet
+        },
+      },
+      {
+        breakpoint: 1025, 
+        settings: {
+          slidesToShow: 3, 
+        },
+      }
+    ],
   };
+  
 
   return (
     <div>

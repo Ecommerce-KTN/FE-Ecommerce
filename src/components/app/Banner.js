@@ -27,7 +27,7 @@ function EmblaCarousel() {
   const scrollNext = () => emblaApi && emblaApi.scrollNext()
 
   return (
-    <div className="w-12/12 h-500 overflow-hidden relative embla rounded-[20px] z-40" ref={emblaRef}>
+    <div className="h-500 overflow-hidden relative embla rounded-[20px] z-40" ref={emblaRef}>
       <div className="flex">
         <div className="min-w-full banner-container">
           <div className="banner-content">
