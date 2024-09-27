@@ -14,8 +14,11 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Switch,
 } from "@mui/material";
 import Select, { components } from "react-select";
+import Variant from "./Variant";
+import Inventory from "./Inventory";
 
 const CheckboxOption = (props) => {
   return (
@@ -52,9 +55,15 @@ const MultiValueContainer = ({ selectProps, data }) => {
   }
 };
 function CreateProduct({ closeAddingProduct }) {
+  const [checked, setChecked] = useState(true);
+
+  const handleSwitchChange = (event) => {
+    setChecked(event.target.checked);
+  };
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
   const [productName, setProductName] = useState("");
+  const [productBrName, setProductBrName] = useState("");
   const [description, setDescription] = useState("");
   const [isAddingProduct, setIsAddingProduct] = useState(false);
   const [category, setCategory] = useState("");
@@ -129,10 +138,15 @@ function CreateProduct({ closeAddingProduct }) {
   const handleProductNameChange = (newProductName) => {
     setProductName(newProductName);
   };
+  const handleProductBrNameChange = (newProductBrName) => {
+    setProductBrName(newProductBrName);
+  };
 
   // Validate inputs
   const isValidProductName =
     productName.trim().length >= 5 && productName.trim().length <= 120;
+  const isValidProductBrName =
+    productBrName.trim().length >= 5 && productBrName.trim().length <= 120;
   const isValidDescription =
     description.trim().length >= 200 && description.trim().length <= 1000;
 
@@ -140,24 +154,26 @@ function CreateProduct({ closeAddingProduct }) {
   useEffect(() => {
     setIsAddingProduct(
       isValidProductName &&
+        isValidProductBrName &&
         isValidDescription &&
         price &&
         MRRPPrice &&
         discount &&
         quantity &&
-        category &&
-        subCategory &&
+        // category &&
+        // subCategory &&
         primaryImage
     );
   }, [
     isValidProductName,
+    isValidProductBrName,
     isValidDescription,
     price,
     MRRPPrice,
     discount,
     quantity,
-    category,
-    subCategory,
+    // category,
+    // subCategory,
     primaryImage,
   ]); // Added dependencies here
 
@@ -167,6 +183,7 @@ function CreateProduct({ closeAddingProduct }) {
 
     const formData = new FormData();
     formData.append("name", productName);
+    formData.append("brandName", productBrName);
     formData.append("description", description);
     formData.append("quantity", quantity);
     formData.append("sellingType", sellingType);
@@ -255,17 +272,43 @@ function CreateProduct({ closeAddingProduct }) {
               <Description
                 onDescriptionChange={handleDescriptionChange}
                 onProductNameChange={handleProductNameChange}
+                onProductBrNameChange={handleProductBrNameChange}
               />
             </div>
           </div>
           <Category
             onCategoryChange={handleCategoryOnChange}
             onSubCategoryChange={handleSubCategoryOnChange}
-            onQuantityChange={handleQuantityOnChange}
-            onSKUChange={handleSKUOnChange}
+            // onQuantityChange={handleQuantityOnChange}
+            // onSKUChange={handleSKUOnChange}
             onSellingTypeChange={handleSellingTypeOnChange}
           />
+          <div className="flex justify-between">
+            <div className="font-bold">Have Variant?</div>
+            <Switch checked={checked} onChange={handleSwitchChange} />
+          </div>
+
+          {checked ? (
+            <Variant></Variant>
+          ) : (
+            <div>
+              <h3>Pricing</h3>
+              <div style={{ border: "1px solid #d9d9d9", paddingTop: "30px" }}>
+                <Pricing
+                  values
+                  onMRRPPriceChange={handleMRRPPriceOnChange}
+                  onPriceChange={handlePriceOnChange}
+                  onDiscountChange={handleDiscountOnChange}
+                />
+              </div>
+              <Inventory
+                onQuantityChange={handleQuantityOnChange}
+                onSKUChange={handleSKUOnChange}
+              ></Inventory>
+            </div>
+          )}
         </div>
+
         <div style={{ width: "48%" }}>
           <div>
             <h3>Product Images</h3>
@@ -287,17 +330,7 @@ function CreateProduct({ closeAddingProduct }) {
               />
             </div>
           </div>
-          <div>
-            <h3>Pricing</h3>
-            <div style={{ border: "1px solid #d9d9d9", paddingTop: "30px" }}>
-              <Pricing
-                values
-                onMRRPPriceChange={handleMRRPPriceOnChange}
-                onPriceChange={handlePriceOnChange}
-                onDiscountChange={handleDiscountOnChange}
-              />
-            </div>
-          </div>
+
           <div>
             <div>
               <Specification />
