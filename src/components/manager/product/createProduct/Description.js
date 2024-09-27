@@ -6,7 +6,11 @@ import Input from "@mui/joy/Input";
 import Multiline from "./Multiline";
 import { VscCloudUpload } from "react-icons/vsc";
 
-function Description({ onDescriptionChange, onProductNameChange }) {
+function Description({
+  onDescriptionChange,
+  onProductNameChange,
+  onProductBrNameChange,
+}) {
   const inputRef = useRef(null);
   const [productName, setProductName] = useState("");
   const [productBrName, setProductBrName] = useState("");
@@ -16,6 +20,18 @@ function Description({ onDescriptionChange, onProductNameChange }) {
   const [fileError, setFileError] = useState("");
 
   const validateProductName = (value) => {
+    let error = "";
+    const trimmedValue = value.trim();
+    if (trimmedValue.length < 5) {
+      error = "Product name must be at least 5 characters.";
+    } else if (trimmedValue.length > 120) {
+      error = "Product name cannot exceed 120 characters.";
+    } else if (!trimmedValue) {
+      error = "Product name cannot be empty.";
+    }
+    return error;
+  };
+  const validateProductBrName = (value) => {
     let error = "";
     const trimmedValue = value.trim();
     if (trimmedValue.length < 5) {
@@ -45,6 +61,13 @@ function Description({ onDescriptionChange, onProductNameChange }) {
     setProductError(error);
     setProductName(value);
     onProductNameChange(value);
+  };
+  const handleProductBrNameChange = (e) => {
+    const value = e.target.value;
+    const error = validateProductBrName(value);
+    setProductError(error);
+    setProductBrName(value);
+    onProductBrNameChange(value);
   };
 
   const handleDescriptionChange = (value) => {
@@ -102,13 +125,13 @@ function Description({ onDescriptionChange, onProductNameChange }) {
         />
         {productError && <FormHelperText>{productError}</FormHelperText>}
 
-        <FormLabel htmlFor="product-name" className="pt-2">
+        <FormLabel htmlFor="product-brName" className="pt-2">
           Brand Name*
         </FormLabel>
         <Input
           id="product-brName"
           value={productBrName}
-          onChange={handleProductNameChange}
+          onChange={handleProductBrNameChange}
           onBlur={handleBlur}
           placeholder="Enter product brand name"
           maxLength={120}

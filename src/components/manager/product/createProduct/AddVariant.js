@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Grid from "@mui/material/Grid2";
 import VariantImage from "./components/VariantImage";
 
 // combine each color, ram and storage
-const generateCombinations = (data) => {
+const generateCombinations = (data, selectedValues, selectedVariant) => {
   const combinations = [];
   const colors = data.Color && data.Color.length > 0 ? data.Color : [null];
   const rams = data.Ram && data.Ram.length > 0 ? data.Ram : [null];
@@ -19,6 +19,12 @@ const generateCombinations = (data) => {
           color,
           ram,
           storage,
+          price: "",
+          "sale-price": "",
+          "mrsp-price": "",
+          quantity: "",
+          sku: "",
+          images: selectedValues[color] || [],
         });
       });
     });
@@ -47,6 +53,14 @@ const AddVariant = ({ onClose }) => {
   const [selectedValues, setSelectedValues] = useState({});
   console.log("selectedValues", selectedValues); //{Blue: [image1, image2]}
 
+  const [rows, setRows] = useState(); // State to hold the rows data
+
+  useEffect(() => {
+    setRows(
+      generateCombinations(values, selectedValues, selectedVariant) // Pass images to generateCombinations
+    );
+  }, [values, selectedValues, selectedVariant]);
+
   // change add image when change primary variant
   const handleVariantChange = (event) => {
     const selected = event.target.value; //(value: radio option)
@@ -61,7 +75,6 @@ const AddVariant = ({ onClose }) => {
 
     setSelectedValues(updatedSelectedValues);
     console.log("Selected Variant change:", selected);
-    console.log("selectedValues change", selectedValues);
   };
 
   //set values and change add image when change values of variant change
@@ -80,6 +93,11 @@ const AddVariant = ({ onClose }) => {
 
         setSelectedValues(newSelectedValues);
       }
+
+      // setRows(generateCombinations(updatedValues));
+      setRows(
+        generateCombinations(updatedValues, selectedValues, selectedVariant)
+      );
 
       return updatedValues;
     });
@@ -108,14 +126,33 @@ const AddVariant = ({ onClose }) => {
   };
 
   const handleApplyAll = () => {
+    // Update all rows with tempPriceValues
+    setRows((prevRows) =>
+      prevRows.map((row) => ({
+        ...row,
+        price: tempPriceValues.price,
+        "sale-price": tempPriceValues["sale-price"],
+        "mrsp-price": tempPriceValues["mrsp-price"],
+        quantity: tempPriceValues.quantity,
+        sku: "", // Or set a default SKU if needed
+      }))
+    );
     setPriceValues(tempPriceValues);
   };
 
-  const rows = generateCombinations(values);
   console.log("row", rows); //{"color": "blue", "ram": "4g", "storage": "8g"}
+
+  const handleRowChange = (rowIndex, field, value) => {
+    setRows((prevRows) => {
+      const updatedRows = [...prevRows];
+      updatedRows[rowIndex][field] = value;
+      return updatedRows;
+    });
+  };
 
   const headers = Object.keys(values).filter((key) => values[key].length > 0);
   console.log("headers", headers); //["Color","Ram", "Storage"]
+  console.log("tesst", selectedVariant.toLowerCase());
 
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 overflow-x-auto">
@@ -126,11 +163,11 @@ const AddVariant = ({ onClose }) => {
         >
           Close
         </button>
-        <h2 className="text-2xl font-bold mb-4 text-center">Add Variant</h2>
+        <h2 className="text-xl font-bold mb-4 text-center">Add Variant</h2>
 
         {/* Select Sections */}
         <div className="flex flex-col gap-4 items-center">
-          <p className="self-start text-lg font-semibold">Primary Variant</p>
+          <p className="self-start text-base font-semibold">Primary Variant</p>
           {variantOptions.map((option) => (
             <Grid container className="w-[70%] flex items-center">
               <Grid size={1}>
@@ -143,7 +180,7 @@ const AddVariant = ({ onClose }) => {
                 />
               </Grid>
               <Grid size={2}>
-                <p className="text-base font-semibold">{option}</p>
+                <p className="text-base">{option}</p>
               </Grid>
               <Grid size={9}>
                 <Autocomplete
@@ -166,7 +203,7 @@ const AddVariant = ({ onClose }) => {
 
         {/* Image Upload Section */}
         <div>
-          <p className="text-lg font-semibold">Variant Images</p>
+          <p className="text-base font-semibold">Variant Images</p>
           <VariantImage
             files={selectedValues}
             setFiles={setSelectedValues}
@@ -175,10 +212,10 @@ const AddVariant = ({ onClose }) => {
 
         {/* product variant */}
         <div className="flex justify-between my-10">
-          <div className="text-lg font-semibold">Product Variant</div>
+          <div className="text-base font-semibold">Product Variant</div>
           <div>
             <button
-              className="bg-blue-500 hover:bg-blue-300 text-white py-2 px-3 rounded-lg"
+              className="bg-blue-500 hover:bg-blue-300 text-white py-2 px-3 rounded-lg text-base"
               onClick={handleApplyAll}
             >
               Apply for all
@@ -187,7 +224,7 @@ const AddVariant = ({ onClose }) => {
         </div>
 
         {/* product */}
-        <div className="flex justify-between">
+        <div className="flex text-base justify-between">
           {price.map((item) => (
             <div className="flex gap-3 items-center">
               <div>{item.label}</div>
@@ -217,8 +254,8 @@ const AddVariant = ({ onClose }) => {
               </tr>
             </thead>
             <tbody>
-              {rows.map((row, index) => (
-                <tr key={index}>
+              {rows.map((row, rowIndex) => (
+                <tr key={rowIndex}>
                   {headers.map((header, headerIndex) => (
                     <td
                       key={headerIndex}
@@ -235,7 +272,15 @@ const AddVariant = ({ onClose }) => {
                         size="small"
                         type="number"
                         value={
-                          priceValues[field.toLowerCase().replace(" ", "-")]
+                          priceValues[field.toLowerCase().replace(" ", "-")] ||
+                          null
+                        }
+                        onChange={(e) =>
+                          handleRowChange(
+                            rowIndex,
+                            field.toLowerCase().replace(" ", "-"),
+                            e.target.value
+                          )
                         }
                         sx={{
                           "& .MuiOutlinedInput-root": {
@@ -253,15 +298,15 @@ const AddVariant = ({ onClose }) => {
           </table>
         )}
         {/* <div style={{ marginTop: "20px" }}> */}
-        <div className="flex justify-end gap-4 mt-[20px]">
-          <button className=" px-3 py-2 border-2 rounded-lg hover:bg-gray-300 hover:text-white">
+        <div className="flex justify-end gap-4 mt-[20px] ">
+          <button className=" px-3 py-2 border-2 rounded-lg hover:bg-gray-300 hover:text-white text-base">
             Discard
           </button>
           <button
             // disabled={!isAddingProduct}
             // onClick={handleSubmit}
             variant="contained"
-            className="bg-blue-500 hover:bg-blue-300 text-white px-3 py-2 rounded-lg"
+            className="bg-blue-500 hover:bg-blue-300 text-white px-3 py-2 rounded-lg text-base"
           >
             Add Variant
           </button>
