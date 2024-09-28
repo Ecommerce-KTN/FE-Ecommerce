@@ -5,6 +5,8 @@ import Category from './components/app/Category';
 import Product from './components/app/Product';
 import { Button } from '@mui/material';
 import Header from './components/app/Header';
+import Footer from './components/app/Footer';
+import Asseenon from './components/app/Asseenon';
 function App () {
   return (
     <div className="">
@@ -23,6 +25,8 @@ function App () {
             <Product nameTitle={'Product Popular 2023'}/>
           <div/> 
         </div>
+      <Asseenon/>
+      <Footer/>
       </div>
     </div >
   );
