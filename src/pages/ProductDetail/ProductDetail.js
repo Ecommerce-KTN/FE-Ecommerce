@@ -14,6 +14,9 @@ import ReviewList from "./ReviewList";
 import { useEffect } from "react";
 import { useState } from "react";
 import Banner from "../../../src/components/app/Banner";
+import Footer from "../../../src/components/app/Footer";
+import Asseenon from "../../../src/components/app/Asseenon";
+import Bannerproductdetail from "./BannerProductDetail";
 
 const specification = [
   {
@@ -128,11 +131,11 @@ function ProductDetail() {
     <>
       {/* <Header /> */}
       <Header/>
-      <div className="w-11/12 relative mx-2 lg:mx-auto">
+      <div className="w-11/12 relative mx-2 lg:mx-auto lg:mt-[10rem]">
         <div className="flex flex-col lg:flex-row">
           {/* Banner */}
           <div className="w-full lg:w-8/12 lg:mr-5">
-            <Banner />
+            <Bannerproductdetail/>
           </div>
 
           {/* Product Info */}
@@ -256,6 +259,8 @@ function ProductDetail() {
         <div className="mt-28">
           <Product nameTitle={"You may also like"} />
         </div>
+        <Asseenon/>
+        <Footer/>
       </div>
     </>
   );

@@ -69,7 +69,7 @@ function SamplePrevArrow(props) {
   );
 }
 
-function Product() {
+function Product({nameTitle}) {
   const [favorites, setFavorites] = useState({});
 
   const handleAddFavorite = (productId) => {
@@ -116,7 +116,7 @@ function Product() {
 
   return (
     <div>
-      <div className="text-3xl font-semibold mb-6">Featured Products</div>
+      <div className="text-3xl font-semibold mb-6">{nameTitle}</div>
       <div className="slider-container relative mx-[-10px] py-3">
         <Slider {...settings}>
           {products.map((product) => (

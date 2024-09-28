@@ -51,7 +51,7 @@ function Footer() {
       <div className="flex mt-20 h-fit gap-2 border-t-2 border-t-slate-100 py-5">
         <div className="w-4/12 text-xl font-bold">Accessed Smart Phone</div>
         <div className="w-8/12 ">
-          <div className="flex justify-between">    
+          <div className="flex justify-between sm:grid-cols-2">    
             {menuData.map((menu, index) => (
             
               <div>
