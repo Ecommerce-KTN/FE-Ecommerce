@@ -295,7 +295,7 @@ function CreateProduct({ closeAddingProduct }) {
           </div>
 
           {checked ? (
-            <Variant onSave={handleSaveVariantData}></Variant>
+            <Variant></Variant>
           ) : (
             <div>
               <h3>Pricing</h3>
