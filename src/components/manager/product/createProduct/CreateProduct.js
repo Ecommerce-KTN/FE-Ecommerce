@@ -83,6 +83,12 @@ function CreateProduct({ closeAddingProduct }) {
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
 
+  const [productVariants, setProductVariants] = useState([]); // State to store formatted data
+
+  const handleSaveVariantData = (formattedData) => {
+    setProductVariants(formattedData);
+  };
+
   // Handle changes from Description component
   const handleDescriptionChange = (newDescription) => {
     setDescription(newDescription);
@@ -289,7 +295,7 @@ function CreateProduct({ closeAddingProduct }) {
           </div>
 
           {checked ? (
-            <Variant></Variant>
+            <Variant onSave={handleSaveVariantData}></Variant>
           ) : (
             <div>
               <h3>Pricing</h3>
