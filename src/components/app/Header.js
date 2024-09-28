@@ -6,22 +6,34 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import MenuOpenOutlinedIcon from '@mui/icons-material/MenuOpenOutlined';
 
+
+
+const header = [
+  { name: "Home", value: "home" },
+  { name: "Today's Detail", value: "todays-detail" },
+  { name: "Customer Services", value: "customer-services" },
+  { name: "Trending Product", value: "trending-product" },
+  { name: "Blog", value: "blog" },
+  { name: "Special Offers", value: "special-offers" }
+];
+
+
 const Header = () => {
-  const [ nav, setNav ] = useState( false );
+  // const [ nav, setNav ] = useState( false );
 
-  const handleScroll = () => {
-    if ( window.scrollY >= 50 )
-    {
-      setNav( true );
-    } else
-    {
-      setNav( false );
-    }
-  }
+  // const handleScroll = () => {
+  //   if ( window.scrollY >= 50 )
+  //   {
+  //     setNav( true );
+  //   } else
+  //   {
+  //     setNav( false );
+  //   }
+  // }
 
-  window.addEventListener( "scroll", handleScroll );
+  // window.addEventListener( "scroll", handleScroll );
   return (
-    <div className={ `${ nav ? 'navbar active' : 'navbar' } border-b border-gray-300 top-0 z-50 bg-white` }>
+    <div className={ `fixed border-b border-gray-300 top-0 z-50 bg-white w-full` }>
       <header className="mx-auto w-10/12 ">
         {/* Logo Section */ }
         <div className="flex justify-between items-center py-2">
@@ -72,13 +84,12 @@ const Header = () => {
             CATEGORIES
           </div>
           <div className="flex justify-end">
-            <ul className="nav flex">
-              <li><a href="#">Home</a></li>
-              <li><a href="#">Today's Detail</a></li>
-              <li><a href="#">Customer Services</a></li>
-              <li><a href="#">Trending Products</a></li>
-              <li><a href="#">Blog</a></li>
-              <li><a href="#">Special Offers</a></li>
+            <ul className="nav flex"> 
+              {header.map((item) => (
+                <li>
+                  <a className="pl-5 cursor-pointer" href="#">{item.name}</a>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
