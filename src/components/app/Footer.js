@@ -48,18 +48,18 @@ const menuData = [
 function Footer() {
   return (
     <>
-      <div className="flex mt-20 h-[50rem]">
-        <div className="w-4/12 bg-blue-300">Accessed Smart Phone</div>
-        <div className="w-8/12 bg-green-300">
-          <div className="flex justify-between">
+      <div className="flex mt-20 h-fit gap-2 border-t-2 border-t-slate-100 py-5">
+        <div className="w-4/12 text-xl font-bold">Accessed Smart Phone</div>
+        <div className="w-8/12 ">
+          <div className="flex justify-between">    
             {menuData.map((menu, index) => (
             
-              <div >
+              <div>
                   <p className="font-bold">{menu.title}</p>
                   <ul className="">
                     {menu.items.map((item, idx) => (
-                      <li>
-                        <a key={idx} href="#">{item}</a>
+                      <li className="py-1">
+                        <a key={idx} href="#" className="font-semibold text-gray-600">{item}</a>
                       </li>
                     ))}
                   </ul>
@@ -67,6 +67,9 @@ function Footer() {
             ))}
           </div>
         </div>
+      </div>
+      <div className="text-end font-semibold text-gray-500 py-5 border-t-2 border-t-slate-100">
+        Terms of Services . Privacy Policy
       </div>
     </>
   );

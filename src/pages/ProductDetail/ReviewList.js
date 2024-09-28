@@ -241,6 +241,12 @@ function Review() {
       return
     }
 
+    // fetch(''), {
+    //   method: 'post',
+    //   headers: {"Content-Type" : "application/json"},
+    //   body: JSON.stringify(data)
+    // }
+
     // Nếu không có lỗi, thực hiện hành động lưu đánh giá
     data.push({
       ratingStar: renderScore(score),

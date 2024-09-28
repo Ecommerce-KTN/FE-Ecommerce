@@ -117,10 +117,10 @@ function Product() {
   return (
     <div>
       <div className="text-3xl font-semibold mb-6">Featured Products</div>
-      <div className="slider-container relative mx-[-10px]">
+      <div className="slider-container relative mx-[-10px] py-3">
         <Slider {...settings}>
           {products.map((product) => (
-            <div className="bg-white shadow-lg hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] transition-shadow duration-300 rounded-xl p-3" key={product.id}>
+            <div className="bg-white shadow-lg hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] transition-shadow duration-300 rounded-xl p-3 my-5" key={product.id}>
               <Link to="/ProductDetail">
                 <div
                   className={`rounded-[10px] h-[300px] bg-[#efefef] flex justify-center items-center product-id-${product.id} relative`}
