@@ -17,65 +17,101 @@ import Banner from "../../../src/components/app/Banner";
 import Footer from "../../../src/components/app/Footer";
 import Asseenon from "../../../src/components/app/Asseenon";
 import Bannerproductdetail from "./BannerProductDetail";
+import { useParams } from "react-router-dom";
+import { specDisplayNames, getColorStyle } from "./SpecDisplayNames";
+import { useMemo } from "react";
 
-const specification = [
-  {
-    name: "Specification",
-    item: [
-      { name: "Display" },
-      { name: "Processor" },
-      { name: "Battery" },
-      { name: "Opperating System" },
-      { name: "Water Resistance" },
-    ],
-  },
-  {
-    name: "Demension",
-    item: [
-      { name: "Height" },
-      { name: "Width" },
-      { name: "Depth" },
-      { name: "Weight" },
-    ],
-  },
-  {
-    name: "Camera",
-    item: [{ name: "Front" }, { name: "Rear" }],
-  },
-];
+function ListItem({ specifications }) {
+  // Sử dụng useMemo để tối ưu hóa hiệu suất
+  const specsList = useMemo(() => {
+    if (!specifications) return []; // Trả về mảng rỗng nếu specifications là undefined
+    return Object.entries(specifications)
+      .filter(
+        ([key, value]) => value !== null && value !== undefined && value !== ""
+      )
+      .map(([key, value]) => ({
+        key, // Sử dụng trực tiếp khóa
+        value,
+      }));
+  }, [specifications]);
 
-function ListItem() {
   return (
-    <div>
-      {specification.map((data) => (
-        <div className="mt-2">
-          <Accordion style={{ borderRadius: "10px" }}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1-content"
-              id="panel1-header"
-              sx={{ height: "40px" }}
-            >
-              <SportsVolleyballIcon sx={{ marginRight: "5px" }} />
-              {data.name}
-            </AccordionSummary>
-            <AccordionDetails>
-              <ul className="list-specification">
-                {data.item.map((items, index) => (
-                  <li
-                    className="border-b-2 border-b-gray-200 bg-white py-2 last:border-b-0 transistion ease-in-out duration-100"
-                    key={index}
-                  >
-                    <a href="" className="block w-full h-full">
-                      {items.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </AccordionDetails>
-          </Accordion>
-        </div>
-      ))}
+    <div className="mt-2">
+      {/* Phần hiển thị Specification */}
+      <Accordion style={{ borderRadius: "10px" }}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="specification-content"
+          id="specification-header"
+          sx={{ height: "40px" }}
+        >
+          <SportsVolleyballIcon sx={{ marginRight: "5px" }} />
+          Specification
+        </AccordionSummary>
+        <AccordionDetails>
+          <ul className="list-specification">
+            {specsList.map((spec, index) => (
+              <li
+                className="border-b-2 border-b-gray-200 bg-white py-2 last:border-b-0 transition ease-in-out duration-100 flex justify-between"
+                key={index}
+              >
+                <span className="font-semibold">{spec.key}</span>
+                <span>{spec.value}</span>
+              </li>
+            ))}
+          </ul>
+        </AccordionDetails>
+      </Accordion>
+
+      {/* Phần hiển thị Dimension */}
+      <div className="mt-4">
+        <Accordion style={{ borderRadius: "10px" }}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="dimension-content"
+            id="dimension-header"
+            sx={{ height: "40px" }}
+          >
+            <SportsVolleyballIcon sx={{ marginRight: "5px" }} />
+            Dimension
+          </AccordionSummary>
+          <AccordionDetails>
+            <ul className="list-dimension">
+              <li className="border-b-2 border-b-gray-200 bg-white py-2 last:border-b-0">
+                {specifications.Dimension || "Not available"}
+              </li>
+            </ul>
+          </AccordionDetails>
+        </Accordion>
+      </div>
+
+      {/* Phần hiển thị Camera */}
+      <div className="mt-4">
+        <Accordion style={{ borderRadius: "10px" }}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="camera-content"
+            id="camera-header"
+            sx={{ height: "40px" }}
+          >
+            <SportsVolleyballIcon sx={{ marginRight: "5px" }} />
+            Camera
+          </AccordionSummary>
+          <AccordionDetails>
+            <ul className="list-camera">
+              <li className="border-b-2 border-b-gray-200 bg-white py-2 last:border-b-0">
+                <span className="font-semibold">Rear Camera:</span>{" "}
+                {specifications["Rear Camera - Resolution (Multiple)"] ||
+                  "Not available"}
+              </li>
+              <li className="border-b-2 border-b-gray-200 bg-white py-2 last:border-b-0">
+                <span className="font-semibold">Front Camera:</span>{" "}
+                {specifications["Front Camera - Resolution"] || "Not available"}
+              </li>
+            </ul>
+          </AccordionDetails>
+        </Accordion>
+      </div>
     </div>
   );
 }
@@ -127,15 +163,67 @@ function ProductDetail() {
   const handleChangeStorage = (storage) => {
     setStorage(storage);
   };
+
+  // get api
+  const { id } = useParams(); // Lấy ID từ URL
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `https://be-ecommerce-gaa8.onrender.com/api/v1/products/${id}`
+        ); // Endpoint để lấy chi tiết sản phẩm
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const responseJson = await response.json();
+        console.log("Fetched product:", responseJson.data);
+
+        if (responseJson.data) {
+          setProduct(responseJson.data); // Lưu thông tin sản phẩm vào state
+        } else {
+          setProduct(null);
+        }
+
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id]); // Chạy lại khi id thay đổi
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!product) {
+    return <div>No product found.</div>;
+  }
   return (
     <>
       {/* <Header /> */}
-      <Header/>
+      <Header />
       <div className="w-11/12 relative mx-2 lg:mx-auto lg:mt-[10rem]">
-        <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col lg:flex-row lg:gap-5">
           {/* Banner */}
-          <div className="w-full lg:w-8/12 lg:mr-5">
-            <Bannerproductdetail/>
+          <div className="lg:w-8/12">
+            {product ? (
+              <Bannerproductdetail productData={product} />
+            ) : (
+              <p>Loading...</p>
+            )}
           </div>
 
           {/* Product Info */}
@@ -143,113 +231,80 @@ function ProductDetail() {
             <div className="flex flex-col sm:flex-row justify-between items-start">
               <div className="w-full sm:w-8/12">
                 <h2 className="font-bold text-xl sm:text-2xl">
-                  Flamenco Frilled & High Waisted
+                  {product.name}
                 </h2>
                 <p className="font-bold text-lg sm:text-xl text-gray-400">
-                  Bikini
+                  {product.brand}
                 </p>
               </div>
               <div className="w-full sm:w-4/12 flex flex-col items-start mt-3 sm:mt-0">
                 <p className="font-bold line-through text-lg sm:text-2xl opacity-60">
-                  $155
+                  ${product.basePrice}
                 </p>
                 <p className="font-bold text-2xl sm:text-3xl text-orange-600">
-                  $140
+                  ${product.discountPrice}
                 </p>
               </div>
             </div>
-
-            {/* Color Selection */}
+            {/* // Color Selection */}
             <div className="my-3">
               <div className="my-2 font-bold">Color: {color}</div>
               <div className="flex gap-3">
-                <button
-                  onClick={() => handleChangeColor("Gray")}
-                  className="bg-gray-300 min-w-[40px] min-h-[40px] rounded-lg focus:outline-none focus:ring focus:ring-gray-600"
-                ></button>
-                <button
-                  onClick={() => handleChangeColor("Blue")}
-                  className="bg-blue-500 min-w-[40px] min-h-[40px] rounded-lg focus:outline-none focus:ring focus:ring-gray-600"
-                ></button>
-                <button
-                  onClick={() => handleChangeColor("Red")}
-                  className="bg-red-500 min-w-[40px] min-h-[40px] rounded-lg focus:outline-none focus:ring focus:ring-gray-600"
-                ></button>
-                <button
-                  onClick={() => handleChangeColor("Gray Bold")}
-                  className="bg-gray-500 min-w-[40px] min-h-[40px] rounded-lg focus:outline-none focus:ring focus:ring-gray-600"
-                ></button>
+                {product.attributes?.Color?.map((col, index) => {
+                  const colorStyle = getColorStyle(col); // Hàm tùy chỉnh để xác định màu
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => handleChangeColor(col)}
+                      className={`min-w-[40px] min-h-[40px] rounded-lg focus:outline-none focus:ring focus:ring-gray-600 ${colorStyle}`}
+                    >
+                      {/* Optional: Hiển thị màu dưới dạng background nếu có */}
+                    </button>
+                  );
+                }) || <div>No colors available.</div>}{" "}
+                {/* Handle case where COLOR is undefined */}
               </div>
             </div>
-
-            {/* RAM Selection */}
+            {/* // RAM Selection */}
             <div className="my-3">
-              <div className="my-2 font-bold">Ram: {ram}</div>
+              <div className="my-2 font-bold">RAM: {ram}</div>
               <div className="flex gap-3">
-                <button
-                  onClick={() => handleChangeRam("4GB")}
-                  className="min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600"
-                >
-                  4GB
-                </button>
-                <button
-                  onClick={() => handleChangeRam("8GB")}
-                  className="min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600"
-                >
-                  8GB
-                </button>
-                <button
-                  onClick={() => handleChangeRam("16GB")}
-                  className="min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600"
-                >
-                  16GB
-                </button>
-                <button
-                  onClick={() => handleChangeRam("32GB")}
-                  className="min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600"
-                >
-                  32GB
-                </button>
+                {product.attributes?.RAM?.map((memory, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleChangeRam(memory)}
+                    className={`min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600 ${
+                      ram === memory ? "ring-blue-500" : ""
+                    }`}
+                  >
+                    {memory}
+                  </button>
+                )) || <div>No RAM options available.</div>}{" "}
+                {/* Handle case where RAM is undefined */}
               </div>
             </div>
-
-            {/* Storage Selection */}
+            {/* // Storage Selection */}
             <div className="my-3">
               <div className="my-2 font-bold">Storage: {storage}</div>
               <div className="flex gap-3">
-                <button
-                  onClick={() => handleChangeStorage("32GB")}
-                  className="min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600"
-                >
-                  32GB
-                </button>
-                <button
-                  onClick={() => handleChangeStorage("64GB")}
-                  className="min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600"
-                >
-                  64GB
-                </button>
-                <button
-                  onClick={() => handleChangeStorage("120GB")}
-                  className="min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600"
-                >
-                  120GB
-                </button>
-                <button
-                  onClick={() => handleChangeStorage("280GB")}
-                  className="min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600"
-                >
-                  280GB
-                </button>
+                {product.attributes?.Storage?.map((storageOption, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleChangeStorage(storageOption)}
+                    className={`min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600 ${
+                      storage === storageOption ? "ring-blue-500" : ""
+                    }`}
+                  >
+                    {storageOption}
+                  </button>
+                )) || <div>No storage options available.</div>}{" "}
+                {/* Handle case where STORAGE is undefined */}
               </div>
             </div>
-
             {/* List of Specifications */}
-            <ListItem />
-
+            <ListItem specifications={product.specifications || {}} />
             {/* Review List */}
             <ReviewList />
-
             {/* Add to Cart */}
             <AddCart />
           </div>
@@ -259,8 +314,8 @@ function ProductDetail() {
         <div className="mt-28">
           <Product nameTitle={"You may also like"} />
         </div>
-        <Asseenon/>
-        <Footer/>
+        <Asseenon />
+        <Footer />
       </div>
     </>
   );
