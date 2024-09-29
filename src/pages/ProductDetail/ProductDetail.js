@@ -22,23 +22,35 @@ import { specDisplayNames, getColorStyle } from "./SpecDisplayNames";
 import { useMemo } from "react";
 
 function ListItem({ specifications }) {
+  // Trạng thái để quản lý Accordion đang mở
+  const [expanded, setExpanded] = useState(false);
+
   // Sử dụng useMemo để tối ưu hóa hiệu suất
   const specsList = useMemo(() => {
-    if (!specifications) return []; // Trả về mảng rỗng nếu specifications là undefined
+    if (!specifications) return [];
     return Object.entries(specifications)
       .filter(
         ([key, value]) => value !== null && value !== undefined && value !== ""
       )
       .map(([key, value]) => ({
-        key, // Sử dụng trực tiếp khóa
+        key,
         value,
       }));
   }, [specifications]);
 
+  // Hàm xử lý việc mở Accordion
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
   return (
     <div className="mt-2">
       {/* Phần hiển thị Specification */}
-      <Accordion style={{ borderRadius: "10px" }}>
+      <Accordion
+        expanded={expanded === "specification"}
+        onChange={handleChange("specification")}
+        style={{ borderRadius: "10px" }}
+      >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="specification-content"
@@ -65,7 +77,11 @@ function ListItem({ specifications }) {
 
       {/* Phần hiển thị Dimension */}
       <div className="mt-4">
-        <Accordion style={{ borderRadius: "10px" }}>
+        <Accordion
+          expanded={expanded === "dimension"}
+          onChange={handleChange("dimension")}
+          style={{ borderRadius: "10px" }}
+        >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="dimension-content"
@@ -87,7 +103,11 @@ function ListItem({ specifications }) {
 
       {/* Phần hiển thị Camera */}
       <div className="mt-4">
-        <Accordion style={{ borderRadius: "10px" }}>
+        <Accordion
+          expanded={expanded === "camera"}
+          onChange={handleChange("camera")}
+          style={{ borderRadius: "10px" }}
+        >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="camera-content"
@@ -145,51 +165,56 @@ function AddCart() {
   );
 }
 
+const findVariant = (product, selectedColor, selectedRam, selectedStorage) => {
+  return product.productVariants?.find(
+    (variant) =>
+      variant.attributes.COLOR === selectedColor &&
+      variant.attributes.RAM === selectedRam &&
+      variant.attributes.STORAGE === selectedStorage
+  );
+};
+
 function ProductDetail() {
+  // Cuộn lên đầu trang khi load trang
   useEffect(() => {
-    window.scrollTo(0, 0); // Cuộn lên đầu trang khi load trang
+    window.scrollTo(0, 0);
   }, []);
 
+  // Khai báo các state để lưu trữ lựa chọn người dùng
   const [color, setColor] = useState("");
   const [ram, setRam] = useState("");
   const [storage, setStorage] = useState("");
+  const [selectedVariant, setSelectedVariant] = useState(null); // Thêm state này
 
-  const handleChangeColor = (color) => {
-    setColor(color);
-  };
-  const handleChangeRam = (ram) => {
-    setRam(ram);
-  };
-  const handleChangeStorage = (storage) => {
-    setStorage(storage);
-  };
-
-  // get api
-  const { id } = useParams(); // Lấy ID từ URL
+  // Lấy ID từ URL và fetch dữ liệu sản phẩm qua API
+  const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Khi người dùng chọn color, ram, storage, tìm biến thể sản phẩm phù hợp
+  useEffect(() => {
+    if (product && product.productVariants) {
+      // Kiểm tra nếu product và productVariants tồn tại
+      const variant = findVariant(product, color, ram, storage);
+      setSelectedVariant(variant); // Sử dụng setSelectedVariant để lưu biến thể đã chọn
+    }
+  }, [color, ram, storage, product]);
+
+  // Fetch dữ liệu sản phẩm
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
           `https://be-ecommerce-gaa8.onrender.com/api/v1/products/${id}`
-        ); // Endpoint để lấy chi tiết sản phẩm
-
-        if (!response.ok) {
+        );
+        if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
-        }
 
         const responseJson = await response.json();
         console.log("Fetched product:", responseJson.data);
 
-        if (responseJson.data) {
-          setProduct(responseJson.data); // Lưu thông tin sản phẩm vào state
-        } else {
-          setProduct(null);
-        }
-
+        setProduct(responseJson.data || null);
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -198,36 +223,31 @@ function ProductDetail() {
     };
 
     fetchData();
-  }, [id]); // Chạy lại khi id thay đổi
+  }, [id]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // Xử lý các trạng thái chờ hoặc lỗi
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!product) return <div>No product found.</div>;
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  if (!product) {
-    return <div>No product found.</div>;
-  }
+  console.log(findVariant);
+  // Giao diện chi tiết sản phẩm
   return (
     <>
-      {/* <Header /> */}
       <Header />
       <div className="w-11/12 relative mx-2 lg:mx-auto lg:mt-[10rem]">
         <div className="flex flex-col lg:flex-row lg:gap-5">
-          {/* Banner */}
+          {/* Banner hiển thị sản phẩm */}
           <div className="lg:w-8/12">
-            {product ? (
-              <Bannerproductdetail productData={product} />
-            ) : (
-              <p>Loading...</p>
-            )}
+            <Bannerproductdetail
+              productData={product}
+              selectedVariant={selectedVariant}
+            />
           </div>
 
-          {/* Product Info */}
+          {/* Thông tin sản phẩm */}
           <div className="w-full lg:w-4/12">
+            {/* Tên sản phẩm và giá */}
             <div className="flex flex-col sm:flex-row justify-between items-start">
               <div className="w-full sm:w-8/12">
                 <h2 className="font-bold text-xl sm:text-2xl">
@@ -238,83 +258,110 @@ function ProductDetail() {
                 </p>
               </div>
               <div className="w-full sm:w-4/12 flex flex-col items-start mt-3 sm:mt-0">
-                <p className="font-bold line-through text-lg sm:text-2xl opacity-60">
-                  ${product.basePrice}
-                </p>
-                <p className="font-bold text-2xl sm:text-3xl text-orange-600">
-                  ${product.discountPrice}
-                </p>
+                {selectedVariant ? (
+                  <>
+                    <p className="font-bold line-through text-lg sm:text-2xl opacity-60">
+                      ${selectedVariant.basePrice}
+                    </p>
+                    <p className="font-bold text-2xl sm:text-3xl text-orange-600">
+                      ${selectedVariant.discountPrice}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="font-bold line-through text-lg sm:text-2xl opacity-60">
+                      ${product.basePrice}
+                    </p>
+                    <p className="font-bold text-2xl sm:text-3xl text-orange-600">
+                      ${product.discountPrice}
+                    </p>
+                  </>
+                )}
               </div>
             </div>
-            {/* // Color Selection */}
+
+            {/* Lựa chọn màu sắc */}
             <div className="my-3">
               <div className="my-2 font-bold">Color: {color}</div>
               <div className="flex gap-3">
-                {product.attributes?.Color?.map((col, index) => {
-                  const colorStyle = getColorStyle(col); // Hàm tùy chỉnh để xác định màu
-                  return (
+                {product.attributes?.Color?.length > 0 ? (
+                  product.attributes.Color.map((col, index) => (
                     <button
                       key={index}
-                      onClick={() => handleChangeColor(col)}
-                      className={`min-w-[40px] min-h-[40px] rounded-lg focus:outline-none focus:ring focus:ring-gray-600 ${colorStyle}`}
-                    >
-                      {/* Optional: Hiển thị màu dưới dạng background nếu có */}
-                    </button>
-                  );
-                }) || <div>No colors available.</div>}{" "}
-                {/* Handle case where COLOR is undefined */}
+                      onClick={() => setColor(col)}
+                      className={`min-w-[40px] min-h-[40px] rounded-lg focus:outline-none focus:ring focus:ring-gray-600 ${getColorStyle(
+                        col
+                      )}`}
+                    ></button>
+                  ))
+                ) : (
+                  <div>No colors available.</div>
+                )}
               </div>
             </div>
-            {/* // RAM Selection */}
+
+            {/* Lựa chọn RAM */}
             <div className="my-3">
               <div className="my-2 font-bold">RAM: {ram}</div>
               <div className="flex gap-3">
-                {product.attributes?.RAM?.map((memory, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleChangeRam(memory)}
-                    className={`min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600 ${
-                      ram === memory ? "ring-blue-500" : ""
-                    }`}
-                  >
-                    {memory}
-                  </button>
-                )) || <div>No RAM options available.</div>}{" "}
-                {/* Handle case where RAM is undefined */}
+                {product.attributes?.RAM?.length > 0 ? (
+                  product.attributes.RAM.map((memory, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setRam(memory)}
+                      className={`min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600 ${
+                        ram === memory ? "ring-blue-500" : ""
+                      }`}
+                    >
+                      {memory}
+                    </button>
+                  ))
+                ) : (
+                  <div>No RAM options available.</div>
+                )}
               </div>
             </div>
-            {/* // Storage Selection */}
+
+            {/* Lựa chọn dung lượng lưu trữ */}
             <div className="my-3">
               <div className="my-2 font-bold">Storage: {storage}</div>
               <div className="flex gap-3">
-                {product.attributes?.Storage?.map((storageOption, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleChangeStorage(storageOption)}
-                    className={`min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600 ${
-                      storage === storageOption ? "ring-blue-500" : ""
-                    }`}
-                  >
-                    {storageOption}
-                  </button>
-                )) || <div>No storage options available.</div>}{" "}
-                {/* Handle case where STORAGE is undefined */}
+                {product.attributes?.Storage?.length > 0 ? (
+                  product.attributes.Storage.map((storageOption, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setStorage(storageOption)}
+                      className={`min-w-[60px] min-h-[28px] rounded-lg ring-2 ring-slate-400 focus:ring focus:ring-gray-600 ${
+                        storage === storageOption ? "ring-blue-500" : ""
+                      }`}
+                    >
+                      {storageOption}
+                    </button>
+                  ))
+                ) : (
+                  <div>No storage options available.</div>
+                )}
               </div>
             </div>
-            {/* List of Specifications */}
+
+            {/* Thông số kỹ thuật sản phẩm */}
             <ListItem specifications={product.specifications || {}} />
-            {/* Review List */}
+
+            {/* Đánh giá sản phẩm */}
             <ReviewList />
-            {/* Add to Cart */}
+
+            {/* Thêm vào giỏ hàng */}
             <AddCart />
           </div>
         </div>
 
-        {/* Product Recommendations */}
-        <div className="mt-28">
-          <Product nameTitle={"You may also like"} />
+        {/* Gợi ý sản phẩm khác */}
+        <div className="">
+          <Product nameTitle={"You may also like"} className=""/>
         </div>
-        <Asseenon />
+        <div className="pt-1">
+          <Asseenon />
+        </div>        
         <Footer />
       </div>
     </>

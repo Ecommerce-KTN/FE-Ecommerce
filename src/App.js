@@ -20,12 +20,12 @@ function App() {
       <Header />
 
       <div className="mx-auto w-10/12">
-        <EmblaCarousel />
+        <EmblaCarousel/>
         <Category />
         <div className="">
           <Product nameTitle={"Product Popular 2023"} />
         </div>
-        <div className="">
+        <div className="mt-36">
           <Product nameTitle={"Furniture Collection"} />
         </div>
         <Sussgest

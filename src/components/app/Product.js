@@ -125,7 +125,13 @@ function Product({ nameTitle }) {
               className="bg-white shadow-lg hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] transition-shadow duration-300 rounded-xl p-3 my-5 flex flex-col"
               key={product.id}
             >
-              <Link to={`/ProductDetail/${product.id}`}>
+              {/* Cập nhật phần Link */}
+              <div
+                onClick={() => {
+                  window.location.href = `/ProductDetail/${product.id}`;
+                }}
+                className="cursor-pointer"
+              >
                 <div
                   className={`rounded-[10px] h-[300px] bg-[#efefef] flex justify-center items-center product-id-${product.id} relative`}
                 >
@@ -136,7 +142,7 @@ function Product({ nameTitle }) {
                   />
                   <button
                     onClick={(e) => {
-                      e.preventDefault();
+                      e.stopPropagation();
                       handleAddFavorite(product.id);
                     }}
                     className="absolute top-3 left-3 rounded-full bg-white p-2"
@@ -148,7 +154,7 @@ function Product({ nameTitle }) {
                     )}
                   </button>
                 </div>
-              </Link>
+              </div>
 
               <div className="flex-grow h-44">
                 <h3

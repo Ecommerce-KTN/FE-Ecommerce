@@ -8,7 +8,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import MenuOpenOutlinedIcon from "@mui/icons-material/MenuOpenOutlined";
 import MenuIcon from "@mui/icons-material/Menu"; // Icon hamburger menu
 import CloseIcon from "@mui/icons-material/Close"; // Icon đóng menu
-
+import {Link} from "react-router-dom";
 // Danh sách header
 const header = [
   { name: "Home", value: "home" },
@@ -42,9 +42,11 @@ const Header = () => {
             >
               <MenuIcon fontSize="large" />
             </button>
-            <div className="text-2xl font-extrabold text-gray-800">
-              LOGOHERE
-            </div>
+            <Link to="/">
+              <div className="text-2xl font-extrabold text-gray-800 cursor-pointer">
+                LOGOHERE
+              </div>
+            </Link>
           </div>
 
           {/* Phần Tìm Kiếm */}
