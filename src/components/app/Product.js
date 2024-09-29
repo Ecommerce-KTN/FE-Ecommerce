@@ -176,16 +176,17 @@ function Product({ nameTitle }) {
                       <div className="flex justify-between gap-2 mt-2">
                         <div className="flex justify-center items-center gap-1">
                           <StarIcon style={{ color: "#FF9A27" }} />
-                          <p>{product.productVariants.avgRating?.rate || "N/A"}</p>
+                          {/* <p>{product.productVariants.avgRating?.rate || "N/A"}</p> */}
+                          <p>{product.productVariants && product.productVariants.avgRating ? product.productVariants.avgRating.rate : "N/A"}</p>
                         </div>
                         <p className="leading-snug">|</p>
                         <p className="bg-slate-300 rounded-md px-2">
                           {product.sold || "N/A"} Sold
                         </p>
                       </div>
-                      <div className="flex gap-4 mt-2">
-                        <p className="line-through text-zinc-400">{product.price}</p>
-                        <p className="price font-bold">{product.price}</p>
+                      <div className="flex flex-col gap-4 mt-2">
+                        <p className="line-through text-zinc-400">{product.priceRange}</p>
+                        <p className="price font-bold">{product.discountPriceRange}</p>
                       </div>
                     </div>
                   </div>
