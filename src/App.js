@@ -35,9 +35,11 @@ function App() {
           originalPrice="66.78"
           salePrice="56.78"
         />
+        <Asseenon/>
+        <Footer />
       </div>
 
-      <Footer />
+      
     </div>
   );
 }
