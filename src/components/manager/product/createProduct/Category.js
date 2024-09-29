@@ -72,7 +72,7 @@ function Category({
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   // const [quantity, setQuantity] = useState("");
   // const [quantityError, setQuantityError] = useState("");
-  const [sellingType, setSellingType] = useState("inStore");
+  const [sellingType, setSellingType] = useState("INSTORE");
   const hasFetched = useRef(false);
 
   // const [openVariant, setOpenVariant] = useState(false);
@@ -119,11 +119,11 @@ function Category({
   const getSubCategories = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/v1/categories/by-parent/${id}`
+        `https://be-ecommerce-gaa8.onrender.com/api/v1/categories/subcategories/${id}`
       );
       const data = await response.json();
       console.log("SubCategories data:", data);
-      setSubCategories(Array.isArray(data) ? data : []);
+      setSubCategories(Array.isArray(data.data) ? data.data : []);
     } catch (error) {
       console.log(error);
       setSubCategories([]);
@@ -135,6 +135,7 @@ function Category({
     setSellingType(selectedType);
     onSellingTypeChange(selectedType);
   };
+  console.log("category", categories);
 
   // const handleQuantityChange = (e) => {
   //   const value = e.target.value;
@@ -164,10 +165,10 @@ function Category({
     const getCategories = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8080/api/v1/categories/parents"
+          "https://be-ecommerce-gaa8.onrender.com/api/v1/categories/parents"
         );
         const data = await response.json();
-        setCategories(data);
+        setCategories(data.data);
       } catch (error) {
         console.log(error);
       }
@@ -233,16 +234,16 @@ function Category({
       }}
     >
       {/* Category Section */}
-      <h3>Category *</h3>
+      <h3 className="mb-2 mt-5 text-lg font-bold">Category <span style={{color:"red"}}>*</span></h3>
       <div
         style={{
-          width: "96%",
+          width: "100%",
           marginBottom: "20px",
           border: "1px solid #d9d9d9",
-          padding: "10px",
+          padding: "15px",
         }}
       >
-        <label style={{ fontWeight: "500", fontSize: "small" }}>
+        <label style={{ fontWeight: "500" }}>
           Product Category
         </label>
         <select
@@ -264,8 +265,8 @@ function Category({
             </option>
           ))}
         </select>
-        <label style={{ fontWeight: "500", fontSize: "small" }}>
-          Subcategory
+        <label style={{ fontWeight: "500" }}>
+          Product Subcategory
         </label>
         <select
           style={{
@@ -346,7 +347,7 @@ function Category({
 
       {/* Selling Type Section */}
       <div style={{ width: "100%", marginBottom: "20px" }}>
-        <label style={{ fontWeight: "bold" }}>Selling Type</label>
+        <label className="mb-2 mt-5 text-lg font-bold">Selling Type <span style={{color:"red"}}>*</span></label>
         <div
           style={{
             padding: "10px",
@@ -359,36 +360,36 @@ function Category({
           <div style={{ marginBottom: "10px" }}>
             <input
               type="checkbox"
-              id="inStore"
+              id="INSTORE"
               name="sellingType"
-              checked={sellingType === "inStore"}
+              checked={sellingType === "INSTORE"}
               onChange={handleSellingTypeChange}
             />
-            <label htmlFor="inStore" style={{ marginLeft: "10px" }}>
+            <label htmlFor="INSTORE" style={{ marginLeft: "10px" }}>
               In-store selling only
             </label>
           </div>
           <div style={{ marginBottom: "10px" }}>
             <input
               type="checkbox"
-              id="online"
+              id="ONLINE"
               name="sellingType"
-              checked={sellingType === "online"}
+              checked={sellingType === "ONLINE"}
               onChange={handleSellingTypeChange}
             />
-            <label htmlFor="online" style={{ marginLeft: "10px" }}>
+            <label htmlFor="ONLINE" style={{ marginLeft: "10px" }}>
               Online selling only
             </label>
           </div>
           <div>
             <input
               type="checkbox"
-              id="both"
+              id="BOTH"
               name="sellingType"
-              checked={sellingType === "both"}
+              checked={sellingType === "BOTH"}
               onChange={handleSellingTypeChange}
             />
-            <label htmlFor="both" style={{ marginLeft: "10px" }}>
+            <label htmlFor="BOTH" style={{ marginLeft: "10px" }}>
               Available both in-store and online
             </label>
           </div>

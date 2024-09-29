@@ -21,7 +21,7 @@ const Variant = () => {
     <div>
       {/* Variant Section */}
       <div style={{ width: "100%" }}>
-        <label style={{ fontWeight: "bold" }}>Variant</label>
+        <label className="mb-2 mt-5 text-lg font-bold">Variant</label>
         <div
           style={{
             border: "1px solid #d9d9d9",
@@ -29,6 +29,7 @@ const Variant = () => {
             flexDirection: "row",
             justifyContent: "space-between",
             marginTop: "15px",
+            alignItems: "center",
           }}
         >
           <p

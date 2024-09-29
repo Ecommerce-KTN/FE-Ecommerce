@@ -15,6 +15,12 @@ const generateCombinations = (data, selectedValues, selectedVariant) => {
   colors.forEach((color) => {
     rams.forEach((ram) => {
       storages.forEach((storage) => {
+        const selectedKey =
+          selectedVariant === "Color"
+            ? color
+            : selectedVariant === "Ram"
+            ? ram
+            : storage;
         combinations.push({
           color,
           ram,
@@ -24,7 +30,7 @@ const generateCombinations = (data, selectedValues, selectedVariant) => {
           "mrsp-price": "",
           quantity: "",
           sku: "",
-          images: selectedValues[color] || [],
+          images: selectedValues[selectedKey] || [],
         });
       });
     });
@@ -43,7 +49,7 @@ const price = [
 const otherFields = ["SKU", "Quantity", "Price", "Sale Price", "MRSP Price"];
 const variantOptions = ["Color", "Ram", "Storage"];
 
-const AddVariant = ({ onClose }) => {
+const AddVariant = ({ onClose,  onHandleAddVariant}) => {
   const [values, setValues] = useState({});
   console.log("values", values); //{Color: ["Blue", "Red"]}
 
@@ -54,6 +60,11 @@ const AddVariant = ({ onClose }) => {
   console.log("selectedValues", selectedValues); //{Blue: [image1, image2]}
 
   const [rows, setRows] = useState(); // State to hold the rows data
+
+  const handleAddVariant = () => {
+    onHandleAddVariant(productVariants);
+    onClose();
+  };
 
   useEffect(() => {
     setRows(
@@ -151,8 +162,34 @@ const AddVariant = ({ onClose }) => {
   };
 
   const headers = Object.keys(values).filter((key) => values[key].length > 0);
-  console.log("headers", headers); //["Color","Ram", "Storage"]
-  console.log("tesst", selectedVariant.toLowerCase());
+  
+  const [productVariants, setProductVariants] = useState([]);
+
+// Cập nhật productVariants mỗi khi rows thay đổi
+useEffect(() => {
+  // Kiểm tra nếu rows có dữ liệu mới
+  if (rows && rows.length > 0) {
+    const updatedVariants = rows.map((row, index) => ({
+      optionValues: {
+          Color: row.color,
+          Ram: row.ram,
+          Storage: row.storage,
+        }, // Lọc bỏ các giá trị null hoặc không hợp lệ
+      basePrice: parseFloat(row["mrsp-price"]) || 0,  // Giá gốc
+      discountPrice: parseFloat(row["sale-price"]) || 0,  // Giá khuyến mãi
+      price: parseFloat(row.price) || 0,  // Giá sau khuyến mãi
+      images: row.images.map((image) => image.path),  // Lấy đường dẫn ảnh
+      isPrimaryVariant: index === 0,  // Chỉ biến đầu tiên là biến chính
+      SKU: row.sku || "",  // SKU
+      quantity: parseInt(row.quantity) || 0,  // Số lượng
+    }));
+
+    setProductVariants(updatedVariants);
+  }
+}, [rows]); // useEffect theo dõi thay đổi của rows
+
+console.log(productVariants);
+
 
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 overflow-x-auto">
@@ -307,6 +344,7 @@ const AddVariant = ({ onClose }) => {
             // onClick={handleSubmit}
             variant="contained"
             className="bg-blue-500 hover:bg-blue-300 text-white px-3 py-2 rounded-lg text-base"
+            onClick={handleAddVariant}
           >
             Add Variant
           </button>
