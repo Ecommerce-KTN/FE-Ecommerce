@@ -46,13 +46,13 @@ function EmblaCarousel() {
         </div>
         <div className='min-w-full embla__slide'>
           <img
-            src='https://images.pexels.com/photos/1209462/pexels-photo-1209462.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+            src='https://images.pexels.com/photos/583847/pexels-photo-583847.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
             alt='Slide 2'
             className='w-full'></img>
         </div>
         <div className='min-w-full embla__slide'>
           <img
-            src='https://images.pexels.com/photos/1173651/pexels-photo-1173651.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+            src='https://images.pexels.com/photos/5198239/pexels-photo-5198239.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
             alt='Slide 3'
             className='w-full'></img>
         </div>

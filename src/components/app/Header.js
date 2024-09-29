@@ -9,6 +9,8 @@ import MenuOpenOutlinedIcon from "@mui/icons-material/MenuOpenOutlined";
 import MenuIcon from "@mui/icons-material/Menu"; // Icon hamburger menu
 import CloseIcon from "@mui/icons-material/Close"; // Icon đóng menu
 import {Link} from "react-router-dom";
+import Login from "../../pages/User/Login";
+
 // Danh sách header
 const header = [
   { name: "Home", value: "home" },
@@ -80,9 +82,11 @@ const Header = () => {
             <div className="flex items-center">
               <PersonOutlineOutlinedIcon sx={{ fontSize: 35 }} />
               <div>
-                <div className="cursor-pointer text-gray-700 text-[10px]">
-                  Sign In
-                </div>
+                <Link to="/Login">
+                  <div className="cursor-pointer text-gray-700 text-[10px]">
+                    Sign In
+                  </div>
+                </Link>
                 <div className="cursor-pointer text-gray-700">Account</div>
               </div>
             </div>
