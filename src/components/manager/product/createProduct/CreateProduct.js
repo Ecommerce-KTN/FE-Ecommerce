@@ -103,6 +103,14 @@ function CreateProduct({ closeAddingProduct }) {
   const [specifications, setSpecifications] = useState({});
   const [variants, setVariants] = useState({});
   console.log("variants add product", variants);
+
+  // const [productVariants, setProductVariants] = useState([]); // State to store formatted data
+
+  // const handleSaveVariantData = (formattedData) => {
+  //   setProductVariants(formattedData);
+  // };
+
+
   // Handle changes from Description component
   const handleVariantChange = (newVariants) => {
     setVariants(newVariants);

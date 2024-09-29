@@ -70,6 +70,35 @@ const AddVariant = ({ onClose,  onHandleAddVariant}) => {
     setRows(
       generateCombinations(values, selectedValues, selectedVariant) // Pass images to generateCombinations
     );
+    const formattedData = rows
+      ? rows.map((item, index) => {
+          const optionValues = [item.color, item.ram, item.storage];
+          const basePrice = 0; // Thay thế bằng giá trị thực tế
+          const discountPrice = 0; // Thay thế bằng giá trị thực tế
+          const price = item.price;
+          const images = item.images.map((image) => image.path);
+          const isPrimaryVariant = index === 0;
+          const sku = item.sku;
+          const quantity = item.quantity;
+
+          return {
+            optionValues,
+            basePrice,
+            discountPrice,
+            // Thêm tên và giá trị cho price
+            price: {
+              name: "Price",
+              value: price,
+            },
+            images,
+            isPrimaryVariant,
+            SKU: sku,
+            quantity,
+          };
+        })
+      : [];
+
+    console.log(formattedData);
   }, [values, selectedValues, selectedVariant]);
 
   // change add image when change primary variant
