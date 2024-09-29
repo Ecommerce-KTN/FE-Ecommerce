@@ -21,7 +21,14 @@ function ProductImage({ onImagesChange, onPrimaryImageChange }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [images, setImages] = useState([]);
 
-  console.log("images", images);
+  // Thêm state mới để lưu file primary và các file ảnh
+  const [primaryFile, setPrimaryFile] = useState(null);
+  const [imageFiles, setImageFiles] = useState([]);
+
+  // console.log("primaryFile", primaryFile);
+  // console.log("imageFiles", imageFiles);
+
+  // console.log("images", images);
 
   const clickToUpload = () => {
     inputRef.current.click();
@@ -29,26 +36,34 @@ function ProductImage({ onImagesChange, onPrimaryImageChange }) {
 
   const handleRemoveImage = (image) => {
     const updatedImages = images.filter((img) => img !== image);
+    const updatedFiles = imageFiles.filter(
+      (file, index) => index !== images.indexOf(image)
+    );
     setImages(updatedImages);
-    onImagesChange(updatedImages);
+    setImageFiles(updatedFiles);
+    onImagesChange(updatedFiles);
     if (primaryImage === image) {
       setPrimaryImage(null);
+      setPrimaryFile(null);
       onPrimaryImageChange(null);
     }
   };
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      const updatedImages = [...images, imageUrl];
-      setImages(updatedImages);
-      if (!primaryImage) {
-        setPrimaryImage(imageUrl);
-        onPrimaryImageChange(imageUrl);
-      }
-      onImagesChange(updatedImages);
+    const files = Array.from(event.target.files);
+    const updatedImages = files.map((file) => URL.createObjectURL(file));
+    const updatedFiles = [...imageFiles, ...files];
+
+    setImages((prevImages) => [...prevImages, ...updatedImages]);
+    setImageFiles(updatedFiles);
+
+    if (!primaryImage) {
+      setPrimaryImage(updatedImages[0]);
+      setPrimaryFile(updatedFiles[0]);
+      onPrimaryImageChange(updatedFiles[0]);
     }
+
+    onImagesChange([...imageFiles, ...updatedFiles]);
   };
 
   const handleSelectImage = (image) => {
@@ -67,7 +82,9 @@ function ProductImage({ onImagesChange, onPrimaryImageChange }) {
   const handleChoosePrimary = () => {
     if (selectedImage && selectedImage !== primaryImage) {
       setPrimaryImage(selectedImage);
-      onPrimaryImageChange(selectedImage);
+      const selectedIndex = images.indexOf(selectedImage);
+      setPrimaryFile(imageFiles[selectedIndex]); // Cập nhật primaryFile
+      onPrimaryImageChange(imageFiles[selectedIndex]);
       setSelectedImage(null);
     }
     handleCloseForm();
@@ -317,124 +334,48 @@ function ProductImage({ onImagesChange, onPrimaryImageChange }) {
             color="inherit"
             onClick={handleCloseForm}
             aria-label="close"
-            style={{ position: "absolute", top: "10px", right: "10px" }}
+            style={{ position: "absolute", right: 0 }}
           >
             <CloseIcon />
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <div style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
-            {/* Primary Image */}
-            <div style={{ width: "25%" }}>
-              <img
-                src={primaryImage || ""}
-                alt="Primary"
-                style={{ width: "100%", height: "auto", borderRadius: "5px" }}
-              />
-            </div>
-
-            {/* Wireframe Images */}
-            <div
-              style={{
-                width: "73%",
-                display: "grid",
-                gridTemplateColumns: "repeat(5, 1fr)",
-                gap: "0.5rem",
-              }}
-            >
-              {images.map((image, index) => (
-                <div
-                  key={index}
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+          >
+            <h4>Select Primary Image</h4>
+            {images.map((image) => (
+              <div
+                key={image}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  border:
+                    selectedImage === image
+                      ? "2px solid blue"
+                      : "2px solid transparent",
+                  cursor: "pointer",
+                }}
+                onClick={() => handleSelectImage(image)}
+              >
+                <img
+                  src={image}
+                  alt="Image Preview"
                   style={{
-                    position: "relative",
-                    width: "6rem",
-                    height: "6rem",
+                    width: "100px",
+                    height: "100px",
+                    objectFit: "cover",
                     borderRadius: "5px",
-                    overflow: "hidden",
-                    border:
-                      selectedImage === image ? "2px solid #007bff" : "none",
                   }}
-                >
-                  {primaryImage === image && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        right: 0,
-                        backgroundColor: "yellow",
-                        borderRadius: "0 0 0 10px",
-                        padding: "0.2rem",
-                      }}
-                    >
-                      <StarIcon style={{ color: "gold" }} />
-                    </div>
-                  )}
-                  <img
-                    src={image}
-                    alt={`Thumbnail ${index}`}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      borderRadius: "5px",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => handleSelectImage(image)}
-                  />
-                  {primaryImage !== image && (
-                    <IconButton
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        right: 0,
-                        backgroundColor: "white",
-                        borderRadius: "0 0 0 10px",
-                      }}
-                      onClick={() => handleRemoveImage(image)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  )}
-                </div>
-              ))}
-              {/* Add Button */}
-              {images.length < 10 && (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    border: "2px dashed gray",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                    backgroundColor: "#f5f5f5",
-                    height: "6rem",
-                    width: "6rem",
-                  }}
-                  onClick={() => inputRef.current.click()}
-                >
-                  <AddIcon style={{ fontSize: "2rem", color: "gray" }} />
-                </div>
-              )}
-            </div>
+                />
+              </div>
+            ))}
           </div>
         </DialogContent>
-
         <DialogActions>
-          <Button onClick={handleCloseForm} color="primary">
-            Cancel
-          </Button>
-          <Button
-            onClick={handleChoosePrimary}
-            color="primary"
-            variant={
-              selectedImage === primaryImage || !selectedImage
-                ? "contained"
-                : "outlined"
-            }
-            disabled={selectedImage === primaryImage || !selectedImage}
-          >
-            Choose Primary
+          <Button onClick={handleCloseForm}>Cancel</Button>
+          <Button onClick={handleChoosePrimary} disabled={!selectedImage}>
+            Choose as Primary
           </Button>
         </DialogActions>
       </Dialog>

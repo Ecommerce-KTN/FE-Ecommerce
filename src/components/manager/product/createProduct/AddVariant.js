@@ -15,6 +15,12 @@ const generateCombinations = (data, selectedValues, selectedVariant) => {
   colors.forEach((color) => {
     rams.forEach((ram) => {
       storages.forEach((storage) => {
+        const selectedKey =
+          selectedVariant === "Color"
+            ? color
+            : selectedVariant === "Ram"
+            ? ram
+            : storage;
         combinations.push({
           color,
           ram,
@@ -24,7 +30,7 @@ const generateCombinations = (data, selectedValues, selectedVariant) => {
           "mrsp-price": "",
           quantity: "",
           sku: "",
-          images: selectedValues[color] || [],
+          images: selectedValues[selectedKey] || [],
         });
       });
     });
@@ -43,22 +49,55 @@ const price = [
 const otherFields = ["SKU", "Quantity", "Price", "Sale Price", "MRSP Price"];
 const variantOptions = ["Color", "Ram", "Storage"];
 
-const AddVariant = ({ onClose }) => {
+const AddVariant = ({ onClose, onHandleAddVariant, onhandleAddOptions }) => {
   const [values, setValues] = useState({});
-  console.log("values", values); //{Color: ["Blue", "Red"]}
+  // console.log("values", values); //{Color: ["Blue", "Red"]}
 
   const [selectedVariant, setSelectedVariant] = useState("");
-  console.log("selectedVariant", selectedVariant); // "Color", "Ram", "Storage"
+  // console.log("selectedVariant", selectedVariant); // "Color", "Ram", "Storage"
 
   const [selectedValues, setSelectedValues] = useState({});
-  console.log("selectedValues", selectedValues); //{Blue: [image1, image2]}
+  // console.log("selectedValues", selectedValues); //{Blue: [image1, image2]}
 
   const [rows, setRows] = useState(); // State to hold the rows data
 
+  const handleAddVariant = () => {
+    onHandleAddVariant(productVariants);
+    onClose();
+  };
+
   useEffect(() => {
-    setRows(
-      generateCombinations(values, selectedValues, selectedVariant) // Pass images to generateCombinations
-    );
+    setRows(generateCombinations(values, selectedValues, selectedVariant));
+    // const formattedData = rows
+    //   ? rows.map((item, index) => {
+    //       const optionValues = [item.color, item.ram, item.storage];
+    //       const basePrice = 0; // Thay thế bằng giá trị thực tế
+    //       const discountPrice = 0; // Thay thế bằng giá trị thực tế
+    //       const price = item.price;
+    //       const images = item.images.map((image) => image.path);
+    //       const isPrimaryVariant = index === 0;
+    //       const sku = item.sku;
+    //       const quantity = item.quantity;
+
+    //       return {
+    //         optionValues,
+    //         basePrice,
+    //         discountPrice,
+    //         // Thêm tên và giá trị cho price
+    //         price: {
+    //           name: "Price",
+    //           value: price,
+    //         },
+    //         images,
+    //         isPrimaryVariant,
+    //         SKU: sku,
+    //         quantity,
+    //       };
+    //     })
+    //   : [];
+
+    onhandleAddOptions(values);
+    // console.log("values options", values);
   }, [values, selectedValues, selectedVariant]);
 
   // change add image when change primary variant
@@ -74,7 +113,7 @@ const AddVariant = ({ onClose }) => {
     }, {});
 
     setSelectedValues(updatedSelectedValues);
-    console.log("Selected Variant change:", selected);
+    // console.log("Selected Variant change:", selected);
   };
 
   //set values and change add image when change values of variant change
@@ -140,7 +179,7 @@ const AddVariant = ({ onClose }) => {
     setPriceValues(tempPriceValues);
   };
 
-  console.log("row", rows); //{"color": "blue", "ram": "4g", "storage": "8g"}
+  // console.log("row", rows); //{"color": "blue", "ram": "4g", "storage": "8g"}
 
   const handleRowChange = (rowIndex, field, value) => {
     setRows((prevRows) => {
@@ -151,8 +190,31 @@ const AddVariant = ({ onClose }) => {
   };
 
   const headers = Object.keys(values).filter((key) => values[key].length > 0);
-  console.log("headers", headers); //["Color","Ram", "Storage"]
-  console.log("tesst", selectedVariant.toLowerCase());
+
+  const [productVariants, setProductVariants] = useState([]);
+
+  useEffect(() => {
+    if (rows && rows.length > 0) {
+      const updatedVariants = rows.map((row, index) => ({
+        optionValues: {
+          Color: row.color,
+          RAM: row.ram,
+          Storage: row.storage,
+        },
+        basePrice: parseFloat(row["mrsp-price"]) || 0,
+        discountPrice: parseFloat(row["sale-price"]) || 0,
+        price: parseFloat(row.price) || 0,
+        images: row.images.map((image) => image),
+        isPrimaryVariant: index === 0,
+        SKU: row.sku || "",
+        quantity: parseInt(row.quantity) || 0,
+      }));
+
+      setProductVariants(updatedVariants);
+    }
+  }, [rows]); // useEffect theo dõi thay đổi của rows
+
+  // console.log(productVariants);
 
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 overflow-x-auto">
@@ -307,6 +369,7 @@ const AddVariant = ({ onClose }) => {
             // onClick={handleSubmit}
             variant="contained"
             className="bg-blue-500 hover:bg-blue-300 text-white px-3 py-2 rounded-lg text-base"
+            onClick={handleAddVariant}
           >
             Add Variant
           </button>

@@ -25,8 +25,10 @@ const Inventory = ({ onQuantityChange, onSKUChange }) => {
     onQuantityChange(value);
   };
   return (
-    <div style={{ width: "100%", marginBottom: "20px" }}>
-      <label style={{ fontWeight: "bold" }}>Inventory</label>
+    <div style={{ width: "100%", marginBottom: "10px", marginTop: "20px" }}>
+      <label className="text-lg font-bold">
+        Inventory <span style={{ color: "red" }}>*</span>
+      </label>
       <div
         style={{
           display: "flex",

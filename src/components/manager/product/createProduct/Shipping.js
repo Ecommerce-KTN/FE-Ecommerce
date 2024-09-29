@@ -1,5 +1,5 @@
 // Shipping.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dropdown from "./Dropdown";
 import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
@@ -19,177 +19,203 @@ const lengthOptions = [
   { label: "m", id: 3 },
 ];
 
-function Shipping ( { onWeightChange, onLengthChange, onWidthChange, onBreadthChange, onUnitOfWeightChange, onUnitOfLengthChange } )
-{
-  const [ unitOfWeight, setUnitOfWeight ] = useState( weightOptions[ 0 ] );
-  const [ unitOfLength, setUnitOfLength ] = useState( lengthOptions[ 0 ] );
-  const [ weight, setWeight ] = useState( "" );
-  const [ length, setLength ] = useState( "" );
-  const [ breadth, setBreadth ] = useState( "" );
-  const [ width, setWidth ] = useState( "" );
+function Shipping({ onShapeChange }) {
+  const [unitOfWeight, setUnitOfWeight] = useState(weightOptions[0]);
+  const [unitOfLength, setUnitOfLength] = useState(lengthOptions[0]);
+  const [weight, setWeight] = useState("");
+  const [length, setLength] = useState("");
+  const [breadth, setBreadth] = useState("");
+  const [width, setWidth] = useState("");
 
-  const handleDropdownChange = ( setter ) => ( unit ) =>
-  {
-    setter( unit );
+  // const [shippingData, setShippingData] = useState({
+  //   unitOfMass: weightOptions[0],
+  //   unitOfLength: lengthOptions[0],
+  //   weight: "",
+  //   length: "",
+  //   breadth: "",
+  //   width: "",
+  // });
+
+  // useEffect(() => {
+  //   setShippingData({
+  //     unitOfWeight,
+  //     unitOfLength,
+  //     weight,
+  //     length,
+  //     breadth,
+  //     width,
+  //   });
+  //   console.log("shippingData", shippingData);
+  //   onShapeChange(shippingData);
+  // }, [unitOfWeight, unitOfLength, weight, length, breadth, width]);
+
+  const updateShippingData = (updatedData) => {
+    const shippingData = {
+      unitOfMass: unitOfWeight,
+      unitOfLength,
+      weight,
+      length,
+      breadth,
+      width,
+      ...updatedData,
+    };
+    onShapeChange(shippingData);
   };
 
-  const handleInputChange = ( setter ) => ( event ) =>
-  {
-    setter( event.target.value );
-    console.log( event.target.value );
-  };
+  // const handleDropdownChange = (setter) => (unit) => {
+  //   setter(unit);
+  // };
+
+  // const handleInputChange = (setter) => (event) => {
+  //   setter(event.target.value);
+  //   console.log(event.target.value);
+  // };
 
   return (
-    <div style={ { padding: "10px", paddingTop: "25px" } }>
-      <FormControl sx={ { m: 2, width: "94%" } } variant="outlined">
+    <div style={{ padding: "10px", paddingTop: "25px" }}>
+      <FormControl sx={{ m: 2, width: "94%" }} variant="outlined">
         <InputLabel
           shrink
-          sx={ {
+          sx={{
             top: "-17px",
             left: "-13px",
             fontSize: "18px",
-          } }
+          }}
         >
           Items Weight
         </InputLabel>
         <OutlinedInput
           id="outlined-adornment-weight"
           endAdornment={
-            <InputAdornment style={ { width: "110px" } } position="end">
+            <InputAdornment style={{ width: "110px" }} position="end">
               <Dropdown
-                options={ weightOptions }
-                selected={ unitOfWeight }
-                onChange={
-                  ( unit ) =>
-                  {
-                    setUnitOfWeight( unit );
-                    onUnitOfWeightChange( unit );
-                  }
-                }
+                options={weightOptions}
+                selected={unitOfWeight}
+                onChange={(unit) => {
+                  setUnitOfWeight(unit);
+                  updateShippingData({ unitOfWeight: unit });
+
+                  // onUnitOfWeightChange(unit);
+                }}
               />
             </InputAdornment>
           }
           aria-describedby="outlined-weight-helper-text"
-          inputProps={ {
+          inputProps={{
             "aria-label": "weight",
-          } }
-          sx={ {
+          }}
+          sx={{
             "& .MuiInputBase-input": {
               padding: "8px",
             },
             boxShadow: "0px 0px 1.5px rgba(0,0,0,0.5)",
             backgroundColor: "white",
-          } }
-          value={ weight }
-          onChange={
-            ( e ) =>
-            {
-              setWeight( e.target.value );
-              onWeightChange( e.target.value );
-            }
-          }
-          onKeyDown={ ( e ) => restrictAlphabets( e, weight ) }
+          }}
+          value={weight}
+          onChange={(e) => {
+            setWeight(e.target.value);
+            updateShippingData({ weight: e.target.value });
+
+            // onWeightChange(e.target.value);
+          }}
+          onKeyDown={(e) => restrictAlphabets(e, weight)}
         />
       </FormControl>
 
-      <div style={ { paddingLeft: "10px" } }>
+      <div style={{ paddingLeft: "10px" }}>
         <div
-          style={ {
+          style={{
             display: "flex",
             justifyContent: "space-between",
             marginBottom: "20px",
             paddingLeft: "10px",
             paddingRight: "15px",
-            marginRight: '6px'
-          } }
+            marginRight: "6px",
+          }}
         >
-          <p style={ { marginTop: "9px" } }>Package Size</p>
+          <p style={{ marginTop: "9px" }}>Package Size</p>
           <Dropdown
-            options={ lengthOptions }
-            selected={ unitOfLength }
-            onChange={
-              ( unit ) => 
-              {
-                setUnitOfLength( unit );
-                onUnitOfLengthChange( unit );
-              }
-            }
+            options={lengthOptions}
+            selected={unitOfLength}
+            onChange={(unit) => {
+              setUnitOfLength(unit);
+              updateShippingData({ unitOfLength: unit });
+
+              // onUnitOfLengthChange(unit);
+            }}
           />
         </div>
         <div>
-          { [ "Length", "Breadth", "Width" ].map( ( dimension ) => (
+          {["Length", "Breadth", "Width"].map((dimension) => (
             <FormControl
-              key={ dimension }
-              sx={ { m: 1, width: "29.5%" } }
+              key={dimension}
+              sx={{ m: 1, width: "29.5%" }}
               variant="outlined"
             >
               <InputLabel
                 shrink
                 htmlFor=""
-                sx={ {
+                sx={{
                   top: "-17px",
                   left: "-13px",
                   fontSize: "18px",
-                } }
+                }}
               >
-                { dimension }
+                {dimension}
               </InputLabel>
               <OutlinedInput
                 endAdornment={
                   <InputAdornment position="end">
-                    { unitOfLength.label }
+                    {unitOfLength.label}
                   </InputAdornment>
                 }
-                aria-describedby={ `outlined-${ dimension.toLowerCase() }-helper-text` }
-                inputProps={ {
+                aria-describedby={`outlined-${dimension.toLowerCase()}-helper-text`}
+                inputProps={{
                   "aria-label": dimension.toLowerCase(),
-                } }
-                sx={ {
+                }}
+                sx={{
                   "& .MuiInputBase-input": {
                     padding: "8px",
                   },
-                } }
+                }}
                 value={
                   dimension === "Length"
                     ? length
                     : dimension === "Breadth"
-                      ? breadth
-                      : width
+                    ? breadth
+                    : width
                 }
-                onChange={
-                  ( e ) =>
-                  {
-                    if ( dimension === "Length" )
-                    {
-                      setLength( e.target.value );
-                      onLengthChange( e.target.value );
-                    }
-                    else if ( dimension === "Breadth" )
-                    {
-                      setBreadth( e.target.value );
-                      onBreadthChange( e.target.value );
-                    }
-                    else
-                    {
-                      setWidth( e.target.value );
-                      onWidthChange( e.target.value );
-                    }
-                  }
+                onChange={(e) => {
+                  if (dimension === "Length") {
+                    setLength(e.target.value);
+                    updateShippingData({ length: e.target.value });
 
-                }
-                onKeyDown={ ( e ) =>
+                    // onLengthChange(e.target.value);
+                  } else if (dimension === "Breadth") {
+                    setBreadth(e.target.value);
+                    updateShippingData({ breadth: e.target.value });
+
+                    // onBreadthChange(e.target.value);
+                  } else {
+                    setWidth(e.target.value);
+                    updateShippingData({ width: e.target.value });
+
+                    // onWidthChange(e.target.value);
+                  }
+                }}
+                onKeyDown={(e) =>
                   restrictAlphabets(
                     e,
                     dimension === "Length"
                       ? length
                       : dimension === "Breadth"
-                        ? breadth
-                        : width
+                      ? breadth
+                      : width
                   )
                 }
               />
             </FormControl>
-          ) ) }
+          ))}
         </div>
       </div>
     </div>
