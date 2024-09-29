@@ -30,9 +30,9 @@ function EmblaCarousel() {
 
   return (
     <div
-      className='h-500 overflow-hidden relative embla rounded-[20px] z-40'
+      className='h-500 overflow-hidden relative embla rounded-[20px] mt-24'
       ref={emblaRef}>
-      <div className='flex'>
+      <div className='flex z-10'>
         <div className='min-w-full banner-container'>
           <div className='banner-content'>
             <h1>New Year Sale</h1>

@@ -8,7 +8,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import MenuOpenOutlinedIcon from "@mui/icons-material/MenuOpenOutlined";
 import MenuIcon from "@mui/icons-material/Menu"; // Icon hamburger menu
 import CloseIcon from "@mui/icons-material/Close"; // Icon đóng menu
-
+import {Link} from "react-router-dom";
 // Danh sách header
 const header = [
   { name: "Home", value: "home" },
@@ -29,34 +29,36 @@ const Header = () => {
   };
 
   return (
-    <div className="fixed border-b border-gray-300 top-0 z-50 bg-white w-full">
+    <div className="fixed border-b border-gray-300 top-0 z-40 bg-white w-full">
       <header className="mx-auto w-10/12">
         {/* Phần Logo và Menu Icon */}
-        <div className="flex justify-between items-center py-2">
+        <div className="flex justify-start items-center py-2">
           <div className="flex items-center">
             {/* Icon hamburger menu chỉ hiển thị trên mobile */}
             <button
-              className="mr-4 sm:hidden"
+              className="mr-4 lg:hidden"
               onClick={toggleMobileMenu}
               aria-label="Toggle Menu"
             >
               <MenuIcon fontSize="large" />
             </button>
-            <div className="text-2xl font-extrabold text-gray-800">
-              LOGOHERE
-            </div>
+            <Link to="/">
+              <div className="text-2xl font-extrabold text-gray-800 cursor-pointer">
+                LOGOHERE
+              </div>
+            </Link>
           </div>
 
           {/* Phần Tìm Kiếm */}
-          <div className="flex items-center space-x-0 flex-grow justify-end">
+          <div className="flex items-center space-x-0 flex-grow justify-center">
             {/* Ô input tìm kiếm chỉ hiển thị trên màn hình lớn hơn sm */}
             <input
               type="text"
               placeholder="Search Products"
-              className="hidden sm:block w-5/12 px-4 py-2 border border-gray-300 rounded-tl-lg rounded-bl-lg"
+              className="hidden lg:block w-5/12 px-4 py-2 border border-gray-300 rounded-tl-lg rounded-bl-lg"
             />
             {/* Select category chỉ hiển thị trên màn hình lớn hơn sm */}
-            <select className="hidden sm:block px-4 py-2.5 ml-2 border border-gray-300 h-10 rounded-r-lg">
+            <select className="hidden lg:block px-4 py-2.5 ml-2 border border-gray-300 h-10 rounded-r-lg">
               <option value="all">All Categories</option>
               <option value="electronics">Electronics</option>
               <option value="books">Books</option>
@@ -64,17 +66,17 @@ const Header = () => {
               {/* Thêm các danh mục khác nếu cần */}
             </select>
             {/* Nút tìm kiếm: trên desktop hiển thị button */}
-            <button className="px-4 py-2 bg-black text-white rounded-tr-lg rounded-br-lg hover:bg-gray-700 sm:block hidden">
+            <button className="px-4 py-2 bg-black text-white rounded-tr-lg rounded-br-lg hover:bg-gray-700 lg:block hidden">
               <SearchOutlinedIcon />
             </button>
             {/* Icon tìm kiếm cho mobile */}
-            <button className="sm:hidden ml-2" aria-label="Search">
+            <button className="lg:hidden ml-2" aria-label="Search">
               <SearchOutlinedIcon />
             </button>
           </div>
 
           {/* Phần User chỉ hiển thị trên màn hình lớn hơn sm */}
-          <div className="hidden sm:flex items-center space-x-6">
+          <div className="hidden lg:flex items-center space-x-6">
             <div className="flex items-center">
               <PersonOutlineOutlinedIcon sx={{ fontSize: 35 }} />
               <div>
@@ -99,7 +101,7 @@ const Header = () => {
         </div>
 
         {/* Phần Categories chỉ hiển thị trên màn hình lớn hơn sm */}
-        <div className="hidden sm:flex items-center justify-between py-6">
+        <div className="hidden lg:flex items-center justify-between py-6">
           <div className="flex items-center justify-center">
             <MenuOpenOutlinedIcon sx={{ marginRight: 1 }} />
             CATEGORIES

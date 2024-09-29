@@ -1,49 +1,14 @@
 import { Link } from "react-router-dom";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import StarIcon from "@mui/icons-material/Star";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import { useState } from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-
-const products = [
-  {
-    id: "7f8e8e9b-1f23-4a45-b981-b12b1e4c2a3f",
-    name: "Smart Watch",
-    price: "$24.56",
-    rating: "4.7",
-    sold: "7,489",
-    image: "../image/watch.png",
-  },
-  {
-    id: "a4b8a4f3-5c3e-42d3-839a-4b8c1d7a1e3b",
-    name: "Headphones",
-    price: "$24.56",
-    rating: "4.7",
-    sold: "7,489",
-    image: "../image/Headphones.png",
-  },
-  {
-    id: "3f4e6f7b-49c5-4b87-90b9-7f3f3c2c8d71",
-    name: "Smartphone",
-    price: "$24.56",
-    rating: "4.7",
-    sold: "7,489",
-    image: "../image/phone.png",
-  },
-  {
-    id: "d6b4c8e6-7d7e-4f4a-8287-fc1e9d6b8c9d",
-    name: "Laptop",
-    price: "$24.56",
-    rating: "4.7",
-    sold: "7,489",
-    image: "../image/laptop.png",
-  },
-];
 
 function SampleNextArrow(props) {
   const { onClick } = props;
@@ -69,13 +34,16 @@ function SamplePrevArrow(props) {
   );
 }
 
-function Product() {
+function Product({ nameTitle }) {
   const [favorites, setFavorites] = useState({});
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const handleAddFavorite = (productId) => {
     setFavorites((prevFavorites) => ({
       ...prevFavorites,
-      [productId]: !prevFavorites[productId], // Toggle trạng thái favorite
+      [productId]: !prevFavorites[productId],
     }));
   };
 
@@ -87,90 +55,136 @@ function Product() {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 4, // Số slide hiển thị mặc định
+    slidesToShow: 4,
     slidesToScroll: 1,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
     responsive: [
       {
-        breakpoint: 640, // Mobile nhỏ hơn 640px
+        breakpoint: 640,
         settings: {
-          slidesToShow: 1, // Hiển thị 1 slide
+          slidesToShow: 1,
         },
       },
       {
-        breakpoint: 768, // Tablet và laptop
+        breakpoint: 768,
         settings: {
-          slidesToShow: 2, // Hiển thị 2 slide cho tablet
+          slidesToShow: 2,
         },
       },
       {
-        breakpoint: 1025, 
+        breakpoint: 1025,
         settings: {
-          slidesToShow: 3, 
+          slidesToShow: 3,
         },
-      }
+      },
     ],
   };
-  
+
+  // Get list product
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://be-ecommerce-gaa8.onrender.com/api/v1/products'); // Endpoint để lấy tất cả danh mục
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const responseJson = await response.json();
+        console.log('Fetched categories:', responseJson.data);
+
+        if (Array.isArray(responseJson.data)) {
+          setProducts(responseJson.data);
+        } else if (responseJson.data) {
+          setProducts([responseJson.data]); // Đóng gói đối tượng đơn lẻ vào mảng
+        } else {
+          setProducts([]);
+        }
+
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
-    <div>
-      <div className="text-3xl font-semibold mb-6">Featured Products</div>
+    <div className="h-[500px] w-full my-16 pb-10">
+      <div className="text-3xl font-semibold mb-6">{nameTitle}</div>
       <div className="slider-container relative mx-[-10px] py-3">
         <Slider {...settings}>
           {products.map((product) => (
-            <div className="bg-white shadow-lg hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] transition-shadow duration-300 rounded-xl p-3 my-5" key={product.id}>
-              <Link to="/ProductDetail">
+            <div
+              className="bg-white shadow-lg hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] transition-shadow duration-300 rounded-xl p-3 my-5 flex flex-col"
+              key={product.id}
+            >
+              {/* Cập nhật phần Link */}
+              <div
+                onClick={() => {
+                  window.location.href = `/ProductDetail/${product.id}`;
+                }}
+                className="cursor-pointer"
+              >
                 <div
                   className={`rounded-[10px] h-[300px] bg-[#efefef] flex justify-center items-center product-id-${product.id} relative`}
                 >
                   <img
-                    src={product.image}
+                    src={product.primaryImage}
                     alt={product.name}
-                    className="max-w-[180px]"
+                    className="max-w-[180px] bg-[#efefef]"
                   />
                   <button
                     onClick={(e) => {
-                      e.preventDefault();
+                      e.stopPropagation();
                       handleAddFavorite(product.id);
                     }}
                     className="absolute top-3 left-3 rounded-full bg-white p-2"
                   >
                     {favorites[product.id] ? (
-                      <FavoriteIcon sx={{
-                        color: "rgb(247 74 73)"
-                      }} />
+                      <FavoriteIcon sx={{ color: "rgb(247 74 73)" }} />
                     ) : (
-                      <FavoriteBorderIcon sx={{"&:hover": {
-                        color: "rgb(247 74 73)", // Đổi màu khi hover
-                      },}}/>
+                      <FavoriteBorderIcon sx={{ "&:hover": { color: "rgb(247 74 73)" } }} />
                     )}
                   </button>
                 </div>
-              </Link>
+              </div>
 
-              <div>
-                <h3 className="font-bold text-xl mt-3">{product.name}</h3>
-                <p className="text-sm text-zinc-400 mt-2">Brand Name</p>
-
+              <div className="flex-grow h-44">
+                <h3
+                  className="font-bold text-xl mt-3"
+                  style={{
+                    display: "-webkit-box",
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                    WebkitLineClamp: 2,
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {product.name}
+                </h3>
+                <p className="text-sm text-zinc-400 mt-2">{product.brand}</p>
                 <div className="flex justify-between">
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="flex justify-between gap-2 mt-2">
                         <div className="flex justify-center items-center gap-1">
                           <StarIcon style={{ color: "#FF9A27" }} />
-                          <p>{product.rating}</p>
+                          <p>{product.productVariants.avgRating?.rate || "N/A"}</p>
                         </div>
                         <p className="leading-snug">|</p>
                         <p className="bg-slate-300 rounded-md px-2">
-                          {product.sold} Sold
+                          {product.sold || "N/A"} Sold
                         </p>
                       </div>
                       <div className="flex gap-4 mt-2">
-                        <p className="line-through text-zinc-400">
-                          {product.price}
-                        </p>
+                        <p className="line-through text-zinc-400">{product.price}</p>
                         <p className="price font-bold">{product.price}</p>
                       </div>
                     </div>
