@@ -114,7 +114,9 @@ function Description({
   return (
     <>
       <FormControl error={Boolean(productError)}>
-        <FormLabel htmlFor="product-name">Product Name *</FormLabel>
+        <FormLabel htmlFor="product-name">
+          Product Name <span style={{ color: "red" }}>*</span>
+        </FormLabel>
         <Input
           id="product-name"
           value={productName}
@@ -126,7 +128,7 @@ function Description({
         {productError && <FormHelperText>{productError}</FormHelperText>}
 
         <FormLabel htmlFor="product-brName" className="pt-2">
-          Brand Name*
+          Brand Name <span style={{ color: "red" }}>*</span>
         </FormLabel>
         <Input
           id="product-brName"
@@ -149,8 +151,10 @@ function Description({
             justifyContent: "space-between",
           }}
         >
-          <FormLabel>Business Description *</FormLabel>
-          <div onClick={clickToUpload}>
+          <FormLabel>
+            Business Description <span style={{ color: "red" }}>*</span>
+          </FormLabel>
+          <div onClick={clickToUpload} className="cursor-pointer">
             <p
               style={{
                 cursor: "pointer",
@@ -158,6 +162,9 @@ function Description({
                 color: "#1a1aff",
                 fontSize: "15px",
                 fontStyle: "bold",
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
               }}
             >
               <VscCloudUpload /> Upload .txt file

@@ -35,7 +35,7 @@ const VariantImage = ({ files, setFiles }) => {
       [key]: prevState[key].filter((file) => file.name !== name),
     }));
   };
-  console.log("files", files);
+  // console.log("files", files);
 
   return (
     <div>
