@@ -6,79 +6,46 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import CloseIcon from "@mui/icons-material/Close";
 
-function EmblaCarousel() {
-  // Dữ liệu cho các slide
-  const slidesData = [
-    {
-      id: 1,
-      image:
-        "https://images.pexels.com/photos/214487/pexels-photo-214487.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "Slide 1",
-      content: (
-        <div className="banner-content">
-          <h1>New Year Sale</h1>
-          <h1>Offer 2024</h1>
-          <h1 className="font-medium">20% OFF</h1>
-          <button className="banner-button flex items-center px-4 py-2 bg-black text-white rounded hover:bg-gray-200">
-            <ShoppingCartIcon className="mr-2" /> Start Shopping
-          </button>
-        </div>
-      ),
-    },
-    {
-      id: 2,
-      image: "https://m.media-amazon.com/images/I/71yelMyyFJL._AC_SL1500_.jpg",
-      alt: "Slide 2",
-      content: null,
-    },
-    {
-      id: 3,
-      image: "https://m.media-amazon.com/images/I/81cL-tAS2lL._AC_SL1500_.jpg",
-      alt: "Slide 3",
-      content: null,
-    },
-    {
-      id: 4,
-      image: "https://m.media-amazon.com/images/I/81adKrmxEVL._AC_SL1500_.jpg",
-      alt: "Slide 4",
-      content: null,
-    },
-    {
-      id: 5,
-      image: "https://m.media-amazon.com/images/I/61oxhHNYDXL._AC_SL1500_.jpg",
-      alt: "Slide 5",
-      content: null,
-    },
-    {
-      id: 6,
-      image: "https://m.media-amazon.com/images/I/61+f8OSF57L._AC_SL1500_.jpg",
-      alt: "Slide 6",
-      content: null,
-    },
-    {
-      id: 7,
-      image: "https://m.media-amazon.com/images/I/71dvviTgmnL._AC_SL1500_.jpg",
-      alt: "Slide 7",
-      content: null,
-    },
-    {
-      id: 8,
-      image: "https://m.media-amazon.com/images/I/61I14csKgXL._AC_SL1500_.jpg",
-      alt: "Slide 8",
-      content: null,
-    },
-  ];
-
+function EmblaCarousel({ productData }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
     Autoplay({ delay: 3000 }),
   ]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [slides, setSlides] = useState([]);
-
+  
   // State để quản lý modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState("");
   const modalRef = useRef(null);
+
+  useEffect(() => {
+    if (productData) {
+      // Tạo slidesData từ productData
+      const slidesData = [
+        {
+          id: 1,
+          image: productData.primaryImage,
+          alt: "Primary Image",
+          content: (
+            <div className="banner-content">
+              <h1>{productData.name}</h1>
+              <h1 className="font-medium">{productData.discountPrice} USD</h1>
+              <button className="banner-button flex items-center px-4 py-2 bg-black text-white rounded hover:bg-gray-200">
+                <ShoppingCartIcon className="mr-2" /> Start Shopping
+              </button>
+            </div>
+          ),
+        },
+        ...productData.images.map((img, index) => ({
+          id: index + 2, // Bắt đầu từ 2 vì slide đầu tiên đã có id 1
+          image: img,
+          alt: `Slide ${index + 2}`,
+          content: null,
+        })),
+      ];
+      setSlides(slidesData);
+    }
+  }, [productData]);
 
   const onSelect = () => {
     if (emblaApi) {
@@ -88,7 +55,6 @@ function EmblaCarousel() {
 
   useEffect(() => {
     if (emblaApi) {
-      setSlides(emblaApi.scrollSnapList());
       emblaApi.on("select", onSelect);
     }
   }, [emblaApi]);
@@ -96,19 +62,16 @@ function EmblaCarousel() {
   const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
   const scrollNext = () => emblaApi && emblaApi.scrollNext();
 
-  // Hàm để mở modal với hình ảnh được chọn
   const openModal = (imageSrc) => {
     setModalImage(imageSrc);
     setIsModalOpen(true);
   };
 
-  // Hàm để đóng modal
   const closeModal = () => {
     setIsModalOpen(false);
     setModalImage("");
   };
 
-  // Hàm để đóng modal khi bấm ra ngoài hình ảnh
   const handleOverlayClick = (e) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
       closeModal();
@@ -117,14 +80,11 @@ function EmblaCarousel() {
 
   useEffect(() => {
     if (isModalOpen) {
-      // Thêm sự kiện click khi modal mở
       document.addEventListener("mousedown", handleOverlayClick);
     } else {
-      // Loại bỏ sự kiện khi modal đóng
       document.removeEventListener("mousedown", handleOverlayClick);
     }
 
-    // Cleanup khi component unmount
     return () => {
       document.removeEventListener("mousedown", handleOverlayClick);
     };
@@ -132,21 +92,15 @@ function EmblaCarousel() {
 
   return (
     <div className="relative lg:w-full">
-      {/* Carousel */}
-      <div
-        className="h-500 overflow-hidden relative embla rounded-[20px]"
-        ref={emblaRef}
-      >
+      <div className="h-500 overflow-hidden relative embla rounded-[20px]" ref={emblaRef}>
         <div className="flex">
-          {slidesData.map((slide) => (
+          {slides.map((slide) => (
             <div key={slide.id} className="min-w-full embla__slide relative">
-              {/* Nội dung banner nếu có */}
               {slide.content && (
                 <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center bg-black bg-opacity-30 text-white">
                   {slide.content}
                 </div>
               )}
-              {/* Hình ảnh */}
               <img
                 src={slide.image}
                 alt={slide.alt}
@@ -156,28 +110,23 @@ function EmblaCarousel() {
             </div>
           ))}
         </div>
-        {/* Nút mũi tên trái */}
         <button
           className="absolute top-1/2 h-9 w-9 left-2 transform -translate-y-1/2 bg-gray-300 text-black p-2 rounded-full opacity-50 hover:opacity-100 flex items-center justify-center"
           onClick={scrollPrev}
         >
           <ArrowBackIosIcon />
         </button>
-        {/* Nút mũi tên phải */}
         <button
           className="absolute top-1/2 h-9 w-9 right-2 transform -translate-y-1/2 bg-gray-300 text-black p-2 rounded-full opacity-50 hover:opacity-100 flex items-center justify-center"
           onClick={scrollNext}
         >
           <ArrowForwardIosIcon />
         </button>
-        {/* Hiển thị chấm tròn */}
         <div className="absolute bottom-7 left-1/2 transform -translate-x-1/2 flex space-x-4">
-          {slidesData.map((_, index) => (
+          {slides.map((_, index) => (
             <button
               key={index}
-              className={`w-3 h-3 rounded-full ${
-                index === selectedIndex ? "bg-white" : "bg-gray-400"
-              }`}
+              className={`w-3 h-3 rounded-full ${index === selectedIndex ? "bg-white" : "bg-gray-400"}`}
               onClick={() => emblaApi.scrollTo(index)}
             />
           ))}
@@ -186,7 +135,7 @@ function EmblaCarousel() {
 
       {/* Thumbnails */}
       <div className="flex justify-center mt-4 space-x-2">
-        {slidesData.map((slide, index) => (
+        {slides.map((slide, index) => (
           <button
             key={slide.id}
             className={`w-16 h-16 rounded-lg overflow-hidden transition-all duration-300 ${

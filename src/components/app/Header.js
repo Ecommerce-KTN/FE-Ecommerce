@@ -32,7 +32,7 @@ const Header = () => {
     <div className="fixed border-b border-gray-300 top-0 z-40 bg-white w-full">
       <header className="mx-auto w-10/12">
         {/* Phần Logo và Menu Icon */}
-        <div className="flex justify-between items-center py-2">
+        <div className="flex justify-start items-center py-2">
           <div className="flex items-center">
             {/* Icon hamburger menu chỉ hiển thị trên mobile */}
             <button
@@ -48,7 +48,7 @@ const Header = () => {
           </div>
 
           {/* Phần Tìm Kiếm */}
-          <div className="flex items-center space-x-0 flex-grow justify-end">
+          <div className="flex items-center space-x-0 flex-grow justify-center">
             {/* Ô input tìm kiếm chỉ hiển thị trên màn hình lớn hơn sm */}
             <input
               type="text"
