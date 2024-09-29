@@ -6,13 +6,13 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import CloseIcon from "@mui/icons-material/Close";
 
-function EmblaCarousel({ productData }) {
+function EmblaCarousel({ productData, selectedVariant }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
     Autoplay({ delay: 3000 }),
   ]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [slides, setSlides] = useState([]);
-  
+
   // State để quản lý modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState("");
@@ -20,11 +20,15 @@ function EmblaCarousel({ productData }) {
 
   useEffect(() => {
     if (productData) {
-      // Tạo slidesData từ productData
+      // Tạo slides dựa trên biến thể đã chọn hoặc productData nếu không có biến thể nào
+      const variantImages = selectedVariant
+        ? selectedVariant.images // Sử dụng hình ảnh của biến thể nếu có
+        : productData.images; // Nếu không có biến thể thì sử dụng hình ảnh gốc của sản phẩm
+
       const slidesData = [
         {
           id: 1,
-          image: productData.primaryImage,
+          image: productData.primaryImage, // Hình ảnh chính của biến thể hoặc sản phẩm
           alt: "Primary Image",
           content: (
             <div className="banner-content">
@@ -36,7 +40,7 @@ function EmblaCarousel({ productData }) {
             </div>
           ),
         },
-        ...productData.images.map((img, index) => ({
+        ...variantImages.map((img, index) => ({
           id: index + 2, // Bắt đầu từ 2 vì slide đầu tiên đã có id 1
           image: img,
           alt: `Slide ${index + 2}`,
@@ -45,7 +49,7 @@ function EmblaCarousel({ productData }) {
       ];
       setSlides(slidesData);
     }
-  }, [productData]);
+  }, [productData, selectedVariant]);
 
   const onSelect = () => {
     if (emblaApi) {
