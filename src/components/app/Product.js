@@ -133,12 +133,12 @@ function Product({ nameTitle }) {
                 className="cursor-pointer"
               >
                 <div
-                  className={`rounded-[10px] h-[300px] bg-[#efefef] flex justify-center items-center product-id-${product.id} relative`}
+                  className={`rounded-[10px] h-[300px] flex justify-center items-center product-id-${product.id} relative`}
                 >
                   <img
                     src={product.primaryImage}
                     alt={product.name}
-                    className="max-w-[180px] bg-[#efefef]"
+                    className="max-w-[240px] bg-[#efefef]"
                   />
                   <button
                     onClick={(e) => {
