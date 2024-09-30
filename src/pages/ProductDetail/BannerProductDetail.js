@@ -28,7 +28,7 @@ function EmblaCarousel({ productData, selectedVariant }) {
       const slidesData = [
         {
           id: 1,
-          image: productData.primaryImage, // Hình ảnh chính của biến thể hoặc sản phẩm
+          image: productData.primaryImage, 
           alt: "Primary Image",
           content: (
             <div className="banner-content">
@@ -41,7 +41,7 @@ function EmblaCarousel({ productData, selectedVariant }) {
           ),
         },
         ...variantImages.map((img, index) => ({
-          id: index + 2, // Bắt đầu từ 2 vì slide đầu tiên đã có id 1
+          id: index + 2,
           image: img,
           alt: `Slide ${index + 2}`,
           content: null,
@@ -95,11 +95,33 @@ function EmblaCarousel({ productData, selectedVariant }) {
   }, [isModalOpen]);
 
   return (
-    <div className="relative lg:w-full">
+
+<div className=" lg:w-full relative">
+<div className="flex gap-5" >
+   {/* Thumbnails */}
+   <div className="flex flex-col justify-start  items-center mt-4 gap-5">
+        {slides.map((slide, index) => (
+          <button
+            key={slide.id}
+            className={`w-16 h-16 rounded-lg overflow-hidden transition-all duration-300 ${
+              index === selectedIndex
+                ? "ring-4 ring-blue-400 shadow-lg backdrop-blur-md"
+                : "border-transparent"
+            }`}
+            onClick={() => emblaApi.scrollTo(index)}
+          >
+            <img
+              src={slide.image}
+              alt={`Thumbnail ${index + 1}`}
+              className="w-full h-full object-cover"
+            />
+          </button>
+        ))}
+      </div>
       <div className="h-500 overflow-hidden relative embla rounded-[20px]" ref={emblaRef}>
         <div className="flex">
           {slides.map((slide) => (
-            <div key={slide.id} className="min-w-full embla__slide relative">
+            <div key={slide.id} className="min-w-full embla__slide relative h-500">
               {slide.content && (
                 <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center bg-black bg-opacity-30 text-white">
                   {slide.content}
@@ -108,7 +130,7 @@ function EmblaCarousel({ productData, selectedVariant }) {
               <img
                 src={slide.image}
                 alt={slide.alt}
-                className="cursor-pointer w-full h-full object-fill"
+                className="cursor-pointer w-full h-500 object-contain"
                 onClick={() => openModal(slide.image)}
               />
             </div>
@@ -137,26 +159,9 @@ function EmblaCarousel({ productData, selectedVariant }) {
         </div>
       </div>
 
-      {/* Thumbnails */}
-      <div className="flex justify-center mt-4 space-x-2">
-        {slides.map((slide, index) => (
-          <button
-            key={slide.id}
-            className={`w-16 h-16 rounded-lg overflow-hidden transition-all duration-300 ${
-              index === selectedIndex
-                ? "ring-4 ring-blue-400 shadow-lg backdrop-blur-md"
-                : "border-transparent"
-            }`}
-            onClick={() => emblaApi.scrollTo(index)}
-          >
-            <img
-              src={slide.image}
-              alt={`Thumbnail ${index + 1}`}
-              className="w-full h-full object-cover"
-            />
-          </button>
-        ))}
-      </div>
+
+     
+</div>
 
       {/* Modal */}
       {isModalOpen && (

@@ -236,9 +236,9 @@ function ProductDetail() {
     <>
       <Header />
       <div className="w-11/12 relative mx-2 lg:mx-auto lg:mt-[10rem]">
-        <div className="flex flex-col lg:flex-row lg:gap-5">
+        <div className="flex flex-col lg:flex-row lg:gap-16">
           {/* Banner hiển thị sản phẩm */}
-          <div className="lg:w-8/12">
+          <div className="lg:w-[60%]">
             <Bannerproductdetail
               productData={product}
               selectedVariant={selectedVariant}
